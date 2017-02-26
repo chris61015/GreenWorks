@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.dartmouth.cs.happytreefriends"
+        applicationId "com.dartmouth.cs.greenworks"
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 1

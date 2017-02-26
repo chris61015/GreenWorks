@@ -1,4 +1,4 @@
-package com.dartmouth.cs.happytreefriends;
+package com.dartmouth.cs.greenworks;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.dartmouth.cs.happytreefriends.Activity;
+package com.dartmouth.cs.greenworks.Activity;
 
 import android.app.Activity;
 

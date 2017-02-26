@@ -4,7 +4,7 @@
    https://github.com/GoogleCloudPlatform/gradle-appengine-templates/tree/master/GcmEndpoints
 */
 
-package com.dartmouth.cs.happytreefriends.backend;
+package com.dartmouth.cs.greenworks.backend;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.inject.Named;
-
-import static com.dartmouth.cs.happytreefriends.backend.OfyService.ofy;
 
 /**
  * A registration endpoint class we are exposing for a device's GCM registration id on the backend
@@ -32,8 +30,8 @@ import static com.dartmouth.cs.happytreefriends.backend.OfyService.ofy;
         name = "registration",
         version = "v1",
         namespace = @ApiNamespace(
-                ownerDomain = "backend.happytreefriends.cs.dartmouth.com",
-                ownerName = "backend.happytreefriends.cs.dartmouth.com",
+                ownerDomain = "backend.greenworks.cs.dartmouth.com",
+                ownerName = "backend.greenworks.cs.dartmouth.com",
                 packagePath = ""
         )
 )
@@ -54,7 +52,7 @@ public class RegistrationEndpoint {
         }
         RegistrationRecord record = new RegistrationRecord();
         record.setRegId(regId);
-        ofy().save().entity(record).now();
+        OfyService.ofy().save().entity(record).now();
     }
 
     /**
@@ -69,7 +67,7 @@ public class RegistrationEndpoint {
             log.info("Device " + regId + " not registered, skipping unregister");
             return;
         }
-        ofy().delete().entity(record).now();
+        OfyService.ofy().delete().entity(record).now();
     }
 
     /**
@@ -80,12 +78,12 @@ public class RegistrationEndpoint {
      */
     @ApiMethod(name = "listDevices")
     public CollectionResponse<RegistrationRecord> listDevices(@Named("count") int count) {
-        List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).limit(count).list();
+        List<RegistrationRecord> records = OfyService.ofy().load().type(RegistrationRecord.class).limit(count).list();
         return CollectionResponse.<RegistrationRecord>builder().setItems(records).build();
     }
 
     private RegistrationRecord findRecord(String regId) {
-        return ofy().load().type(RegistrationRecord.class).filter("regId", regId).first().now();
+        return OfyService.ofy().load().type(RegistrationRecord.class).filter("regId", regId).first().now();
     }
 
 }

@@ -4,7 +4,7 @@
    https://github.com/GoogleCloudPlatform/gradle-appengine-templates/tree/master/GcmEndpoints
 */
 
-package com.dartmouth.cs.happytreefriends.backend;
+package com.dartmouth.cs.greenworks.backend;
 
 import com.google.android.gcm.server.Constants;
 import com.google.android.gcm.server.Message;
@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.inject.Named;
-
-import static com.dartmouth.cs.happytreefriends.backend.OfyService.ofy;
 
 /**
  * An endpoint to send messages to devices registered with the backend
@@ -35,8 +33,8 @@ import static com.dartmouth.cs.happytreefriends.backend.OfyService.ofy;
         name = "messaging",
         version = "v1",
         namespace = @ApiNamespace(
-                ownerDomain = "backend.happytreefriends.cs.dartmouth.com",
-                ownerName = "backend.happytreefriends.cs.dartmouth.com",
+                ownerDomain = "backend.greenworks.cs.dartmouth.com",
+                ownerName = "backend.greenworks.cs.dartmouth.com",
                 packagePath = ""
         )
 )
@@ -64,7 +62,7 @@ public class MessagingEndpoint {
         }
         Sender sender = new Sender(API_KEY);
         Message msg = new Message.Builder().addData("message", message).build();
-        List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).limit(10).list();
+        List<RegistrationRecord> records = OfyService.ofy().load().type(RegistrationRecord.class).limit(10).list();
         for (RegistrationRecord record : records) {
             Result result = sender.send(msg, record.getRegId(), 5);
             if (result.getMessageId() != null) {
@@ -74,14 +72,14 @@ public class MessagingEndpoint {
                     // if the regId changed, we have to update the datastore
                     log.info("Registration Id changed for " + record.getRegId() + " updating to " + canonicalRegId);
                     record.setRegId(canonicalRegId);
-                    ofy().save().entity(record).now();
+                    OfyService.ofy().save().entity(record).now();
                 }
             } else {
                 String error = result.getErrorCodeName();
                 if (error.equals(Constants.ERROR_NOT_REGISTERED)) {
                     log.warning("Registration Id " + record.getRegId() + " no longer registered with GCM, removing from datastore");
                     // if the device is no longer registered with Gcm, remove it from the datastore
-                    ofy().delete().entity(record).now();
+                    OfyService.ofy().delete().entity(record).now();
                 } else {
                     log.warning("Error when sending message : " + error);
                 }

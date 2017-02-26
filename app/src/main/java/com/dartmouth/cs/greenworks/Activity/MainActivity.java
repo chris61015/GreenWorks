@@ -1,4 +1,4 @@
-package com.dartmouth.cs.happytreefriends.Activity;
+package com.dartmouth.cs.greenworks.Activity;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.dartmouth.cs.happytreefriends.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -32,29 +31,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(com.dartmouth.cs.greenworks.R.layout.activity_main);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(com.dartmouth.cs.greenworks.R.id.map);
         mapFragment.getMapAsync(this);
 
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        mDrawerLayout = (DrawerLayout) findViewById(com.dartmouth.cs.greenworks.R.id.drawer_layout);
+        Toolbar toolbar = (Toolbar) findViewById(com.dartmouth.cs.greenworks.R.id.toolbar);
 //        setSupportActionBar(toolbar);
 
         if (null == savedInstanceState) {
-            mNavItemId = R.id.drawer_item_1;
+            mNavItemId = com.dartmouth.cs.greenworks.R.id.drawer_item_1;
         } else {
             mNavItemId = savedInstanceState.getInt(NAV_ITEM_ID);
         }
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation);
+        NavigationView navigationView = (NavigationView) findViewById(com.dartmouth.cs.greenworks.R.id.navigation);
         navigationView.setNavigationItemSelectedListener(this);
 
         navigationView.getMenu().findItem(mNavItemId).setChecked(true);
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.open, R.string.close);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, com.dartmouth.cs.greenworks.R.string.open, com.dartmouth.cs.greenworks.R.string.close);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
