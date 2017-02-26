@@ -21,6 +21,7 @@
     <string name="drawer_item_2">Plant Trees</string>
     <string name="drawer_item_3">Nearest Tree</string>
 
-
+    <string name="open">open navigation drawer</string>
+    <string name="close">close navigation drawer</string>
 
 </resources>
