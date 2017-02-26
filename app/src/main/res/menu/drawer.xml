@@ -2,14 +2,14 @@
     <!-- group with single selected item so only one item is highlighted in the nav menu -->
     <group android:checkableBehavior="single">
         <!--TODO: Change Title Name-->
-        <item android:title="@string/drawer_item_1">
-            android:id="@+id/drawer_item_1"
+        <item android:title="@string/drawer_item_1"
+            android:id="@+id/drawer_item_1">
         </item>
-        <item android:title="@string/drawer_item_2">
-            android:id="@+id/drawer_item_2"
+        <item android:title="@string/drawer_item_2"
+            android:id="@+id/drawer_item_2">
         </item>
-        <item android:title="@string/drawer_item_3">
-            android:id="@+id/drawer_item_3"
+        <item android:title="@string/drawer_item_3"
+            android:id="@+id/drawer_item_3">
         </item>
     </group>
 </menu>
