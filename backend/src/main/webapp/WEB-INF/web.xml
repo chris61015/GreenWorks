@@ -13,8 +13,8 @@
         <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
         <init-param>
             <param-name>services</param-name>
-            <param-value>com.dartmouth.cs.happytreefriends.backend.RegistrationEndpoint,
-                com.dartmouth.cs.happytreefriends.backend.MessagingEndpoint
+            <param-value>com.dartmouth.cs.greenworks.backend.RegistrationEndpoint,
+                com.dartmouth.cs.greenworks.backend.MessagingEndpoint
             </param-value>
         </init-param>
     </servlet>

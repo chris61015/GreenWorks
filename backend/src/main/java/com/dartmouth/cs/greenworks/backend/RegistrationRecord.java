@@ -1,4 +1,4 @@
-package com.dartmouth.cs.happytreefriends.backend;
+package com.dartmouth.cs.greenworks.backend;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;

@@ -1,4 +1,4 @@
-package com.dartmouth.cs.happytreefriends;
+package com.dartmouth.cs.greenworks;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.dartmouth.cs.happytreefriends", appContext.getPackageName());
+        assertEquals("com.dartmouth.cs.greenworks", appContext.getPackageName());
     }
 }

@@ -1,4 +1,4 @@
-package com.dartmouth.cs.happytreefriends.backend;
+package com.dartmouth.cs.greenworks.backend;
 
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFactory;
