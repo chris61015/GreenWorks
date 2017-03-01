@@ -59,6 +59,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 //        navigate(mNavItemId);
 //        getFragmentManager().beginTransaction().add(R.id.content, new FragmentGridView(), "my_fragment").commit();
+
+        testBackend();
+
     }
 
 
@@ -94,5 +97,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }, DRAWER_CLOSE_DELAY_MS);
         return true;
+    }
+
+    public void testBackend() {
+        BackendTest newTest = new BackendTest();
+        newTest.registerTest(this);
     }
 }
