@@ -18,6 +18,7 @@ public class TimelineEntry {
     // entity property keys
     public static final String PROPERTY_TIMELINE_ID ="Timeline ID";
     public static final String PROPERTY_TREE_ID = "Tree ID";
+    public static final String PROPERTY_DATETIME = "Date Time";
     public static final String PROPERTY_NAME = "Name";
     public static final String PROPERTY_REG_ID = "Registration ID";
     public static final String PROPERTY_PHOTO = "Photo";
@@ -27,16 +28,18 @@ public class TimelineEntry {
     // properties.
     public long timelineId;
     public long treeId;  // foreign key.
+    public long dateTime;
     public String name;  // person who updated the tree
     public String regId; // identify user.
     public Blob photo;
     public String comment;
 
     // constructor
-    public TimelineEntry(long _timelineId, long _treeId, String _name,
+    public TimelineEntry(long _timelineId, long _treeId, long _dateTime, String _name,
                          String _regId, Blob _photo, String _comment) {
         timelineId = _timelineId;
         treeId = _treeId;
+        dateTime = _dateTime;
         name = _name;
         regId = _regId;
         photo = _photo;

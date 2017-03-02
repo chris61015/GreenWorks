@@ -59,6 +59,7 @@ public class TimelineDataStore {
         TimelineEntry ret = new TimelineEntry(
                 (long)entity.getProperty(TimelineEntry.PROPERTY_TIMELINE_ID),
                 (long)entity.getProperty(TimelineEntry.PROPERTY_TREE_ID),
+                (long)entity.getProperty(TimelineEntry.PROPERTY_DATETIME),
                 (String)entity.getProperty(TimelineEntry.PROPERTY_NAME),
                 (String)entity.getProperty(TimelineEntry.PROPERTY_REG_ID),
                 (Blob)entity.getProperty(TimelineEntry.PROPERTY_PHOTO),
@@ -73,6 +74,7 @@ public class TimelineDataStore {
                 entry.timelineId, getParentKey());
         entity.setProperty(TimelineEntry.PROPERTY_TIMELINE_ID, entry.timelineId);
         entity.setProperty(TimelineEntry.PROPERTY_TREE_ID, entry.treeId);
+        entity.setProperty(TimelineEntry.PROPERTY_DATETIME, entry.dateTime);
         entity.setProperty(TimelineEntry.PROPERTY_NAME, entry.name);
         entity.setProperty(TimelineEntry.PROPERTY_REG_ID, entry.regId);
         entity.setProperty(TimelineEntry.PROPERTY_PHOTO, entry.photo);
@@ -80,6 +82,8 @@ public class TimelineDataStore {
         datastoreService.put(entity);
     }
 
+
+    // maybe useless.
     public ArrayList<TimelineEntry> queryAll () {
         ArrayList<TimelineEntry> ret = new ArrayList<>();
         Iterator<Entity> entities = getAllEntities();
@@ -92,12 +96,19 @@ public class TimelineDataStore {
         return ret;
     }
 
+    // maybe useless.
     private Iterator<Entity> getAllEntities() {
         Query query = new Query(TimelineEntry.ENTRY_ENTITY_KIND);
         query.setFilter(null);
         query.setAncestor(getParentKey());
         PreparedQuery preparedQuery = datastoreService.prepare(query);
         return preparedQuery.asIterator();
+    }
+
+    private ArrayList<TimelineEntry> queryUpdatesOfATree (long treeId) {
+        ArrayList<TimelineEntry> ret = new ArrayList<TimelineEntry> ();
+        // TODO
+        return ret;
     }
 
     private ArrayList<TimelineEntry> queryMyUpdate (String regId) {

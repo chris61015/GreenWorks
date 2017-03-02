@@ -9,6 +9,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -112,6 +113,19 @@ public class TreeDataStore {
     // get my trees using registration ID as identifier.
     public ArrayList<TreeEntry> queryMyTrees (String regId) {
         ArrayList<TreeEntry> ret = new ArrayList<>();
+        Filter filter = new Query.FilterPredicate(TreeEntry.PROPERTY_REG_ID,
+                Query.FilterOperator.EQUAL, regId);
+        Query query = new Query(TreeEntry.ENTRY_ENTITY_KIND);
+
+        query.setFilter(filter);
+        PreparedQuery preparedQuery = datastoreService.prepare(query);
+        Iterator<Entity> iter = preparedQuery.asIterator();
+        while(iter.hasNext()) {
+            Entity temp = iter.next();
+            if (temp != null) {
+
+            }
+        }
         //TODO
         return ret;
     }
