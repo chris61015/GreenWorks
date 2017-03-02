@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/HappyTreeFriends.iml" filepath="$PROJECT_DIR$/HappyTreeFriends.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GreenWorks.iml" filepath="$PROJECT_DIR$/GreenWorks.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/backend/backend.iml" filepath="$PROJECT_DIR$/backend/backend.iml" />
     </modules>

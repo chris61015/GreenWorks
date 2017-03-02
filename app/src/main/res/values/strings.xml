@@ -1,15 +1,14 @@
 <resources>
-    <string name="app_name">HappyTreeFriends</string>
-    <string name="title_activity_main">Map</string>
+    <string name="app_name">GreenWorks</string>
+    <string name="title_activity_main">GreenWorks</string>
 
-    <string name="trees_photo">Tree's photo</string>
-    <string name="trees_name">Tree's name</string>
+    <string name="trees_name">Name of the Tree</string>
     <string name="Give_your_tree_a_name">Give your tree a name</string>
-    <string name="City"> City</string>
-    <string name="Record_where_you_find_your_tree"> Where do you find your tree</string>
-    <string name="Write_somthing_to_your_tree"> Comments</string>
+    <string name="Trees_Location"> Location of the Tree</string>
+    <string name="Record_where_you_find_your_tree"> Record where you find your tree</string>
+    <string name="Write_somthing_to_your_tree"> Write somthing to your tree</string>
     <string name="This_is_my_happy_tree">This is my happy tree!</string>
-    <string name="Trees_Photo"> Tree's Photo</string>
+    <string name="Trees_Photo">Photo of the Tree</string>
 
 
     <string name="ui_proile_image_descripton">Your Profile Picture</string>
@@ -17,18 +16,12 @@
     <string name="ui_profile_button_save">Save</string>
     <string name="ui_profile_button_cancel">Cancel</string>
 
-    <string name="ui_profile_button_update">Update</string>
-    <string name="ui_profile_button_showTimeLine">Show Timeline</string>
 
-    <string name="ui_profile_button_get_full_timeline">Get Full Timeline</string>
+    <string name="drawer_item_1">My Trees</string>
+    <string name="drawer_item_2">Plant Trees</string>
+    <string name="drawer_item_3">Nearest Tree</string>
 
-
-    <string name="drawer_item_1">Plant a tree</string>
-    <string name="drawer_item_2">My Trees</string>
-    <string name="drawer_item_3">Trees I Updated</string>
-
-
-    <string name="action_share">Share</string>
-
+    <string name="open">open navigation drawer</string>
+    <string name="close">close navigation drawer</string>
 
 </resources>
