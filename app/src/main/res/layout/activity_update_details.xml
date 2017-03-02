@@ -1,0 +1,133 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false" >
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/trees_photo"
+                android:layout_margin="5dp"
+                android:layout_marginBottom="5dp"
+                android:id="@+id/plant_a_tree" />
+
+            <ImageView
+                android:contentDescription="@string/ui_proile_image_descripton"
+                android:id="@+id/imageProfile"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_margin="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:focusable="true"
+                android:focusableInTouchMode="true" >
+
+                <requestFocus />
+
+            </ImageView>
+
+            <Button
+                android:id="@+id/btnChangePhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="30dp"
+                android:onClick="onChangePhotoClicked"
+                android:text="@string/ui_profile_button_change" >
+
+            </Button>
+
+        </LinearLayout>
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="@string/trees_name"
+            android:layout_margin="5dp"
+            android:layout_marginBottom="5dp"
+            android:id="@+id/tvEmail" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/Give_your_tree_a_name"
+            android:layout_margin="5dp"
+            android:layout_marginBottom="5dp"
+            android:inputType="textEmailAddress"
+            android:singleLine="true"
+            android:id="@+id/etEmail" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="@string/City"
+
+            android:id="@+id/tvPhone" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginBottom="5dp"
+            android:hint="@string/Record_where_you_find_your_tree"
+            android:inputType="phone"
+            android:singleLine="true"
+            android:id="@+id/etPhone" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="@string/Write_somthing_to_your_tree"
+            android:id="@+id/tvClass" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginBottom="5dp"
+            android:hint="@string/This_is_my_happy_tree"
+            android:inputType="date"
+            android:singleLine="true"
+
+            android:id="@+id/etClass" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp" >
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_weight="1"
+                android:onClick="onGetFullTimelineClicked"
+                android:text="@string/ui_profile_button_get_full_timeline" >
+            </Button>
+
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

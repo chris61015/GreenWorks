@@ -1,5 +1,6 @@
 package com.dartmouth.cs.greenworks.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -11,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.dartmouth.cs.greenworks.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -40,25 +42,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mDrawerLayout = (DrawerLayout) findViewById(com.dartmouth.cs.greenworks.R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(com.dartmouth.cs.greenworks.R.id.toolbar);
-//        setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
 
-        if (null == savedInstanceState) {
-            mNavItemId = com.dartmouth.cs.greenworks.R.id.drawer_item_1;
-        } else {
-            mNavItemId = savedInstanceState.getInt(NAV_ITEM_ID);
-        }
+
 
         NavigationView navigationView = (NavigationView) findViewById(com.dartmouth.cs.greenworks.R.id.navigation);
         navigationView.setNavigationItemSelectedListener(this);
 
-        navigationView.getMenu().findItem(mNavItemId).setChecked(true);
+        if (null != savedInstanceState) {
+            mNavItemId = savedInstanceState.getInt(NAV_ITEM_ID);
+            navigationView.getMenu().findItem(mNavItemId).setChecked(true);
+        }
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, com.dartmouth.cs.greenworks.R.string.open, com.dartmouth.cs.greenworks.R.string.close);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
-//        navigate(mNavItemId);
-//        getFragmentManager().beginTransaction().add(R.id.content, new FragmentGridView(), "my_fragment").commit();
+        navigate(mNavItemId);
 
         testBackend();
 
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
         item.setChecked(true);
         mNavItemId = item.getItemId();
 
@@ -93,11 +93,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerActionHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-//                navigate(item.getItemId());
+                navigate(item.getItemId());
             }
         }, DRAWER_CLOSE_DELAY_MS);
         return true;
     }
+    private void navigate(final int itemId) {
+
+        switch (itemId) {
+            case R.id.drawer_item_1:
+                Intent intent1 = new Intent(this, MyTreesActivity.class);
+                startActivity(intent1);
+                break;
+            case R.id.drawer_item_2:
+                Intent intent2 = new Intent(this, PlantATreeActivity.class);
+                startActivity(intent2);
+                break;
+            default:
+                // ignore
+                break;
+        }
+    }
+
 
     public void testBackend() {
         BackendTest newTest = new BackendTest();
