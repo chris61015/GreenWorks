@@ -24,4 +24,10 @@
     <string name="open">open navigation drawer</string>
     <string name="close">close navigation drawer</string>
 
+    <string name="City">City</string>
+    <string name="trees_photo">Photo of the tree</string>
+    <string name="ui_profile_button_get_full_timeline">Get Full Timeline</string>
+    <string name="ui_profile_button_update">Update</string>
+    <string name="ui_profile_button_showTimeLine">Show Timeline</string>
+
 </resources>
