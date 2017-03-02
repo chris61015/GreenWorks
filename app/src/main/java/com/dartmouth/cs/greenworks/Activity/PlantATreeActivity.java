@@ -10,10 +10,10 @@ import com.dartmouth.cs.greenworks.R;
  * Created by chris61015 on 2/25/17.
  */
 
-public class MyTreesActivity extends AppCompatActivity{
+public class PlantATreeActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);;
-        setContentView(R.layout.activity_my_trees);
+        super.onCreate(savedInstanceState, persistentState);
+        setContentView(R.layout.activity_plant_a_tree);
     }
 }
