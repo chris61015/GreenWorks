@@ -108,4 +108,18 @@ public class TreeDataStore {
         PreparedQuery preparedQuery = datastoreService.prepare(query);
         return preparedQuery.asIterator();
     }
+
+    // get my trees using registration ID as identifier.
+    public ArrayList<TreeEntry> queryMyTrees (String regId) {
+        ArrayList<TreeEntry> ret = new ArrayList<>();
+        //TODO
+        return ret;
+    }
+
+    // get trees around me using geographic data.
+    public ArrayList<TreeEntry> queryNearbyTrees (long miles, GeoPt center) {
+        ArrayList<TreeEntry> ret = new ArrayList<>();
+        //TODO
+        return ret;
+    }
 }

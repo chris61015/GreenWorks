@@ -100,4 +100,10 @@ public class TimelineDataStore {
         return preparedQuery.asIterator();
     }
 
+    private ArrayList<TimelineEntry> queryMyUpdate (String regId) {
+        ArrayList<TimelineEntry> ret = new ArrayList<TimelineEntry> ();
+        // TODO
+        return ret;
+    }
+
 }
