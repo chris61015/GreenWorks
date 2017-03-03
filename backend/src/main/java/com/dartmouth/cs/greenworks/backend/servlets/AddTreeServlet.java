@@ -35,7 +35,8 @@ public class AddTreeServlet extends HttpServlet {
 
         // get data from request, wrap into a entry object,
         // and insert to datastore.
-        long treeId = Long.parseLong(request.getParameter("Tree ID"));
+//        long treeId = Long.parseLong(request.getParameter("Tree ID"));
+        long treeId = TreeDataStore.idCounter++;
         long datetime = Long.parseLong(request.getParameter("Date Time"));
         String location = request.getParameter("Location");
         String name = request.getParameter("Name");
