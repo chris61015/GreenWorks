@@ -1,8 +1,9 @@
 package com.dartmouth.cs.greenworks.Activity;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.dartmouth.cs.greenworks.R;
 
@@ -12,8 +13,9 @@ import com.dartmouth.cs.greenworks.R;
 
 public class MyTreesActivity extends AppCompatActivity{
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);;
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_trees);
+        Log.d("DEBUG", "MyTreesActivity");
     }
 }

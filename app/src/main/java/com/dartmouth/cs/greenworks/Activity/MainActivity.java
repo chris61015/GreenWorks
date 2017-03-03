@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.dartmouth.cs.greenworks.R;
@@ -43,8 +44,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayout = (DrawerLayout) findViewById(com.dartmouth.cs.greenworks.R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(com.dartmouth.cs.greenworks.R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
 
         NavigationView navigationView = (NavigationView) findViewById(com.dartmouth.cs.greenworks.R.id.navigation);
         navigationView.setNavigationItemSelectedListener(this);
@@ -106,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent1);
                 break;
             case R.id.drawer_item_2:
+                Log.d("DEBUG", "Plant a Tree");
                 Intent intent2 = new Intent(this, PlantATreeActivity.class);
                 startActivity(intent2);
                 break;
