@@ -28,10 +28,10 @@ public class UpdateTreeSevlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
 
+        TimelineDataStore timelineDataStore = new TimelineDataStore();
         // get data from request, wrap into a entry object,
         // and insert to datastore.
-//        long timelineId = Long.parseLong(request.getParameter("Timeline ID"));
-        long timelineId = TimelineDataStore.idCounter++;
+        long timelineId = timelineDataStore.idGenerator();
         long treeId = Long.parseLong(request.getParameter("Tree ID"));
         long datetime = Long.parseLong(request.getParameter("Date Time"));
         String name = request.getParameter("Name");
@@ -43,7 +43,7 @@ public class UpdateTreeSevlet extends HttpServlet {
         TimelineEntry timelineEntry = new TimelineEntry(treeId, timelineId,
                 datetime, name, regId, photo, comment);
 
-        TimelineDataStore timelineDataStore = new TimelineDataStore();
+
         timelineDataStore.addEntry2Datastore(timelineEntry);
         response.sendRedirect("/listalltrees.do");
     }

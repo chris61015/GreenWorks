@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 public class TreeDataStore {
     private Logger logger;
     private DatastoreService datastoreService;
-    public static long idCounter = 1;
+
 
     public TreeDataStore () {
         logger = Logger.getLogger(TreeEntry.class.getName());
@@ -208,6 +208,8 @@ public class TreeDataStore {
     }
 
 
+
+
     // code source: http://www.geodatasource.com/developers/java
     private double distance(double lat1, double lon1,
                             double lat2, double lon2) {
@@ -233,5 +235,20 @@ public class TreeDataStore {
 	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
     private static double rad2deg(double rad) {
         return (rad * 180 / Math.PI);
+    }
+
+
+    // find the largest tree ID and increment it by 1 as id for new comer.
+    public long idGenerator() {
+        ArrayList<TreeEntry> allEntries = queryAll();
+        long curMax = 0;
+        if (allEntries != null) {
+            for (TreeEntry entry:allEntries) {
+                if (entry.treeId > curMax) {
+                    curMax = entry.treeId;
+                }
+            }
+        }
+        return curMax+1;
     }
 }

@@ -29,10 +29,11 @@ public class AddTreeServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
 
+        TreeDataStore treeDataStore = new TreeDataStore();
+
         // get data from request, wrap into a entry object,
         // and insert to datastore.
-//        long treeId = Long.parseLong(request.getParameter("Tree ID"));
-        long treeId = TreeDataStore.idCounter++;
+        long treeId = treeDataStore.idGenerator();
         long datetime = Long.parseLong(request.getParameter("Date Time"));
         String lat = request.getParameter("Latitude");
         String lng = request.getParameter("Longitude");
@@ -46,7 +47,7 @@ public class AddTreeServlet extends HttpServlet {
         TreeEntry treeEntry = new TreeEntry(treeId, datetime,
                 new GeoPt(Float.parseFloat(lat), Float.parseFloat(lng)), name, city, regId, photo, comment);
 
-        TreeDataStore treeDataStore = new TreeDataStore();
+
         treeDataStore.addEntry2Datastore(treeEntry);
         response.sendRedirect("/listalltrees.do");
     }

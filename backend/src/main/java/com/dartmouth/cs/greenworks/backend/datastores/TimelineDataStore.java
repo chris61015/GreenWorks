@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 public class TimelineDataStore {
     private Logger logger;
     private DatastoreService datastoreService;
-    public static long idCounter = 1;
+
 
     public TimelineDataStore () {
         logger = Logger.getLogger(TimelineEntry.class.getName());
@@ -148,5 +148,18 @@ public class TimelineDataStore {
             }
         }
         return ret;
+    }
+
+    public long idGenerator() {
+        ArrayList<TimelineEntry> allEntries = queryAll();
+        long curMax = 0;
+        if (allEntries != null) {
+            for (TimelineEntry entry:allEntries) {
+                if (entry.timelineId > curMax) {
+                    curMax = entry.treeId;
+                }
+            }
+        }
+        return curMax+1;
     }
 }
