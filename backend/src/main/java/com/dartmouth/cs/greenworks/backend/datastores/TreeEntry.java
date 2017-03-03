@@ -35,6 +35,8 @@ public class TreeEntry {
     public String regId; // unique Id to identify use. Hack for login.
     public Blob photo;
     public String comment;
+    public double distanceToOrigin;  // not saved in datastore.
+                                    // only for sorting after retrieved from datastore.
 
     // Constructor.
     public TreeEntry(long _treeId, long _dateTime, GeoPt _location,
@@ -48,5 +50,6 @@ public class TreeEntry {
         regId = _regId;
         photo = _photo;
         comment = _comment;
+        distanceToOrigin = 0.0;
     }
 }

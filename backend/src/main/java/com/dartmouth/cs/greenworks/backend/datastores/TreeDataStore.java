@@ -118,22 +118,91 @@ public class TreeDataStore {
         Query query = new Query(TreeEntry.ENTRY_ENTITY_KIND);
 
         query.setFilter(filter);
+        // get the newest ones first.
+        query.addSort(TreeEntry.PROPERTY_DATETIME, Query.SortDirection.DESCENDING);
         PreparedQuery preparedQuery = datastoreService.prepare(query);
         Iterator<Entity> iter = preparedQuery.asIterator();
         while(iter.hasNext()) {
             Entity temp = iter.next();
             if (temp != null) {
-
+                ret.add(convertEntity2Entry(temp));
             }
         }
-        //TODO
         return ret;
     }
 
     // get trees around me using geographic data.
-    public ArrayList<TreeEntry> queryNearbyTrees (long miles, GeoPt center) {
-        ArrayList<TreeEntry> ret = new ArrayList<>();
-        //TODO
-        return ret;
+    public ArrayList<TreeEntry> queryNearbyTrees (double miles, GeoPt center) {
+
+        ArrayList<TreeEntry> sorted = new ArrayList<>();
+
+        // get all entries
+        ArrayList<TreeEntry> allEntries = queryAll();
+
+        for (TreeEntry entry:allEntries) {
+            GeoPt loca = entry.location;
+            entry.distanceToOrigin = distance(center.getLatitude(), center.getLongitude(),
+                    loca.getLatitude(), loca.getLongitude());
+        }
+
+        // sort the list in ascending order of distance
+        // by removing the closest tree from original list and
+        // adding to the new list.
+        while (allEntries != null && allEntries.size() > 0) {
+            int index = closest (allEntries);
+            if (allEntries.get(index).distanceToOrigin <= miles) {
+                sorted.add(allEntries.get(index));
+            }
+            allEntries.remove(index);
+        }
+
+        // return a sorted list of all trees.
+        // Let the caller choose which page it wants.
+        return sorted;
+    }
+
+
+
+    // find the index of the entries with the smallest distance.
+    private int closest(ArrayList<TreeEntry> entries) {
+
+        double minDistance = entries.get(0).distanceToOrigin;
+        int index = 0;
+
+        for (int i = 1; i < entries.size(); i++) {
+            if (entries.get(i).distanceToOrigin < minDistance) {
+                minDistance = entries.get(i).distanceToOrigin;
+                index = i;
+            }
+        }
+        return index;
+    }
+
+
+    // code source: http://www.geodatasource.com/developers/java
+    private double distance(double lat1, double lon1,
+                            double lat2, double lon2) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2))
+                + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2))
+                * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;  // in miles
+        return (dist);
+    }
+
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+	/*::	This function converts decimal degrees to radians			:*/
+	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    private static double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+	/*::	This function converts radians to decimal degrees			:*/
+	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    private static double rad2deg(double rad) {
+        return (rad * 180 / Math.PI);
     }
 }

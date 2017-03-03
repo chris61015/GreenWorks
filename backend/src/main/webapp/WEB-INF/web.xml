@@ -90,6 +90,6 @@
     </servlet-mapping>
 
     <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
+        <welcome-file>listalltrees</welcome-file>
     </welcome-file-list>
 </web-app>

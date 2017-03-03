@@ -105,16 +105,48 @@ public class TimelineDataStore {
         return preparedQuery.asIterator();
     }
 
-    private ArrayList<TimelineEntry> queryUpdatesOfATree (long treeId) {
-        ArrayList<TimelineEntry> ret = new ArrayList<TimelineEntry> ();
-        // TODO
+    public ArrayList<TimelineEntry> queryUpdatesOfATree (long treeId) {
+        ArrayList<TimelineEntry> ret = new ArrayList<> ();
+
+        Query.Filter filter = new Query.FilterPredicate(TimelineEntry.PROPERTY_TREE_ID,
+                Query.FilterOperator.EQUAL, treeId);
+        Query query = new Query(TimelineEntry.ENTRY_ENTITY_KIND);
+
+        query.setFilter(filter);
+        // get the newest ones first.
+        query.addSort(TimelineEntry.PROPERTY_DATETIME, Query.SortDirection.DESCENDING);
+        PreparedQuery preparedQuery = datastoreService.prepare(query);
+        Iterator<Entity> iter = preparedQuery.asIterator();
+        while(iter.hasNext()) {
+            Entity temp = iter.next();
+            if (temp != null) {
+                ret.add(convertEntity2Entry(temp));
+            }
+        }
+
         return ret;
     }
 
-    private ArrayList<TimelineEntry> queryMyUpdate (String regId) {
-        ArrayList<TimelineEntry> ret = new ArrayList<TimelineEntry> ();
-        // TODO
+    // get my timeline updates.
+    // note it will return the time line, not the tree itself.
+    public ArrayList<TimelineEntry> queryMyUpdate (String regId) {
+        ArrayList<TimelineEntry> ret = new ArrayList<> ();
+
+        Query.Filter filter = new Query.FilterPredicate(TimelineEntry.PROPERTY_REG_ID,
+                Query.FilterOperator.EQUAL, regId);
+        Query query = new Query(TimelineEntry.ENTRY_ENTITY_KIND);
+
+        query.setFilter(filter);
+        // get the newest ones first.
+        query.addSort(TimelineEntry.PROPERTY_DATETIME, Query.SortDirection.DESCENDING);
+        PreparedQuery preparedQuery = datastoreService.prepare(query);
+        Iterator<Entity> iter = preparedQuery.asIterator();
+        while(iter.hasNext()) {
+            Entity temp = iter.next();
+            if (temp != null) {
+                ret.add(convertEntity2Entry(temp));
+            }
+        }
         return ret;
     }
-
 }
