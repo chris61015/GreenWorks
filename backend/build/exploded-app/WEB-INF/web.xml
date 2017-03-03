@@ -23,7 +23,73 @@
         <url-pattern>/_ah/spi/*</url-pattern>
     </servlet-mapping>
 
+
+    <servlet>
+        <servlet-name>addtree</servlet-name>
+        <servlet-class>com.dartmouth.cs.greenworks.backend.servlets.AddTreeServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>addtree</servlet-name>
+        <url-pattern>/addtree.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>getmytrees</servlet-name>
+        <servlet-class>com.dartmouth.cs.greenworks.backend.servlets.GetMyTreesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>getmytrees</servlet-name>
+        <url-pattern>/getmytrees.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>gettimeline</servlet-name>
+        <servlet-class>com.dartmouth.cs.greenworks.backend.servlets.GetTimelineServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>gettimeline</servlet-name>
+        <url-pattern>/gettimeline.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>gettreesaroundme</servlet-name>
+        <servlet-class>com.dartmouth.cs.greenworks.backend.servlets.GetTreesAroundMeServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>gettreesaroundme</servlet-name>
+        <url-pattern>/gettreesaroundme.do</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>gettreesiupdated</servlet-name>
+        <servlet-class>com.dartmouth.cs.greenworks.backend.servlets.GetTreesIUpdatedSevlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>gettreesiupdated</servlet-name>
+        <url-pattern>/gettreesiupdated.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>listalltrees</servlet-name>
+        <servlet-class>com.dartmouth.cs.greenworks.backend.servlets.ListAllTreesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>listalltrees</servlet-name>
+        <url-pattern>/listalltrees.do</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>updatetree</servlet-name>
+        <servlet-class>com.dartmouth.cs.greenworks.backend.servlets.UpdateTreeSevlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>updatetree</servlet-name>
+        <url-pattern>/updatetree.do</url-pattern>
+    </servlet-mapping>
+
     <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
+        <welcome-file>listalltrees</welcome-file>
     </welcome-file-list>
 </web-app>

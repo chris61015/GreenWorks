@@ -2,7 +2,6 @@ package com.dartmouth.cs.greenworks.backend.servlets;
 
 import com.dartmouth.cs.greenworks.backend.datastores.TimelineDataStore;
 import com.dartmouth.cs.greenworks.backend.datastores.TimelineEntry;
-import com.google.appengine.api.datastore.Blob;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -40,10 +39,9 @@ public class UpdateTreeSevlet extends HttpServlet {
         String photo = request.getParameter("Photo");
         String comment = request.getParameter("Comment");
 
-        Blob photoBlob = new Blob(photo.getBytes());
 
         TimelineEntry timelineEntry = new TimelineEntry(treeId, timelineId,
-                datetime, name, regId, photoBlob, comment);
+                datetime, name, regId, photo, comment);
 
         TimelineDataStore timelineDataStore = new TimelineDataStore();
         timelineDataStore.addEntry2Datastore(timelineEntry);

@@ -2,11 +2,7 @@ package com.dartmouth.cs.greenworks.backend.servlets;
 
 import com.dartmouth.cs.greenworks.backend.datastores.TreeDataStore;
 import com.dartmouth.cs.greenworks.backend.datastores.TreeEntry;
-import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.GeoPt;
-import com.google.appengine.repackaged.com.google.gson.Gson;
-import com.google.appengine.repackaged.com.google.gson.reflect.TypeToken;
-import com.google.appengine.repackaged.com.google.type.LatLng;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -38,22 +34,17 @@ public class AddTreeServlet extends HttpServlet {
 //        long treeId = Long.parseLong(request.getParameter("Tree ID"));
         long treeId = TreeDataStore.idCounter++;
         long datetime = Long.parseLong(request.getParameter("Date Time"));
-        String location = request.getParameter("Location");
+        String lat = request.getParameter("Latitude");
+        String lng = request.getParameter("Longitude");
         String name = request.getParameter("Name");
         String city = request.getParameter("City");
         String regId = request.getParameter("Registration ID");
         String photo = request.getParameter("Photo");
         String comment = request.getParameter("Comment");
 
-        Blob photoBlob = new Blob(photo.getBytes());
-
-        Gson gson = new Gson();
-        LatLng locLatLng = gson.fromJson(location, new TypeToken<LatLng>(){}.getType());
-        GeoPt locGeoPt = new GeoPt((float)locLatLng.getLatitude(),
-                (float)locLatLng.getLongitude());
 
         TreeEntry treeEntry = new TreeEntry(treeId, datetime,
-                locGeoPt, name, city, regId, photoBlob, comment);
+                new GeoPt(Float.parseFloat(lat), Float.parseFloat(lng)), name, city, regId, photo, comment);
 
         TreeDataStore treeDataStore = new TreeDataStore();
         treeDataStore.addEntry2Datastore(treeEntry);

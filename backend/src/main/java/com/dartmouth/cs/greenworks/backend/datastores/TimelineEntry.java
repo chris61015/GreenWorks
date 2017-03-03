@@ -1,8 +1,6 @@
 package com.dartmouth.cs.greenworks.backend.datastores;
 
 
-import com.google.appengine.api.datastore.Blob;
-
 /**
  * Created by Xiaolei on 2/26/17.
  */
@@ -31,12 +29,12 @@ public class TimelineEntry {
     public long dateTime;
     public String name;  // person who updated the tree
     public String regId; // identify user.
-    public Blob photo;
+    public String photo; // base64
     public String comment;
 
     // constructor
     public TimelineEntry(long _timelineId, long _treeId, long _dateTime, String _name,
-                         String _regId, Blob _photo, String _comment) {
+                         String _regId, String _photo, String _comment) {
         timelineId = _timelineId;
         treeId = _treeId;
         dateTime = _dateTime;

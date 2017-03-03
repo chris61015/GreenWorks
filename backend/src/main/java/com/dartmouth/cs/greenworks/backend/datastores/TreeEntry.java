@@ -1,6 +1,5 @@
 package com.dartmouth.cs.greenworks.backend.datastores;
 
-import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.GeoPt;
 
 
@@ -33,7 +32,7 @@ public class TreeEntry {
     public String name; // person who planted the tree. Entered by user
     public String city; // where is the tree.  Entered by user.
     public String regId; // unique Id to identify use. Hack for login.
-    public Blob photo;
+    public String photo;  // base64
     public String comment;
     public double distanceToOrigin;  // not saved in datastore.
                                     // only for sorting after retrieved from datastore.
@@ -41,7 +40,7 @@ public class TreeEntry {
     // Constructor.
     public TreeEntry(long _treeId, long _dateTime, GeoPt _location,
                      String _name, String _city, String _regId,
-                     Blob _photo, String _comment) {
+                     String _photo, String _comment) {
         treeId = _treeId;
         dateTime = _dateTime;
         location = _location;

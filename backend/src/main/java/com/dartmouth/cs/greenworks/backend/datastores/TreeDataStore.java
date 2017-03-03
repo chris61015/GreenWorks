@@ -1,6 +1,5 @@
 package com.dartmouth.cs.greenworks.backend.datastores;
 
-import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -10,6 +9,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Text;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 public class TreeDataStore {
     private Logger logger;
     private DatastoreService datastoreService;
-    public static long idCounter = 0;
+    public static long idCounter = 1;
 
     public TreeDataStore () {
         logger = Logger.getLogger(TreeEntry.class.getName());
@@ -65,7 +65,7 @@ public class TreeDataStore {
                 (String)entity.getProperty(TreeEntry.PROPERTY_NAME),
                 (String)entity.getProperty(TreeEntry.PROPERTY_CITY),
                 (String)entity.getProperty(TreeEntry.PROPERTY_REG_ID),
-                (Blob)entity.getProperty(TreeEntry.PROPERTY_PHOTO),
+                ((Text)entity.getProperty(TreeEntry.PROPERTY_PHOTO)).getValue(),
                 (String)entity.getProperty(TreeEntry.PROPERTY_COMMENT)
         );
         return ret;
@@ -82,7 +82,7 @@ public class TreeDataStore {
         entity.setProperty(TreeEntry.PROPERTY_LOCATION, entry.location);
         entity.setProperty(TreeEntry.PROPERTY_CITY, entry.city);
         entity.setProperty(TreeEntry.PROPERTY_REG_ID, entry.regId);
-        entity.setProperty(TreeEntry.PROPERTY_PHOTO, entry.photo);
+        entity.setProperty(TreeEntry.PROPERTY_PHOTO, new Text(entry.photo));
         entity.setProperty(TreeEntry.PROPERTY_COMMENT, entry.comment);
         datastoreService.put(entity);
     }
@@ -161,6 +161,35 @@ public class TreeDataStore {
         return sorted;
     }
 
+    public ArrayList<TreeEntry> queryTreesIUpdated(String regId) {
+        TimelineDataStore timelineDataStore = new TimelineDataStore();
+
+        ArrayList<TreeEntry> treeEntries = new ArrayList<>();
+
+        // get all my updates from timeline datastore.
+        ArrayList<TimelineEntry> myUpdates = timelineDataStore.queryMyUpdate(regId);
+
+        // get tree IDs from my updates.
+        ArrayList<Long> treeIds = new ArrayList<>();
+        if (myUpdates != null) {
+            for (TimelineEntry update:myUpdates) {
+                long treeId = update.treeId;
+                if (!treeIds.contains(treeId)) {
+                    treeIds.add(treeId);
+                }
+            }
+        }
+
+        // get trees from tree datastore using tree IDs.
+        for (long treeId:treeIds) {
+            TreeEntry temp = getEntryByIdentifier(treeId);
+            if (temp != null) {
+                treeEntries.add(temp);
+            }
+        }
+        return treeEntries;
+
+    }
 
 
     // find the index of the entries with the smallest distance.

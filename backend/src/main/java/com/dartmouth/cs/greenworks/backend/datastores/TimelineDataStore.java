@@ -1,6 +1,5 @@
 package com.dartmouth.cs.greenworks.backend.datastores;
 
-import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -8,6 +7,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Text;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 public class TimelineDataStore {
     private Logger logger;
     private DatastoreService datastoreService;
-    public static long idCounter = 0;
+    public static long idCounter = 1;
 
     public TimelineDataStore () {
         logger = Logger.getLogger(TimelineEntry.class.getName());
@@ -62,7 +62,7 @@ public class TimelineDataStore {
                 (long)entity.getProperty(TimelineEntry.PROPERTY_DATETIME),
                 (String)entity.getProperty(TimelineEntry.PROPERTY_NAME),
                 (String)entity.getProperty(TimelineEntry.PROPERTY_REG_ID),
-                (Blob)entity.getProperty(TimelineEntry.PROPERTY_PHOTO),
+                ((Text)entity.getProperty(TimelineEntry.PROPERTY_PHOTO)).getValue(),
                 (String)entity.getProperty(TimelineEntry.PROPERTY_COMMENT)
         );
         return ret;
@@ -77,7 +77,7 @@ public class TimelineDataStore {
         entity.setProperty(TimelineEntry.PROPERTY_DATETIME, entry.dateTime);
         entity.setProperty(TimelineEntry.PROPERTY_NAME, entry.name);
         entity.setProperty(TimelineEntry.PROPERTY_REG_ID, entry.regId);
-        entity.setProperty(TimelineEntry.PROPERTY_PHOTO, entry.photo);
+        entity.setProperty(TimelineEntry.PROPERTY_PHOTO, new Text(entry.photo));
         entity.setProperty(TimelineEntry.PROPERTY_COMMENT, entry.comment);
         datastoreService.put(entity);
     }
@@ -128,7 +128,7 @@ public class TimelineDataStore {
     }
 
     // get my timeline updates.
-    // note it will return the time line, not the tree itself.
+    // note it will return the time line, not the trees.
     public ArrayList<TimelineEntry> queryMyUpdate (String regId) {
         ArrayList<TimelineEntry> ret = new ArrayList<> ();
 
