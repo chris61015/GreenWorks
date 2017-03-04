@@ -39,4 +39,5 @@
     <string name="preference_key_tree_name">TreeName</string>
     <string name="preference_key_tree_comment">TreeComment</string>
     <string name="preference_key_tree_city">TreeCity</string>
+    <string name="google_play_service_missing">ServiceMissing</string>
 </resources>
