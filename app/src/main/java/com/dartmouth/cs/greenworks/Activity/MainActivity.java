@@ -70,8 +70,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         navigate(mNavItemId);
 
-        checkPermissions();
-//        testBackend();
+        //checkPermissions();
+        testBackend();
 
     }
 
@@ -210,7 +210,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         newTest.updateTree(this, "U1_1.jpg", 1);
         newTest.updateTree(this, "U1_2.jpg", 1);
         newTest.updateTree(this, "U2_1.jpg", 2);
-
+        newTest.getMyTreesTest(this);
+        newTest.getTreesAroundMeTest(this);
+        newTest.addTreeTest(this, "5.jpg");
 
     }
 
