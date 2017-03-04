@@ -10,7 +10,7 @@
     <string name="This_is_my_happy_tree">This is my happy tree!</string>
     <string name="Trees_Photo">Photo of the Tree</string>
 
-
+    <string name="ui_profile_photo_file_name">profile_photo.png</string>
     <string name="ui_proile_image_descripton">Your Profile Picture</string>
     <string name="ui_profile_button_change">Change</string>
     <string name="ui_profile_button_save">Save</string>
@@ -35,4 +35,8 @@
     <string name="ui_profile_button_update">Update</string>
     <string name="ui_profile_button_showTimeLine">Show Timeline</string>
 
+    <string name="preference_name">TreeInfo</string>
+    <string name="preference_key_tree_name">TreeName</string>
+    <string name="preference_key_tree_comment">TreeComment</string>
+    <string name="preference_key_tree_city">TreeCity</string>
 </resources>

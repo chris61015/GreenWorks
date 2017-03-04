@@ -2,6 +2,7 @@ package com.dartmouth.cs.greenworks.Fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private static View view;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,15 +29,29 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_map, container, false);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
-                .findFragmentById(R.id.map);
-
-        mapFragment.getMapAsync(this);
-
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null)
+                parent.removeView(view);
+        }
+        try {
+            view = inflater.inflate(R.layout.fragment_map, container, false);
+            SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().
+                    findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+        } catch (InflateException e) {
+        /* map is already there, just return view as it is */
+        }
         return view;
+//        // Inflate the layout for this fragment
+//        View view = inflater.inflate(R.layout.fragment_map, container, false);
+//        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+//        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+//                .findFragmentById(R.id.map);
+//
+//        mapFragment.getMapAsync(this);
+//
+//        return view;
     }
 
     /**
@@ -56,6 +72,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
+//    @Override
+//    public void onDestroyView() {
+//        super.onDestroyView();
+//        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+//                .findFragmentById(R.id.map);
+//        if (mapFragment != null)
+//            getFragmentManager().beginTransaction().remove(mapFragment).commit();
+//    }
 
 }
 

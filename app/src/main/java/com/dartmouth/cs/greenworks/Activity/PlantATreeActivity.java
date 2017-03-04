@@ -4,14 +4,16 @@ import android.app.DialogFragment;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -20,16 +22,19 @@ import com.dartmouth.cs.greenworks.R;
 import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Created by chris61015 on 2/25/17.
  */
 
+//TODO: Figure out the bug when change orientation, pic become smaller
 public class PlantATreeActivity extends AppCompatActivity {
 
     public static final int REQUEST_CODE_TAKE_FROM_CAMERA = 0;
     public static final int REQUEST_CODE_SELECT_FROM_GALLERY = 1;
-
     public static final int REQUEST_CODE_CROP_PHOTO = 2;
 
     private static final String IMAGE_UNSPECIFIED = "image/*";
@@ -37,10 +42,8 @@ public class PlantATreeActivity extends AppCompatActivity {
     private static final String URI_INSTANCE_STATE_KEY_TEMP = "saved_uri_temp";
     private static final String CAMERA_CLICKED_KEY = "clicked";
 
-
-    private Button mBtnChangeImage, mBtnSave, mBtnCancel;
     private Uri mImageCaptureUri, mTempUri;
-    private Boolean stateChnaged = false, cameraClicked = false,clickedFromCam=false;
+    private Boolean stateChanged = false, cameraClicked = false,clickedFromCam=false;
 
     private ImageView m_ImgView;
 
@@ -55,10 +58,12 @@ public class PlantATreeActivity extends AppCompatActivity {
                     .getParcelable(URI_INSTANCE_STATE_KEY);
             mTempUri = savedInstanceState.getParcelable(URI_INSTANCE_STATE_KEY_TEMP);
             cameraClicked = savedInstanceState.getBoolean(CAMERA_CLICKED_KEY);
-            stateChnaged=true;
+            stateChanged=true;
         }
 
         m_ImgView = (ImageView)findViewById(R.id.imageProfile);
+        loadProfile();
+        loadProfileImage();
     }
 
     public void onSaveClicked(View v){
@@ -154,7 +159,6 @@ public class PlantATreeActivity extends AppCompatActivity {
             mTempUri = Crop.getOutput(result);
             m_ImgView.setImageResource(0);
             m_ImgView.setImageURI(mTempUri);
-            Log.d("TAG", "came here");
             cameraClicked=true;
 
         } else if (resultCode == Crop.RESULT_ERROR) {
@@ -169,13 +173,13 @@ public class PlantATreeActivity extends AppCompatActivity {
         outState.putParcelable(URI_INSTANCE_STATE_KEY, mImageCaptureUri);
         outState.putParcelable(URI_INSTANCE_STATE_KEY_TEMP,mTempUri);
         outState.putBoolean(CAMERA_CLICKED_KEY,cameraClicked);
+        saveProfile();
+        saveProfileImage();
     }
 
     public void onPhotoPickerItemSelected(int item) {
         Intent intent;
-
         switch (item) {
-
             case 0:
                 changeImage();
                 break;
@@ -183,12 +187,98 @@ public class PlantATreeActivity extends AppCompatActivity {
                 intent = new Intent(
                         Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
                 startActivityForResult(intent, REQUEST_CODE_SELECT_FROM_GALLERY);
                 break;
 
             default:
                 return;
         }
+    }
+
+
+    private void saveProfileImage() {
+
+        // Commit all the changes into preference file
+        // Save profile image into internal storage.
+        m_ImgView.buildDrawingCache();
+        Bitmap bmap = m_ImgView.getDrawingCache();
+        try {
+            FileOutputStream fos = openFileOutput(
+                    getString(R.string.ui_profile_photo_file_name), MODE_PRIVATE);
+            bmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.flush();
+            fos.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+    private void loadProfileImage() {
+        // Load profile photo from internal storage
+        try {
+            FileInputStream fis;
+
+            if(stateChanged && cameraClicked){
+                if(!Uri.EMPTY.equals(mTempUri)) {
+                    m_ImgView.setImageURI(mTempUri);
+                    stateChanged = false;
+                }
+            } else {
+                fis = openFileInput(getString(R.string.ui_profile_photo_file_name));
+                Bitmap bmap = BitmapFactory.decodeStream(fis);
+                m_ImgView.setImageBitmap(bmap);
+
+                fis.close();
+            }
+
+        } catch (IOException e) {
+            // Default profile photo if no photo saved before.
+            m_ImgView.setImageResource(R.drawable.dartmouthpine);
+        }
+    }
+
+    public void saveProfile(){
+        String key, val;
+
+        key = getString(R.string.preference_name);
+        SharedPreferences prefs = getSharedPreferences(key, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        // Write screen contents into corresponding editor fields.
+        key = getString(R.string.preference_key_tree_name);
+        val = ((EditText) findViewById(R.id.etName)).getText().toString();
+        editor.putString(key, val);
+
+        key = getString(R.string.preference_key_tree_city);
+        val = ((EditText) findViewById(R.id.etCity)).getText()
+                .toString();
+        editor.putString(key, val);
+
+        key = getString(R.string.preference_key_tree_comment);
+        val = ((EditText) findViewById(R.id.etComment)).getText()
+                .toString();
+        editor.putString(key, val);
+
+        //TODO: Check this out
+        editor.apply();
+    }
+
+    public void loadProfile(){
+        String key, str_val;
+
+        key = getString(R.string.preference_name);
+        SharedPreferences prefs = getSharedPreferences(key, MODE_PRIVATE);
+
+        key = getString(R.string.preference_key_tree_name);
+        str_val = prefs.getString(key, "");
+        ((EditText) findViewById(R.id.etName)).setText(str_val);
+
+        key = getString(R.string.preference_key_tree_city);
+        str_val = prefs.getString(key, "");
+        ((EditText) findViewById(R.id.etCity)).setText(str_val);
+
+        key = getString(R.string.preference_key_tree_comment);
+        str_val = prefs.getString(key, "");
+        ((EditText) findViewById(R.id.etComment)).setText(str_val);
     }
 }

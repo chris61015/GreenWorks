@@ -24,6 +24,7 @@ import com.dartmouth.cs.greenworks.Fragment.TreesIUpdatedFragment;
 import com.dartmouth.cs.greenworks.R;
 import com.google.android.gms.maps.GoogleMap;
 
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
 
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigate(mNavItemId);
 
         checkPermissions();
-        testBackend();
+//        testBackend();
 
     }
 
@@ -90,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
     private void navigate(final int itemId) {
-
         switch (itemId) {
             case R.id.drawer_item_1:
                 getSupportFragmentManager()
@@ -101,13 +101,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.drawer_item_2:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.content, mSecondFragment)
+                        .replace(R.id.content, mSecondFragment).addToBackStack(null)
                         .commit();
                 break;
             case R.id.drawer_item_3:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.content, mThirdFragment)
+                        .replace(R.id.content, mThirdFragment).addToBackStack(null)
                         .commit();
                 break;
 //            case R.id.drawer_item_4:
