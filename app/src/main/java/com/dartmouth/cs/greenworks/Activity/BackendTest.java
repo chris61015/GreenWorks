@@ -82,6 +82,10 @@ public class BackendTest {
         new DatastoreTask().execute(ADD_TREE, tree);
     }
 
+    public void addTreeTest(TreeEntry entry) {
+        new DatastoreTask().execute(ADD_TREE, entry);
+    }
+
     public String photoToString(Context context, String filename) {
 
         String filepath = Environment.getExternalStorageDirectory()
