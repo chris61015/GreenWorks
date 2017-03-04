@@ -56,7 +56,8 @@ public class ListAllTreesServlet extends HttpServlet {
                         " Date Time: " + formatDatetime(treeEntry.dateTime) +
                         " GeoPt: " + locationToString(treeEntry.location) + "<br>\n");
                 // All the '+' was replaced by space somehow during storage in datastore.
-                out.write("<img src='data:img/jpg;base64," + treeEntry.photo.replace(' ', '+') + "' /><br>\n");
+                out.write("<img src='data:img/jpg;base64," + treeEntry.photo.replace(' ', '+') +
+                        "' width=\"100\" height=\"100\" /><br>\n");
                 out.write("&nbsp;&nbsp;&nbsp;&nbsp;" + "Timeline: <br>\n");
                 ArrayList<TimelineEntry>timelineEntries = timelineDataStore
                         .queryUpdatesOfATree(treeEntry.treeId);
@@ -65,6 +66,10 @@ public class ListAllTreesServlet extends HttpServlet {
                             timelineEntry.timelineId + "). " +
                             "Name: " + timelineEntry.name +
                             " Date Time: " + formatDatetime(timelineEntry.dateTime) + "<br>\n");
+                    out.write("&nbsp;&nbsp;&nbsp;&nbsp;" +
+                            "<img src='data:img/jpg;base64," +
+                            timelineEntry.photo.replace(' ', '+')
+                            + "' width=\"100\" height=\"100\"  /><br>\n");
                 }
             }
         }

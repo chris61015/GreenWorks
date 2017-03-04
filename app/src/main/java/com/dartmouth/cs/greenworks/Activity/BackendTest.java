@@ -4,10 +4,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.dartmouth.cs.greenworks.TimelineEntry;
 import com.dartmouth.cs.greenworks.TreeEntry;
 import com.dartmouth.cs.greenworks.backend.registration.Registration;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -18,6 +20,7 @@ import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,20 +63,43 @@ public class BackendTest {
         return myRegId;
     }
 
-    public void addTreeTest(Context context, int id) {
+    public void updateTree(Context context, String filename) {
+        String encodedImage = photoToString (context, filename);
+    }
 
-        Bitmap bm = BitmapFactory.decodeResource(context.getResources(),
-                id);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
-        byte[] b = baos.toByteArray();
+    public void addTreeTest(Context context, String filename) {
 
-        String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+        String encodedImage = photoToString(context, filename);
 
         TreeEntry tree = new TreeEntry(0, System.currentTimeMillis(),
                 new LatLng(12.4, 11.2), "Xiaolei", "West Leb",
                 myRegId, encodedImage, "Hello World!");
         new DatastoreTask().execute(ADD_TREE, tree);
+    }
+
+    public String photoToString(Context context, String filename) {
+
+        String filepath = Environment.getExternalStorageDirectory()
+                .getAbsolutePath() + File.separator + filename;
+        Log.d(TAG, "abs file path: " + filepath);
+
+        try {
+            File f = new File(filepath);
+            if (!f.exists()) {
+                Log.d(TAG, "File doesn't exist");
+                return null;
+            }
+
+            Bitmap bm = BitmapFactory.decodeFile(filepath);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+            byte[] b = baos.toByteArray();
+
+            return Base64.encodeToString(b, Base64.DEFAULT);
+        } catch (Exception e) {
+            Log.d(TAG, "Load file error: " + filename);
+            return null;
+        }
     }
 
     public class DatastoreTask extends AsyncTask<Object, Void, Void> {
@@ -97,7 +123,22 @@ public class BackendTest {
                     try {
                         ServerUtilities.post(SERVER_ADDR + "/addtree.do", data);
                     } catch (IOException e) {
-                        Log.e(TAG, "Sync failed: " + e.getCause());
+                        Log.e(TAG, "Add tree Sync failed: " + e.getCause());
+                        Log.e(TAG, "data posting error " + e);
+                    }
+                    break;
+                case UPDATE_TREE:
+                    TimelineEntry timelineEntry = (TimelineEntry) params[1];
+                    Map<String, String>data2 = new HashMap();
+                    data2.put("Tree ID", Long.toString(timelineEntry.treeId));
+                    data2.put("Date Time", Long.toString(timelineEntry.dateTime));
+                    data2.put("Photo", timelineEntry.photo);
+                    data2.put("Registration ID", timelineEntry.regId);
+                    data2.put("Comment", timelineEntry.comment);
+                    try {
+                        ServerUtilities.post(SERVER_ADDR + "/updatetree.do", data2);
+                    } catch (IOException e) {
+                        Log.e(TAG, "Update tree Sync failed: " + e.getCause());
                         Log.e(TAG, "data posting error " + e);
                     }
                     break;
