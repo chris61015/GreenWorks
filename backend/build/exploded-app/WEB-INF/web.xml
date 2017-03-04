@@ -90,6 +90,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>gettreebyid</servlet-name>
+        <servlet-class>com.dartmouth.cs.greenworks.backend.servlets.GetTreeByIdServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>gettreebyid</servlet-name>
+        <url-pattern>/gettreebyid.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>clearall</servlet-name>
         <servlet-class>com.dartmouth.cs.greenworks.backend.servlets.ClearAllServlet</servlet-class>
     </servlet>

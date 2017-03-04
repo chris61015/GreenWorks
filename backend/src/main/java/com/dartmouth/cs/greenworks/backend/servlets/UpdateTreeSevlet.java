@@ -1,9 +1,13 @@
 package com.dartmouth.cs.greenworks.backend.servlets;
 
+import com.dartmouth.cs.greenworks.backend.MessagingEndpoint;
 import com.dartmouth.cs.greenworks.backend.datastores.TimelineDataStore;
 import com.dartmouth.cs.greenworks.backend.datastores.TimelineEntry;
+import com.dartmouth.cs.greenworks.backend.datastores.TreeDataStore;
+import com.dartmouth.cs.greenworks.backend.datastores.TreeEntry;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -29,6 +33,7 @@ public class UpdateTreeSevlet extends HttpServlet {
             throws IOException, ServletException {
 
         TimelineDataStore timelineDataStore = new TimelineDataStore();
+        TreeDataStore treeDataStore = new TreeDataStore();
         // get data from request, wrap into a entry object,
         // and insert to datastore.
         long timelineId = timelineDataStore.idGenerator();
@@ -46,5 +51,15 @@ public class UpdateTreeSevlet extends HttpServlet {
 
         timelineDataStore.addEntry2Datastore(timelineEntry);
 
+        // for pushing notification:
+        ArrayList<String> regIds = new ArrayList<>();
+        TreeEntry tree = treeDataStore.getEntryByIdentifier(treeId);
+        regIds.add(tree.regId);
+
+        ArrayList<TimelineEntry> timelines = timelineDataStore.queryUpdatesOfATree(treeId);
+        for(TimelineEntry timeline:timelines) {
+            regIds.add(timeline.regId);
+        }
+        new MessagingEndpoint().sendMessage("Tree " + treeId + " Updated", regIds);
     }
 }
