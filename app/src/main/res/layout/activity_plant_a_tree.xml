@@ -25,6 +25,7 @@
             <ImageView
                 android:contentDescription="@string/ui_proile_image_descripton"
                 android:id="@+id/imageProfile"
+                android:src="@drawable/dartmouthpine"
                 android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:layout_margin="5dp"

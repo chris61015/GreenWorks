@@ -36,8 +36,8 @@ public class MyDialogFragment extends DialogFragment {
 
     private static final String DIALOG_ID_KEY = "dialog_id";
 
-    public static DialogFragment newInstance(int dialog_id) {
-        DialogFragment frag = new DialogFragment();
+    public static MyDialogFragment newInstance(int dialog_id) {
+        MyDialogFragment frag = new MyDialogFragment();
         Bundle args = new Bundle();
         args.putInt(DIALOG_ID_KEY, dialog_id);
         frag.setArguments(args);

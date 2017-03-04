@@ -1,5 +1,6 @@
 package com.dartmouth.cs.greenworks.Activity;
 
+import android.app.DialogFragment;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -61,6 +62,10 @@ public class PlantATreeActivity extends AppCompatActivity {
     }
 
     public void onSaveClicked(View v){
+        //TODO
+//        Toast.makeText(getApplicationContext(),
+//                getString(R.string.ui_profile_toast_save_text),
+//                Toast.LENGTH_SHORT).show();
         finish();
     }
 
@@ -68,7 +73,8 @@ public class PlantATreeActivity extends AppCompatActivity {
         finish();
     }
 
-    public void changeImage(){        Intent intent;
+    public void changeImage(){
+        Intent intent;
         // Take photo from camera，
         // Construct an intent with action
         // MediaStore.ACTION_IMAGE_CAPTURE
@@ -96,9 +102,8 @@ public class PlantATreeActivity extends AppCompatActivity {
     }
 
     public void onChangePhotoClicked(View v){
-        android.app.DialogFragment fragment = MyDialogFragment.newInstance(MyDialogFragment.DIALOG_ID_PHOTO_PICKER);
-        fragment.show(getFragmentManager(), "Photo Picker");
-        changeImage();
+        DialogFragment fragment = MyDialogFragment.newInstance(MyDialogFragment.DIALOG_ID_PHOTO_PICKER);
+        fragment.show(getFragmentManager(), "Photo Picker");;
     }
 
     @Override
