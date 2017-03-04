@@ -25,6 +25,7 @@
             <ImageView
                 android:contentDescription="@string/ui_proile_image_descripton"
                 android:id="@+id/imageProfile"
+                android:src="@drawable/dartmouthpine"
                 android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:layout_margin="5dp"
@@ -132,7 +133,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="30dp"
                 android:layout_weight="1"
-                android:text="@string/ui_profile_button_cancel" >
+                android:text="@string/ui_profile_button_cancel"
+                android:onClick="onCancelClicked">
             </Button>
         </LinearLayout>
     </LinearLayout>
