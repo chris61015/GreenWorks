@@ -119,7 +119,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void testBackend() {
         BackendTest newTest = new BackendTest();
         newTest.registerTest(this);
-        newTest.addTreeTest(this, R.drawable.getty);
+        newTest.addTreeTest(this, R.drawable.apple);
+        newTest.getMyTreesTest(this);
+        newTest.updateTree(this);
 
     }
 }

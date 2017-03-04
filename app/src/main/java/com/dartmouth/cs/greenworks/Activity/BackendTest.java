@@ -16,10 +16,16 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -60,6 +66,34 @@ public class BackendTest {
         return myRegId;
     }
 
+    public void getTreesAroundMeTest(Context context)
+    {
+        int radius =5;
+        double longitude = 43.7069;
+        double lattitude = -72.2869;
+
+        new DatastoreTask().execute(GET_TREES_AROUND_ME,radius, longitude, lattitude);
+    }
+
+    public void getMyTreesTest(Context context)
+    {
+        new DatastoreTask().execute(GET_MY_TREES,myRegId);
+    }
+
+    public void getTimelineTest(Context context)
+    {
+
+    }
+
+    public void getTreesIUpdatedTest(Context context)
+    {
+        new DatastoreTask().execute(GET_MY_TREES,myRegId);
+    }
+
+    public void updateTree(Context context)
+    {
+
+    }
     public void addTreeTest(Context context, int id) {
 
         Bitmap bm = BitmapFactory.decodeResource(context.getResources(),
@@ -71,9 +105,14 @@ public class BackendTest {
         String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
 
         TreeEntry tree = new TreeEntry(0, System.currentTimeMillis(),
-                new LatLng(12.4, 11.2), "Xiaolei", "West Leb",
+                new LatLng(11.4, 12.7), "Rohan2", "Hanover2",
                 myRegId, encodedImage, "Hello World!");
         new DatastoreTask().execute(ADD_TREE, tree);
+
+        TreeEntry tree1 = new TreeEntry(0, System.currentTimeMillis(),
+                new LatLng(11.4, 12.7), "Xiao", "West Leb",
+                myRegId, encodedImage, "ByeBye!");
+        new DatastoreTask().execute(ADD_TREE, tree1);
     }
 
     public class DatastoreTask extends AsyncTask<Object, Void, Void> {
@@ -101,6 +140,110 @@ public class BackendTest {
                         Log.e(TAG, "data posting error " + e);
                     }
                     break;
+
+                case UPDATE_TREE:
+
+                break;
+
+                case GET_TREES_AROUND_ME:
+
+                    Map<String, String> data1 = new HashMap<>();
+                    //data1.put("Date Time", Long.toString(tree1.dateTime));
+                    data1.put("Radius", Integer.toString((Integer)params[1]));
+                    data1.put("Longitude", Double.toString((Double)params[2]));
+                    data1.put("Latitude", Double.toString((Double)params[3]));
+
+                    //data1.put("Name", tree1.name);
+                    //data1.put("City", tree1.city);
+                    //data1.put("Registration ID", tree1.regId);
+                    //data1.put("Photo", tree1.photo);
+                    //data1.put("Comment", tree1.comment);
+                    try {
+                        ServerUtilities.post(SERVER_ADDR + "/gettreesaroundme.do", data1);
+                    } catch (IOException e) {
+                        Log.e(TAG, "Sync failed: " + e.getCause());
+                        Log.e(TAG, "data posting error " + e);
+                    }
+                    break;
+
+                case GET_MY_TREES:
+                    Map<String, String> data2 = new HashMap<>();
+                    data2.put("Registration ID", (String)params[1]);
+                    try {
+                        String myTrees = ServerUtilities.post(SERVER_ADDR + "/getmytrees.do", data2 );
+                        JSONArray jsonResult = new JSONArray(myTrees);
+                        List<TreeEntry> treeEntryList = new ArrayList<>();
+
+                        for(int i=0;i<jsonResult.length();i++)
+                        {
+
+                            Gson gson = new Gson();
+                            TreeEntry treeEntry = gson.fromJson(jsonResult.getString(i),TreeEntry.class);
+                            treeEntryList.add(treeEntry);
+                            Log.e(TAG, treeEntry.comment);
+                        }   ////treeEntryList now contains all the TreeEntry Objects
+                    } catch (IOException e) {
+                        Log.e(TAG, "Sync failed: " + e.getCause());
+                        Log.e(TAG, "data posting error " + e);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Log.e(TAG, "JSON error " + e);
+                    }
+
+
+
+                    break;
+
+                case GET_MY_UPDATED_TREES:
+                    Map<String, String> data3 = new HashMap<>();
+                    data3.put("Registration ID", (String)params[1]);
+                    try {
+                        String myTrees = ServerUtilities.post(SERVER_ADDR + "/gettreesiupdated.do", data3 );
+                        JSONArray jsonResult = new JSONArray(myTrees);
+                        List<TreeEntry> treeEntryList = new ArrayList<>();
+
+                        for(int i=0;i<jsonResult.length();i++)
+                        {
+
+                            Gson gson = new Gson();
+                            TreeEntry treeEntry = gson.fromJson(jsonResult.getString(i),TreeEntry.class);
+                            treeEntryList.add(treeEntry);
+                            Log.e(TAG, treeEntry.comment);
+                        }///treeEntryList now contains all my updates treeEntry objects
+                    } catch (IOException e) {
+                        Log.e(TAG, "Sync failed: " + e.getCause());
+                        Log.e(TAG, "data posting error " + e);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    break;
+
+                case GET_TIMELINE:
+                    Map<String, String> data4 = new HashMap<>();
+                    data4.put("Registration ID", (String)params[1]);
+                    try {
+                        String myTrees = ServerUtilities.post(SERVER_ADDR + "/gettimeline.do", data4 );
+                        JSONArray jsonResult = new JSONArray(myTrees);
+                        List<TreeEntry> treeEntryList = new ArrayList<>();
+
+                        for(int i=0;i<jsonResult.length();i++)
+                        {
+
+                            Gson gson = new Gson();
+                            TreeEntry treeEntry = gson.fromJson(jsonResult.getString(i),TreeEntry.class);
+                            treeEntryList.add(treeEntry);
+                            Log.e(TAG, treeEntry.comment);
+                        }///treeEntryList now contains all my updates treeEntry objects
+                    } catch (IOException e) {
+                        Log.e(TAG, "Sync failed: " + e.getCause());
+                        Log.e(TAG, "data posting error " + e);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    break;
+
             }
             return null;
 
