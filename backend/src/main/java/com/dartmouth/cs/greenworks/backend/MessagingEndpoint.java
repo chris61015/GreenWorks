@@ -14,6 +14,7 @@ import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiNamespace;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -51,7 +52,8 @@ public class MessagingEndpoint {
      *
      * @param message The message to send
      */
-    public void sendMessage(@Named("message") String message) throws IOException {
+    public void sendMessage(@Named("message") String message,
+                            @Named("records") ArrayList<String> IDs) throws IOException {
         if (message == null || message.trim().length() == 0) {
             log.warning("Not sending message because it is empty");
             return;
@@ -62,7 +64,18 @@ public class MessagingEndpoint {
         }
         Sender sender = new Sender(API_KEY);
         Message msg = new Message.Builder().addData("message", message).build();
-        List<RegistrationRecord> records = OfyService.ofy().load().type(RegistrationRecord.class).limit(10).list();
+        List<RegistrationRecord> records;
+        if (IDs == null) {
+            records = OfyService.ofy().load().type(RegistrationRecord.class).limit(100).list();
+        }
+        else {
+            records = new ArrayList<>();
+            for (String ID: IDs) {
+                RegistrationRecord rcd = new RegistrationRecord();
+                rcd.setRegId(ID);
+                records.add(rcd);
+            }
+        }
         for (RegistrationRecord record : records) {
             Result result = sender.send(msg, record.getRegId(), 5);
             if (result.getMessageId() != null) {

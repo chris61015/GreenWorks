@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"ODRTh3xaRR64wpeXJSlF33HMN-0/zMli6VYbZjh8ldEiR6QrJxeu7Gg\"",
+ "etag": "\"ODRTh3xaRR64wpeXJSlF33HMN-0/DcRley9OVUhDhKbaVJws0Sv-pmI\"",
  "discoveryVersion": "v1",
  "id": "messaging:v1",
  "name": "messaging",
@@ -77,17 +77,24 @@
    "methods": {
     "sendMessage": {
      "id": "messaging.messagingEndpoint.sendMessage",
-     "path": "{message}",
+     "path": "{message}/{records}",
      "httpMethod": "POST",
      "parameters": {
       "message": {
        "type": "string",
        "required": true,
        "location": "path"
+      },
+      "records": {
+       "type": "string",
+       "required": true,
+       "repeated": true,
+       "location": "path"
       }
      },
      "parameterOrder": [
-      "message"
+      "message",
+      "records"
      ],
      "scopes": [
       "https://www.googleapis.com/auth/userinfo.email"

@@ -34,7 +34,7 @@ public class GcmIntentService extends IntentService {
             if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 Logger.getLogger("GCM_RECEIVED").log(Level.INFO, extras.toString());
                 //XD: this "my_message" has to be the same as the one used on the server side in MessagingEndpoint.java
-                showToast(extras.getString("message") + " deleted");
+                showToast(extras.getString("message"));
                 long entryId = Long.parseLong(extras.getString("message"));
 //                MainActivity.dataSource.deleteEntry(entryId, HistoryFragment.entries, HistoryFragment.adapter);
             }
