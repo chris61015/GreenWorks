@@ -49,6 +49,6 @@ public class AddTreeServlet extends HttpServlet {
 
 
         treeDataStore.addEntry2Datastore(treeEntry);
-        response.sendRedirect("/listalltrees.do");
+
     }
 }

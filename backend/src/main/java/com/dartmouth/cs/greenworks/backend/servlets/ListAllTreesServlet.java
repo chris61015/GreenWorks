@@ -51,28 +51,44 @@ public class ListAllTreesServlet extends HttpServlet {
 
         if (treeEntries != null) {
             for (TreeEntry treeEntry:treeEntries) {
-                out.write(treeEntry.treeId + ". " +
-                        "Name: " + treeEntry.name +
-                        " Date Time: " + formatDatetime(treeEntry.dateTime) +
-                        " GeoPt: " + locationToString(treeEntry.location) + "<br>\n");
                 // All the '+' was replaced by space somehow during storage in datastore.
                 out.write("<img src='data:img/jpg;base64," + treeEntry.photo.replace(' ', '+') +
                         "' width=\"100\" height=\"100\" /><br>\n");
-                out.write("&nbsp;&nbsp;&nbsp;&nbsp;" + "Timeline: <br>\n");
+                out.write("Tree ID: " + treeEntry.treeId + "<br>");
+                out.write("Date: " + formatDatetime(treeEntry.dateTime) + "<br>");
+                out.write("User: " + treeEntry.name + "<br>");
+                out.write("Location: " + locationToString(treeEntry.location) + "<br>");
+                out.write("City: " + treeEntry.city + "<br>");
+                out.write("Registration ID: " + treeEntry.regId + "<br>");
+                out.write("Comment: " + treeEntry.comment + "<br>");
+                out.write("Timeline: <br>\n");
+
                 ArrayList<TimelineEntry>timelineEntries = timelineDataStore
                         .queryUpdatesOfATree(treeEntry.treeId);
+
+
                 for (TimelineEntry timelineEntry:timelineEntries) {
-                    out.write("&nbsp;&nbsp;&nbsp;&nbsp;" +
-                            timelineEntry.timelineId + "). " +
-                            "Name: " + timelineEntry.name +
-                            " Date Time: " + formatDatetime(timelineEntry.dateTime) + "<br>\n");
-                    out.write("&nbsp;&nbsp;&nbsp;&nbsp;" +
+                    out.write("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
                             "<img src='data:img/jpg;base64," +
                             timelineEntry.photo.replace(' ', '+')
                             + "' width=\"100\" height=\"100\"  /><br>\n");
+                    out.write("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+                    out.write("Timeline ID: " + timelineEntry.timelineId + "<br>");
+                    out.write("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+                    out.write("Tree ID: " + treeEntry.treeId + "<br>");
+                    out.write("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+                    out.write("User: " + treeEntry.name + "<br>");
+                    out.write("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+                    out.write("Registration ID: " + treeEntry.regId + "<br>");
+                    out.write("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+                    out.write("Comment: " + treeEntry.comment + "<br>");
                 }
+                out.write("<hr>");
             }
         }
+
+        out.write("<input type=\"button\" onclick=\"location.href='/clearall.do" +
+                "'\" value=\"Clear All\">");
 
         // header end.
         out.write("</body>\n" +

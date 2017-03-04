@@ -156,10 +156,22 @@ public class TimelineDataStore {
         if (allEntries != null) {
             for (TimelineEntry entry:allEntries) {
                 if (entry.timelineId > curMax) {
-                    curMax = entry.treeId;
+                    curMax = entry.timelineId;
                 }
             }
         }
         return curMax+1;
+    }
+
+    // delete all entries from datasource
+    public void deleteAll() {
+        Iterator<Entity> entities = getAllEntities();
+        while(entities.hasNext()) {
+            Entity temp = entities.next();
+            if (temp != null) {
+
+                datastoreService.delete(temp.getKey());
+            }
+        }
     }
 }
