@@ -1,5 +1,6 @@
 package com.dartmouth.cs.greenworks.Activity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -7,21 +8,30 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
-import android.Manifest;
 
 import com.dartmouth.cs.greenworks.Fragment.MapFragment;
 import com.dartmouth.cs.greenworks.Fragment.MyTreesFragment;
 import com.dartmouth.cs.greenworks.Fragment.TreesIUpdatedFragment;
 import com.dartmouth.cs.greenworks.R;
+import com.google.android.gms.maps.GoogleMap;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+
+    public static final String TAG = "MAIN ACTIVITY";
+    public static final int PERMISSIONS_REQUEST = 1;
+
+    private GoogleMap mMap;
 
     private final Handler mDrawerActionHandler = new Handler();
     private DrawerLayout mDrawerLayout;
@@ -118,10 +128,78 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+
+
+    /**
+     * Checks if user has CAMERA, READ/WRITE external storage
+     * and access fine location permissions
+     */
+    private void checkPermissions2 () {
+
+        boolean permitted = true;
+
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            Log.d(TAG, "No write SD permssion!");
+            permitted = false;
+        }
+        else {
+            Log.d(TAG, "Has write SD permssion!");
+        }
+
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            Log.d(TAG, "No Read SD permssion!");
+            permitted = false;
+
+        }
+        else {
+            Log.d(TAG, "Has Read SD permssion!");
+        }
+
+        if (!permitted) {
+            acquirePermssions();
+        }
+
+    }
+
+    /**
+     * Ask for permission using dialog.
+     */
+    private void acquirePermssions () {
+
+        Log.d(TAG, "Requesting permssions...");
+        ActivityCompat.requestPermissions(this,
+                new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE},
+                PERMISSIONS_REQUEST);
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        Log.d(TAG, "Returned from request");
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST:
+                if (grantResults.length == 2
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "Permission Granted!");
+                }
+        }
+        // Check again
+//        checkPermissions();
+    }
+
     public void testBackend() {
         BackendTest newTest = new BackendTest();
         newTest.registerTest(this);
-        newTest.addTreeTest(this, R.drawable.getty);
+        newTest.addTreeTest(this, "3.jpg");
 
     }
 
