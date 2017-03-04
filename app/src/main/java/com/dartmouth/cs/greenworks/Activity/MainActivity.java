@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigate(mNavItemId);
 
         checkPermissions();
-//        testBackend();
+        testBackend();
 
     }
 
@@ -129,8 +129,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         BackendTest newTest = new BackendTest();
         newTest.registerTest(this);
 
-        newTest.addTreeTest(this, "1.jpg");
-        newTest.getMyTreesTest(this);
+//        newTest.addTreeTest(this, "1.jpg");
+//        newTest.getMyTreesTest(this);
 
         newTest.addTreeTest(this, "1.jpg");
         newTest.addTreeTest(this, "2.jpg");

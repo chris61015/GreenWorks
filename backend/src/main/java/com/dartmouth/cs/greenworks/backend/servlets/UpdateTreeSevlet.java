@@ -48,18 +48,21 @@ public class UpdateTreeSevlet extends HttpServlet {
         TimelineEntry timelineEntry = new TimelineEntry(timelineId, treeId,
                 datetime, name, regId, photo, comment);
 
-
-        timelineDataStore.addEntry2Datastore(timelineEntry);
-
-        // for pushing notification:
-        ArrayList<String> regIds = new ArrayList<>();
         TreeEntry tree = treeDataStore.getEntryByIdentifier(treeId);
-        regIds.add(tree.regId);
 
-        ArrayList<TimelineEntry> timelines = timelineDataStore.queryUpdatesOfATree(treeId);
-        for(TimelineEntry timeline:timelines) {
-            regIds.add(timeline.regId);
+        if (tree != null) { // cann't update non-existant tree
+            timelineDataStore.addEntry2Datastore(timelineEntry);
+            // for pushing notification:
+            ArrayList<String> regIds = new ArrayList<>();
+            regIds.add(tree.regId);
+
+            ArrayList<TimelineEntry> timelines = timelineDataStore.queryUpdatesOfATree(treeId);
+            for(TimelineEntry timeline:timelines) {
+                regIds.add(timeline.regId);
+            }
+            new MessagingEndpoint().sendMessage("Tree " + treeId + " Updated", regIds);
+
         }
-        new MessagingEndpoint().sendMessage("Tree " + treeId + " Updated", regIds);
+
     }
 }

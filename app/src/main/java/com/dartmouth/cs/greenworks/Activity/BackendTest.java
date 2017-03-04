@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.dartmouth.cs.greenworks.Model.TimelineEntry;
 import com.dartmouth.cs.greenworks.Model.TreeEntry;
@@ -49,6 +48,8 @@ public class BackendTest {
 
     public static final String TAG = "BackendTest";
 
+    public static int pseudoRegId = 1;
+
 
     public String myRegId = "";
 
@@ -58,6 +59,7 @@ public class BackendTest {
 
 
     public String registerTest(Context context) {
+
         try {
             myRegId = new GcmRegistrationAsyncTask(context).execute().get();
         } catch (InterruptedException e) {
@@ -66,6 +68,8 @@ public class BackendTest {
             e.printStackTrace();
         }
         Log.d(TAG, "RegID: " + myRegId);
+
+
         return myRegId;
     }
 
@@ -112,10 +116,10 @@ public class BackendTest {
                 myRegId, encodedImage, "Hello World!");
         new DatastoreTask().execute(ADD_TREE, tree);
 
-        TreeEntry tree1 = new TreeEntry(0, System.currentTimeMillis(),
-                new LatLng(11.4, 12.7), "Xiao", "West Leb",
-                myRegId, encodedImage, "ByeBye!");
-        new DatastoreTask().execute(ADD_TREE, tree1);
+//        TreeEntry tree1 = new TreeEntry(0, System.currentTimeMillis(),
+//                new LatLng(11.4, 12.7), "Xiao", "West Leb",
+//                myRegId, encodedImage, "ByeBye!");
+//        new DatastoreTask().execute(ADD_TREE, tree1);
     }
 
     public void addTreeTest(TreeEntry entry) {
@@ -350,6 +354,7 @@ public class BackendTest {
                 // is using accounts.
                 regService.register(regId).execute();
 
+
             } catch (IOException ex) {
                 ex.printStackTrace();
                 msg = "Error: " + ex.getMessage();
@@ -359,7 +364,7 @@ public class BackendTest {
 
         @Override
         protected void onPostExecute(String msg) {
-            Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+//            Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
             Logger.getLogger("REGISTRATION").log(Level.INFO, msg);
         }
     }

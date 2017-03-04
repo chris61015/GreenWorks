@@ -35,14 +35,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!--<receiver-->
-            <!--android:name=".GcmBroadcastReceiver"-->
-            <!--android:permission="com.google.android.c2dm.permission.SEND" >-->
-            <!--<intent-filter>-->
-                <!--<action android:name="com.google.android.c2dm.intent.RECEIVE" />-->
-                <!--<category android:name="com.dartmouth.cs.greenworks.Service" />-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
+        <receiver
+            android:name=".Service.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.dartmouth.cs.greenworks" />
+            </intent-filter>
+        </receiver>
         <service android:name="com.dartmouth.cs.greenworks.Service.GcmIntentService" />
 
         <!--
@@ -63,6 +63,11 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <category android:name="your.package.here" />
             </intent-filter>
         </activity>
         <activity
