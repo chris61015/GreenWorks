@@ -105,6 +105,8 @@ public class TreeDataStore {
     private Iterator<Entity> getAllEntities() {
         Query query = new Query(TreeEntry.ENTRY_ENTITY_KIND);
         query.setFilter(null);
+        // get newest ones first.
+        query.addSort(TreeEntry.PROPERTY_DATETIME, Query.SortDirection.DESCENDING);
         query.setAncestor(getParentKey());
         PreparedQuery preparedQuery = datastoreService.prepare(query);
         return preparedQuery.asIterator();
@@ -250,5 +252,17 @@ public class TreeDataStore {
             }
         }
         return curMax+1;
+    }
+
+    // delete all entries from datasource
+    public void deleteAll() {
+        Iterator<Entity> entities = getAllEntities();
+        while(entities.hasNext()) {
+            Entity temp = entities.next();
+            if (temp != null) {
+
+                datastoreService.delete(temp.getKey());
+            }
+        }
     }
 }

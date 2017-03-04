@@ -89,6 +89,15 @@
         <url-pattern>/updatetree.do</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>clearall</servlet-name>
+        <servlet-class>com.dartmouth.cs.greenworks.backend.servlets.ClearAllServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>clearall</servlet-name>
+        <url-pattern>/clearall.do</url-pattern>
+    </servlet-mapping>
+
     <welcome-file-list>
         <welcome-file>listalltrees</welcome-file>
     </welcome-file-list>

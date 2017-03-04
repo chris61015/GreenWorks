@@ -40,11 +40,11 @@ public class UpdateTreeSevlet extends HttpServlet {
         String comment = request.getParameter("Comment");
 
 
-        TimelineEntry timelineEntry = new TimelineEntry(treeId, timelineId,
+        TimelineEntry timelineEntry = new TimelineEntry(timelineId, treeId,
                 datetime, name, regId, photo, comment);
 
 
         timelineDataStore.addEntry2Datastore(timelineEntry);
-        response.sendRedirect("/listalltrees.do");
+
     }
 }

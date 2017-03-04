@@ -63,8 +63,13 @@ public class BackendTest {
         return myRegId;
     }
 
-    public void updateTree(Context context, String filename) {
+    public void updateTree(Context context, String filename, long treeId) {
         String encodedImage = photoToString (context, filename);
+        TimelineEntry timelineEntry = new TimelineEntry(0, treeId,
+                System.currentTimeMillis(), "Xiaolei_up_" + treeId,
+                myRegId, encodedImage, "update on tree " + treeId) ;
+        new DatastoreTask().execute(UPDATE_TREE, timelineEntry);
+
     }
 
     public void addTreeTest(Context context, String filename) {
@@ -131,6 +136,7 @@ public class BackendTest {
                     TimelineEntry timelineEntry = (TimelineEntry) params[1];
                     Map<String, String>data2 = new HashMap();
                     data2.put("Tree ID", Long.toString(timelineEntry.treeId));
+                    data2.put("Name", timelineEntry.name);
                     data2.put("Date Time", Long.toString(timelineEntry.dateTime));
                     data2.put("Photo", timelineEntry.photo);
                     data2.put("Registration ID", timelineEntry.regId);
@@ -190,11 +196,12 @@ public class BackendTest {
             }
 
             String msg = "";
+            String regId = "";
             try {
                 if (gcm == null) {
                     gcm = GoogleCloudMessaging.getInstance(context);
                 }
-                String regId = gcm.register(SENDER_ID);
+                regId = gcm.register(SENDER_ID);
                 msg = "Device registered, registration ID=" + regId;
 
                 // You should send the registration ID to your server over HTTP,
@@ -207,7 +214,7 @@ public class BackendTest {
                 ex.printStackTrace();
                 msg = "Error: " + ex.getMessage();
             }
-            return msg;
+            return regId; //msg;
         }
 
         @Override
