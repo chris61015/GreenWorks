@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.dartmouth.cs.greenworks.Fragment.MapFragment;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private final MyTreesFragment mSecondFragment = new MyTreesFragment();
     private final TreesIUpdatedFragment mThirdFragment = new TreesIUpdatedFragment();
   //  private final PlantATreeFragment mFourthFragment = new PlantATreeFragment();
+    private NavigationView mNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,15 +53,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(com.dartmouth.cs.greenworks.R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        NavigationView navigationView = (NavigationView) findViewById(com.dartmouth.cs.greenworks.R.id.navigation);
-        navigationView.setNavigationItemSelectedListener(this);
+        mNavigationView = (NavigationView) findViewById(com.dartmouth.cs.greenworks.R.id.navigation);
+        mNavigationView.setNavigationItemSelectedListener(this);
 
         if (null != savedInstanceState) {
             mNavItemId = savedInstanceState.getInt(NAV_ITEM_ID);
         } else {
             mNavItemId = R.id.drawer_item_1;
         }
-        navigationView.getMenu().findItem(mNavItemId).setChecked(true);
+        Log.d("DEBUG",mNavigationView.getMenu().findItem(mNavItemId).toString());
+        mNavigationView.getMenu().findItem(mNavItemId).setChecked(true);
+
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, com.dartmouth.cs.greenworks.R.string.open, com.dartmouth.cs.greenworks.R.string.close);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -72,6 +76,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(NAV_ITEM_ID, mNavItemId);
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
