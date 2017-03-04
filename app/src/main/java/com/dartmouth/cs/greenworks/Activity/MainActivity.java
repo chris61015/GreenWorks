@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigate(mNavItemId);
 
         checkPermissions();
-//        testBackend();
+        testBackend();
 
     }
 
