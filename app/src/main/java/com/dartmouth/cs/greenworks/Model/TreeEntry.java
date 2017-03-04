@@ -1,4 +1,4 @@
-package com.dartmouth.cs.greenworks;
+package com.dartmouth.cs.greenworks.Model;
 
 import com.google.android.gms.maps.model.LatLng;
 

@@ -11,8 +11,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.dartmouth.cs.greenworks.Activity.TreeDetailActivity;
 import com.dartmouth.cs.greenworks.R;
-import com.dartmouth.cs.greenworks.TreeEntry;
+import com.dartmouth.cs.greenworks.Model.TreeEntry;
 
 import java.util.ArrayList;
 
@@ -23,9 +24,6 @@ public class MyTreesFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
     }
     // retrieve records from the database and display them in the list view
     public void updateTreeEntries() {
@@ -54,8 +52,8 @@ public class MyTreesFragment extends ListFragment {
     // Click event
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Intent intent = new Intent(); // The intent to launch the activity after
-        // click.
+        Intent intent = new Intent(); // The intent to launch the activity after click.
+        intent.setClass(mContext,TreeDetailActivity.class);
         Bundle extras = new Bundle(); // The extra information needed pass
         // through to next activity.
 

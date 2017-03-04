@@ -1,4 +1,4 @@
-package com.dartmouth.cs.greenworks;
+package com.dartmouth.cs.greenworks.Model;
 
 /**
  * Created by Xiaolei on 3/3/17.

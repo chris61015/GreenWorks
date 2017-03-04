@@ -12,7 +12,6 @@
             android:layout_height="wrap_content"
             android:baselineAligned="false" >
 
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
