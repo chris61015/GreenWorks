@@ -1,4 +1,15 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
+<!-- Indices written at Fri, 3 Mar 2017 21:48:22 EST -->
+
+<datastore-indexes>
+
+    <!-- Used 28 times in query history -->
+=======
+<!-- Indices written at Sat, 4 Mar 2017 01:45:39 EST -->
+=======
 <!-- Indices written at Sat, 4 Mar 2017 12:12:20 EST -->
+>>>>>>> 3229c002dae0153cd1cb7cd4ef4905ce270c8b9b
 
 <datastore-indexes>
 
@@ -7,9 +18,20 @@
         <property name="Date Time" direction="desc"/>
     </datastore-index>
 
+<<<<<<< HEAD
+    <!-- Used 5 times in query history -->
+>>>>>>> 90dd3fab2bdb103599b36b842da196ba56665b94
+=======
     <!-- Used 16 times in query history -->
+>>>>>>> 3229c002dae0153cd1cb7cd4ef4905ce270c8b9b
     <datastore-index kind="timeline entry" ancestor="false" source="auto">
         <property name="Tree ID" direction="asc"/>
+        <property name="Date Time" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 3 times in query history -->
+    <datastore-index kind="tree entry" ancestor="false" source="auto">
+        <property name="Registration ID" direction="asc"/>
         <property name="Date Time" direction="desc"/>
     </datastore-index>
 
