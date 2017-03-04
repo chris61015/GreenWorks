@@ -11,5 +11,8 @@
         <item android:title="@string/drawer_item_3"
             android:id="@+id/drawer_item_3">
         </item>
+        <item android:title="@string/drawer_item_4"
+            android:id="@+id/drawer_item_4">
+        </item>
     </group>
 </menu>

@@ -7,34 +7,29 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
+        <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/trees_photo"
+        android:layout_margin="5dp"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/plant_a_tree" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:baselineAligned="false" >
 
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="@string/trees_photo"
-                android:layout_margin="5dp"
-                android:layout_marginBottom="5dp"
-                android:id="@+id/plant_a_tree" />
-
             <ImageView
                 android:contentDescription="@string/ui_proile_image_descripton"
                 android:id="@+id/imageProfile"
+                android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:layout_margin="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_weight="1"
                 android:focusable="true"
                 android:focusableInTouchMode="true" >
-
                 <requestFocus />
-
             </ImageView>
 
             <Button
@@ -42,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="30dp"
+                android:layout_margin="5dp"
                 android:onClick="onChangePhotoClicked"
                 android:text="@string/ui_profile_button_change" >
 
@@ -55,11 +50,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:text="@string/trees_name"
             android:layout_margin="5dp"
             android:layout_marginBottom="5dp"
-            android:id="@+id/tvEmail" />
+            android:id="@+id/tvName" />
 
         <EditText
             android:layout_width="match_parent"
@@ -69,7 +63,7 @@
             android:layout_marginBottom="5dp"
             android:inputType="textEmailAddress"
             android:singleLine="true"
-            android:id="@+id/etEmail" />
+            android:id="@+id/etName" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -77,8 +71,7 @@
             android:layout_margin="5dp"
             android:layout_marginBottom="5dp"
             android:text="@string/City"
-
-            android:id="@+id/tvPhone" />
+            android:id="@+id/tvCity" />
 
         <EditText
             android:layout_width="match_parent"
@@ -88,7 +81,7 @@
             android:hint="@string/Record_where_you_find_your_tree"
             android:inputType="phone"
             android:singleLine="true"
-            android:id="@+id/etPhone" />
+            android:id="@+id/etCity" />
 
 
         <TextView
@@ -97,7 +90,7 @@
             android:layout_margin="5dp"
             android:layout_marginBottom="5dp"
             android:text="@string/Write_somthing_to_your_tree"
-            android:id="@+id/tvClass" />
+            android:id="@+id/tvComment" />
 
         <EditText
             android:layout_width="match_parent"
@@ -107,8 +100,7 @@
             android:hint="@string/This_is_my_happy_tree"
             android:inputType="date"
             android:singleLine="true"
-
-            android:id="@+id/etClass" />
+            android:id="@+id/etComment" />
 
 
         <LinearLayout
@@ -132,7 +124,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="30dp"
                 android:layout_weight="1"
-                android:text="@string/ui_profile_button_cancel" >
+                android:text="@string/ui_profile_button_cancel"
+                android:onClick="onCancelClicked">
             </Button>
         </LinearLayout>
     </LinearLayout>

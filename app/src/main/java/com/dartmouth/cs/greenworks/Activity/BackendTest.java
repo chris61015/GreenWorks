@@ -4,11 +4,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.dartmouth.cs.greenworks.TreeEntry;
+import com.dartmouth.cs.greenworks.Model.TimelineEntry;
+import com.dartmouth.cs.greenworks.Model.TreeEntry;
 import com.dartmouth.cs.greenworks.backend.registration.Registration;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.maps.model.LatLng;
@@ -22,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,6 +69,7 @@ public class BackendTest {
         return myRegId;
     }
 
+
     public void getTreesAroundMeTest(Context context)
     {
         int radius =5;
@@ -90,19 +94,18 @@ public class BackendTest {
         new DatastoreTask().execute(GET_MY_TREES,myRegId);
     }
 
-    public void updateTree(Context context)
-    {
 
+    public void updateTree(Context context, String filename, long treeId) {
+        String encodedImage = photoToString (context, filename);
+        TimelineEntry timelineEntry = new TimelineEntry(0, treeId,
+                System.currentTimeMillis(), "Xiaolei_up_" + treeId,
+                myRegId, encodedImage, "update on tree " + treeId) ;
+        new DatastoreTask().execute(UPDATE_TREE, timelineEntry);
     }
-    public void addTreeTest(Context context, int id) {
 
-        Bitmap bm = BitmapFactory.decodeResource(context.getResources(),
-                id);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
-        byte[] b = baos.toByteArray();
+    public void addTreeTest(Context context, String filename) {
 
-        String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+        String encodedImage = photoToString(context, filename);
 
         TreeEntry tree = new TreeEntry(0, System.currentTimeMillis(),
                 new LatLng(11.4, 12.7), "Rohan2", "Hanover2",
@@ -113,6 +116,31 @@ public class BackendTest {
                 new LatLng(11.4, 12.7), "Xiao", "West Leb",
                 myRegId, encodedImage, "ByeBye!");
         new DatastoreTask().execute(ADD_TREE, tree1);
+    }
+
+    public String photoToString(Context context, String filename) {
+
+        String filepath = Environment.getExternalStorageDirectory()
+                .getAbsolutePath() + File.separator + filename;
+        Log.d(TAG, "abs file path: " + filepath);
+
+        try {
+            File f = new File(filepath);
+            if (!f.exists()) {
+                Log.d(TAG, "File doesn't exist");
+                return null;
+            }
+
+            Bitmap bm = BitmapFactory.decodeFile(filepath);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+            byte[] b = baos.toByteArray();
+
+            return Base64.encodeToString(b, Base64.DEFAULT);
+        } catch (Exception e) {
+            Log.d(TAG, "Load file error: " + filename);
+            return null;
+        }
     }
 
     public class DatastoreTask extends AsyncTask<Object, Void, Void> {
@@ -136,14 +164,26 @@ public class BackendTest {
                     try {
                         ServerUtilities.post(SERVER_ADDR + "/addtree.do", data);
                     } catch (IOException e) {
-                        Log.e(TAG, "Sync failed: " + e.getCause());
+                        Log.e(TAG, "Add tree Sync failed: " + e.getCause());
                         Log.e(TAG, "data posting error " + e);
                     }
                     break;
-
                 case UPDATE_TREE:
-
-                break;
+                    TimelineEntry timelineEntry = (TimelineEntry) params[1];
+                    Map<String, String>data2 = new HashMap();
+                    data2.put("Tree ID", Long.toString(timelineEntry.treeId));
+                    data2.put("Name", timelineEntry.name);
+                    data2.put("Date Time", Long.toString(timelineEntry.dateTime));
+                    data2.put("Photo", timelineEntry.photo);
+                    data2.put("Registration ID", timelineEntry.regId);
+                    data2.put("Comment", timelineEntry.comment);
+                    try {
+                        ServerUtilities.post(SERVER_ADDR + "/updatetree.do", data2);
+                    } catch (IOException e) {
+                        Log.e(TAG, "Update tree Sync failed: " + e.getCause());
+                        Log.e(TAG, "data posting error " + e);
+                    }
+                    break;
 
                 case GET_TREES_AROUND_ME:
 
@@ -167,10 +207,10 @@ public class BackendTest {
                     break;
 
                 case GET_MY_TREES:
-                    Map<String, String> data2 = new HashMap<>();
-                    data2.put("Registration ID", (String)params[1]);
+                    Map<String, String> data21 = new HashMap<>();
+                    data21.put("Registration ID", (String)params[1]);
                     try {
-                        String myTrees = ServerUtilities.post(SERVER_ADDR + "/getmytrees.do", data2 );
+                        String myTrees = ServerUtilities.post(SERVER_ADDR + "/getmytrees.do", data21 );
                         JSONArray jsonResult = new JSONArray(myTrees);
                         List<TreeEntry> treeEntryList = new ArrayList<>();
 
@@ -292,11 +332,12 @@ public class BackendTest {
             }
 
             String msg = "";
+            String regId = "";
             try {
                 if (gcm == null) {
                     gcm = GoogleCloudMessaging.getInstance(context);
                 }
-                String regId = gcm.register(SENDER_ID);
+                regId = gcm.register(SENDER_ID);
                 msg = "Device registered, registration ID=" + regId;
 
                 // You should send the registration ID to your server over HTTP,
@@ -309,7 +350,7 @@ public class BackendTest {
                 ex.printStackTrace();
                 msg = "Error: " + ex.getMessage();
             }
-            return msg;
+            return regId; //msg;
         }
 
         @Override

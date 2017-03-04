@@ -1,10 +1,15 @@
 package com.dartmouth.cs.greenworks.Activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,17 +18,21 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.dartmouth.cs.greenworks.Fragment.MapFragment;
+import com.dartmouth.cs.greenworks.Fragment.MyTreesFragment;
+import com.dartmouth.cs.greenworks.Fragment.TreesIUpdatedFragment;
 import com.dartmouth.cs.greenworks.R;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+
+    public static final String TAG = "MAIN ACTIVITY";
+    public static final int PERMISSIONS_REQUEST = 1;
 
     private GoogleMap mMap;
+
     private final Handler mDrawerActionHandler = new Handler();
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -31,15 +40,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String NAV_ITEM_ID = "navItemId";
     private static final long DRAWER_CLOSE_DELAY_MS = 250;
 
+    private final MapFragment mFirstFragment = new MapFragment();
+    private final MyTreesFragment mSecondFragment = new MyTreesFragment();
+    private final TreesIUpdatedFragment mThirdFragment = new TreesIUpdatedFragment();
+  //  private final PlantATreeFragment mFourthFragment = new PlantATreeFragment();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(com.dartmouth.cs.greenworks.R.layout.activity_main);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(com.dartmouth.cs.greenworks.R.id.map);
-        mapFragment.getMapAsync(this);
-
+        setContentView(R.layout.activity_main);
 
         mDrawerLayout = (DrawerLayout) findViewById(com.dartmouth.cs.greenworks.R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(com.dartmouth.cs.greenworks.R.id.toolbar);
@@ -50,8 +59,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (null != savedInstanceState) {
             mNavItemId = savedInstanceState.getInt(NAV_ITEM_ID);
-            navigationView.getMenu().findItem(mNavItemId).setChecked(true);
+        } else {
+            mNavItemId = R.id.drawer_item_1;
         }
+        navigationView.getMenu().findItem(mNavItemId).setChecked(true);
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, com.dartmouth.cs.greenworks.R.string.open, com.dartmouth.cs.greenworks.R.string.close);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -59,29 +70,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         navigate(mNavItemId);
 
-        testBackend();
+        checkPermissions();
+//        testBackend();
 
     }
 
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
@@ -98,16 +91,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
     private void navigate(final int itemId) {
-
         switch (itemId) {
             case R.id.drawer_item_1:
-                Intent intent1 = new Intent(this, MyTreesActivity.class);
-                startActivity(intent1);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content, mFirstFragment)
+                        .commit();
                 break;
             case R.id.drawer_item_2:
-                Log.d("DEBUG", "Plant a Tree");
-                Intent intent2 = new Intent(this, PlantATreeActivity.class);
-                startActivity(intent2);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content, mSecondFragment).addToBackStack(null)
+                        .commit();
+                break;
+            case R.id.drawer_item_3:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content, mThirdFragment).addToBackStack(null)
+                        .commit();
+                break;
+//            case R.id.drawer_item_4:
+//                getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .replace(R.id.content, mFourthFragment)
+//                        .commit();
+//                break;
+            case R.id.drawer_item_4:
+                Intent intent = new Intent(this, PlantATreeActivity.class);
+                startActivity(intent);
                 break;
             default:
                 // ignore
@@ -116,12 +127,119 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+
+
+    /**
+     * Checks if user has CAMERA, READ/WRITE external storage
+     * and access fine location permissions
+     */
+    private void checkPermissions2 () {
+
+        boolean permitted = true;
+
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            Log.d(TAG, "No write SD permssion!");
+            permitted = false;
+        }
+        else {
+            Log.d(TAG, "Has write SD permssion!");
+        }
+
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            Log.d(TAG, "No Read SD permssion!");
+            permitted = false;
+
+        }
+        else {
+            Log.d(TAG, "Has Read SD permssion!");
+        }
+
+        if (!permitted) {
+            acquirePermssions();
+        }
+
+    }
+
+    /**
+     * Ask for permission using dialog.
+     */
+    private void acquirePermssions () {
+
+        Log.d(TAG, "Requesting permssions...");
+        ActivityCompat.requestPermissions(this,
+                new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE},
+                PERMISSIONS_REQUEST);
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        Log.d(TAG, "Returned from request");
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST:
+                if (grantResults.length == 2
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "Permission Granted!");
+                }
+        }
+        // Check again
+//        checkPermissions();
+    }
+
     public void testBackend() {
         BackendTest newTest = new BackendTest();
         newTest.registerTest(this);
-        newTest.addTreeTest(this, R.drawable.apple);
-        newTest.getMyTreesTest(this);
-        newTest.updateTree(this);
 
+        newTest.addTreeTest(this, "1.jpg");
+        newTest.getMyTreesTest(this);
+
+        newTest.addTreeTest(this, "1.jpg");
+        newTest.addTreeTest(this, "2.jpg");
+        newTest.addTreeTest(this, "3.jpg");
+        newTest.addTreeTest(this, "4.jpg");
+        newTest.addTreeTest(this, "5.jpg");
+        newTest.updateTree(this, "U1_1.jpg", 1);
+        newTest.updateTree(this, "U1_2.jpg", 1);
+        newTest.updateTree(this, "U2_1.jpg", 2);
+
+
+    }
+
+    // Ask users to give permisson to get fetch data
+    private void checkPermissions() {
+        // If SDK version is less then 23, it will not check the permission in the runtime
+        if (Build.VERSION.SDK_INT < 23)
+            return;
+
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                ) {
+            // TODO: Consider calling
+            String[] permissions = new String[]{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+            };
+            requestPermissions(permissions, 0);
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
     }
 }

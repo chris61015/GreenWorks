@@ -10,16 +10,21 @@
     <string name="This_is_my_happy_tree">This is my happy tree!</string>
     <string name="Trees_Photo">Photo of the Tree</string>
 
-
+    <string name="ui_profile_photo_file_name">profile_photo.png</string>
     <string name="ui_proile_image_descripton">Your Profile Picture</string>
     <string name="ui_profile_button_change">Change</string>
     <string name="ui_profile_button_save">Save</string>
     <string name="ui_profile_button_cancel">Cancel</string>
+    <string name="ui_profile_photo_picker_title">Choose A Photo From</string>
+    <string-array name="ui_profile_photo_picker_items">
+        <item>Take from camera</item>
+        <item>Select from gallery</item>
+    </string-array>
 
-
-    <string name="drawer_item_1">My Trees</string>
-    <string name="drawer_item_2">Plant Trees</string>
-    <string name="drawer_item_3">Nearest Tree</string>
+    <string name="drawer_item_1">Home</string>
+    <string name="drawer_item_2">My Trees</string>
+    <string name="drawer_item_3">Trees I Updated</string>
+    <string name="drawer_item_4">Plant A Tree</string>
 
     <string name="open">open navigation drawer</string>
     <string name="close">close navigation drawer</string>
@@ -30,4 +35,8 @@
     <string name="ui_profile_button_update">Update</string>
     <string name="ui_profile_button_showTimeLine">Show Timeline</string>
 
+    <string name="preference_name">TreeInfo</string>
+    <string name="preference_key_tree_name">TreeName</string>
+    <string name="preference_key_tree_comment">TreeComment</string>
+    <string name="preference_key_tree_city">TreeCity</string>
 </resources>

@@ -12,6 +12,7 @@
             android:layout_height="wrap_content"
             android:baselineAligned="false" >
 
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -116,23 +117,23 @@
             android:layout_margin="5dp" >
 
             <Button
-                android:id="@+id/btnUpdate"
+                android:id="@+id/btnSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_weight="1"
-                android:onClick="onUpdateClicked"
-                android:text="@string/ui_profile_button_update" >
+                android:onClick="onSaveClicked"
+                android:text="@string/ui_profile_button_save" >
             </Button>
 
             <Button
-                android:id="@+id/btnShowTimeline"
+                android:id="@+id/btnCancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="30dp"
                 android:layout_weight="1"
-                android:onClick="onShowTimelineClicked"
-                android:text="@string/ui_profile_button_showTimeLine" >
+                android:text="@string/ui_profile_button_cancel"
+                android:onClick="onCancelClicked">
             </Button>
         </LinearLayout>
     </LinearLayout>
