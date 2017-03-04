@@ -9,8 +9,8 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.dartmouth.cs.greenworks.TimelineEntry;
-import com.dartmouth.cs.greenworks.TreeEntry;
+import com.dartmouth.cs.greenworks.Model.TimelineEntry;
+import com.dartmouth.cs.greenworks.Model.TreeEntry;
 import com.dartmouth.cs.greenworks.backend.registration.Registration;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.maps.model.LatLng;

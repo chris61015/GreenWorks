@@ -37,6 +37,7 @@ public class GcmIntentService extends IntentService {
                 showToast(extras.getString("message"));
                 long entryId = Long.parseLong(extras.getString("message"));
 //                MainActivity.dataSource.deleteEntry(entryId, HistoryFragment.entries, HistoryFragment.adapter);
+                //TODO: Receive Data Here
             }
         }
         GcmBroadcastReceiver.completeWakefulIntent(intent);
