@@ -89,8 +89,13 @@ public class PlantATreeActivity extends AppCompatActivity {
         LatLng location = new LatLng(12.4, 11.2);
         String name = ((EditText) findViewById(R.id.etName)).getText().toString();
         String city = ((EditText) findViewById(R.id.etCity)).getText().toString();
+<<<<<<< HEAD
+//        String regId = ""; // unique Id to identify use. Hack for login.
+        String photo = test.photoToString(this,getString(R.string.ui_profile_photo_file_name));
+=======
         String regId = ""; // unique Id to identify use. Hack for login.
         String photo = test.photoToString(this,getString(R.string.ui_plant_tree_photo_file_name));
+>>>>>>> 8e53e10556fe962577569ab2ea177fa2748ae672
         String comment =((EditText) findViewById(R.id.etComment)).getText().toString();;
 
         TreeEntry entry = new TreeEntry(treeId, dateTime,location,name,city,

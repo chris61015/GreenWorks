@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +31,6 @@ public class ActivityEntriesAdapter extends ArrayAdapter<TreeEntry> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-        Log.d("DEBUG!!!!!!!!!!!!!!","You know I am debugging");
 
         LayoutInflater inflater = (LayoutInflater) getContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);

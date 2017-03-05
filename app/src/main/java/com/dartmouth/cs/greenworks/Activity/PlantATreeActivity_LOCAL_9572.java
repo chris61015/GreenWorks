@@ -32,6 +32,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
+import static com.dartmouth.cs.greenworks.R.string.ui_profile_photo_file_name;
+
 /**
  * Created by chris61015 on 2/25/17.
  */
@@ -76,7 +78,7 @@ public class PlantATreeActivity extends AppCompatActivity {
     }
 
     public void onSaveClicked(View v){
-        //TODO Get Location
+        //TODO
 //        Toast.makeText(getApplicationContext(),
 //                getString(R.string.ui_profile_toast_save_text),
 //                Toast.LENGTH_SHORT).show();
@@ -89,8 +91,8 @@ public class PlantATreeActivity extends AppCompatActivity {
         LatLng location = new LatLng(12.4, 11.2);
         String name = ((EditText) findViewById(R.id.etName)).getText().toString();
         String city = ((EditText) findViewById(R.id.etCity)).getText().toString();
-        String regId = ""; // unique Id to identify use. Hack for login.
-        String photo = test.photoToString(this,getString(R.string.ui_plant_tree_photo_file_name));
+//        String regId = ""; // unique Id to identify use. Hack for login.
+        String photo = test.photoToString(this,getString(R.string.ui_profile_photo_file_name));
         String comment =((EditText) findViewById(R.id.etComment)).getText().toString();;
 
         TreeEntry entry = new TreeEntry(treeId, dateTime,location,name,city,
@@ -230,7 +232,7 @@ public class PlantATreeActivity extends AppCompatActivity {
         Bitmap bmap = m_ImgView.getDrawingCache();
 
         String filepath = Environment.getExternalStorageDirectory()
-                .getAbsolutePath() + File.separator + getString(R.string.ui_plant_tree_photo_file_name);
+                .getAbsolutePath() + File.separator + getString(ui_profile_photo_file_name);
         Log.d("DEBUG", "abs file path: " + filepath);
 
         try {
@@ -256,7 +258,7 @@ public class PlantATreeActivity extends AppCompatActivity {
                 }
             } else {
                 String filepath = Environment.getExternalStorageDirectory()
-                        .getAbsolutePath() + File.separator + getString(R.string.ui_plant_tree_photo_file_name);
+                        .getAbsolutePath() + File.separator + getString(ui_profile_photo_file_name);
                 fis = new FileInputStream(filepath);
                 Bitmap bmap = BitmapFactory.decodeStream(fis);
                 m_ImgView.setImageBitmap(bmap);

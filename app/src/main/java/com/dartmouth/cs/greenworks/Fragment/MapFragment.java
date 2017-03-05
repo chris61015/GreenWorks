@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.dartmouth.cs.greenworks.Activity.BackendTest;
+import com.dartmouth.cs.greenworks.Model.TreeEntry;
 import com.dartmouth.cs.greenworks.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -26,18 +28,24 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
+import static com.dartmouth.cs.greenworks.Activity.BackendTest.GET_TREES_AROUND_ME;
+
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private GoogleMap mMap;
     private static View view;
     private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
 
     private LocationRequest locationRequest;
 
     private Location currentLocation;
 
     private Marker currentMarker, itemMarker;
+    private ArrayList<TreeEntry> mTreeList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +58,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         if (!mGoogleApiClient.isConnected()) {
             mGoogleApiClient.connect();
         }
+
+        mTreeList = new ArrayList<TreeEntry>();
     }
 
     private synchronized void configGoogleApiClient() {
@@ -85,21 +95,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
             SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().
                     findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
+
+            getTreesAroundMe();
         } catch (InflateException e) {
         /* map is already there, just return view as it is */
         }
         return view;
-//        // Inflate the layout for this fragment
-//        View view = inflater.inflate(R.layout.fragment_map, container, false);
-//        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-//        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
-//                .findFragmentById(R.id.map);
-//
-//        mapFragment.getMapAsync(this);
-//
-//        return view;
     }
 
+    void getTreesAroundMe(){
+        if (mLastLocation != null) {
+            new BackendTest.DatastoreTask(mTreeList).execute(GET_TREES_AROUND_ME, 10000, mLastLocation.getLongitude(), mLastLocation.getAltitude());
+        }
+    }
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -124,6 +132,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     public void onConnected(@Nullable Bundle bundle) {
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, locationRequest, this);
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
     }
 
     @Override

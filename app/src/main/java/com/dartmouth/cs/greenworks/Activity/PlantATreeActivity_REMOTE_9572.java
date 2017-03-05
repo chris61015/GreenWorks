@@ -83,7 +83,7 @@ public class PlantATreeActivity extends AppCompatActivity {
         saveProfileImage();
 
         BackendTest test = new BackendTest();
-//        test.registerTest(this);
+        test.registerTest(this);
         long treeId = 2;
         long dateTime = new Date().getTime();
         LatLng location = new LatLng(12.4, 11.2);
@@ -93,8 +93,7 @@ public class PlantATreeActivity extends AppCompatActivity {
         String photo = test.photoToString(this,getString(R.string.ui_plant_tree_photo_file_name));
         String comment =((EditText) findViewById(R.id.etComment)).getText().toString();;
 
-        TreeEntry entry = new TreeEntry(treeId, dateTime,location,name,city,
-                MainActivity.myRegId,photo,comment);
+        TreeEntry entry = new TreeEntry(treeId, dateTime,location,name,city,regId,photo,comment);
         test.addTreeTest(entry);
         finish();
     }

@@ -9,6 +9,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.dartmouth.cs.greenworks.ActivityEntriesAdapter;
 import com.dartmouth.cs.greenworks.Model.TimelineEntry;
 import com.dartmouth.cs.greenworks.Model.TreeEntry;
 import com.dartmouth.cs.greenworks.backend.registration.Registration;
@@ -180,13 +181,24 @@ public class BackendTest {
     public static class DatastoreTask extends AsyncTask<Object, Void, Void> {
         private int operMode;
         private List<TreeEntry> mTreeEntryList;
+        private List<TimelineEntry> mTimelineList;
+        private ActivityEntriesAdapter mAdapter;
 
 
         DatastoreTask(){
         }
 
-        public DatastoreTask(List<TreeEntry> entryList){
+        public DatastoreTask(ArrayList<TreeEntry> list){
+            mTreeEntryList = list;
+        }
+
+        public DatastoreTask(ActivityEntriesAdapter adapter, List<TreeEntry> entryList){
             mTreeEntryList = entryList;
+            mAdapter = adapter;
+        }
+
+        public DatastoreTask(List<TimelineEntry> entryList){
+            mTimelineList = entryList;
         }
 
         @Override
@@ -245,13 +257,13 @@ public class BackendTest {
                     try {
                         String treesAroundMe = ServerUtilities.post(SERVER_ADDR + "/gettreesaroundme.do", data1);
                         JSONArray treesAroundMeJSON = new JSONArray(treesAroundMe);
-                        List<TreeEntry> treeEntryList = new ArrayList<>();
+                        //List<TreeEntry> treeEntryList = new ArrayList<>();
 
                         for(int i=0;i<treesAroundMeJSON.length();i++)
                         {
                             Gson gson = new Gson();
                             TreeEntry treeEntry = gson.fromJson(treesAroundMeJSON.getString(i),TreeEntry.class);
-                            treeEntryList.add(treeEntry);
+                            mTreeEntryList.add(treeEntry);
                             Log.e("In GetTreesAroundMe ", treeEntry.comment);
                         }
                     } catch (IOException e) {
@@ -296,14 +308,14 @@ public class BackendTest {
                     try {
                         String myTrees = ServerUtilities.post(SERVER_ADDR + "/gettreesiupdated.do", data3 );
                         JSONArray jsonResult = new JSONArray(myTrees);
-                        List<TreeEntry> treeEntryList = new ArrayList<>();
+                        //List<TreeEntry> treeEntryList = new ArrayList<>();
 
                         for(int i=0;i<jsonResult.length();i++)
                         {
 
                             Gson gson = new Gson();
                             TreeEntry treeEntry = gson.fromJson(jsonResult.getString(i),TreeEntry.class);
-                            treeEntryList.add(treeEntry);
+                            mTreeEntryList.add(treeEntry);
                             Log.e("In GetTreesIUpdated", "Tree:"+treeEntry.treeId+" "+treeEntry.regId);
                         }///treeEntryList now contains all my updates treeEntry objects
                     } catch (IOException e) {
@@ -321,14 +333,14 @@ public class BackendTest {
                     try {
                         String myTrees = ServerUtilities.post(SERVER_ADDR + "/gettimeline.do", data4 );
                         JSONArray jsonResult = new JSONArray(myTrees);
-                        List<TimelineEntry> treeEntryList = new ArrayList<>();
+//                        List<TimelineEntry> treeEntryList = new ArrayList<>();
 
                         for(int i=0;i<jsonResult.length();i++)
                         {
 
                             Gson gson = new Gson();
                             TimelineEntry tempTimelineEntry = gson.fromJson(jsonResult.getString(i),TimelineEntry.class);
-                            treeEntryList.add(tempTimelineEntry);
+                            mTimelineList.add(tempTimelineEntry);
                             Log.e("In GetTimeline", Long.toString(tempTimelineEntry.timelineId));
                         }///treeEntryList now contains all my updates treeEntry objects
                     } catch (IOException e) {
@@ -362,16 +374,23 @@ public class BackendTest {
             return null;
 
         }
-//
-//        @Override
-//        protected void onPostExecute(Void aVoid) {
-//            super.onPostExecute(aVoid);
-//            if (mTreeEntryList != null){
-//                mAdapter.clear();
-//                mAdapter.addAll(mTreeEntryList);
-//                mAdapter.notifyDataSetChanged();
-//            }
-//        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            switch(operMode) {
+                case GET_MY_TREES:
+                    mAdapter.clear();
+                    mAdapter.addAll(mTreeEntryList);
+                    mAdapter.notifyDataSetChanged();
+                    break;
+                case GET_MY_UPDATED_TREES:
+                    mAdapter.clear();
+                    mAdapter.addAll(mTreeEntryList);
+                    mAdapter.notifyDataSetChanged();
+                    break;
+            }
+        }
     }
 
     public class GcmRegistrationAsyncTask extends AsyncTask<Void, Void, String> {
