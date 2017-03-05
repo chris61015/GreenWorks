@@ -14,12 +14,13 @@ import com.dartmouth.cs.greenworks.Timeline.TimeLineAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.dartmouth.cs.greenworks.Activity.AddTimelineActivity.TREEID;
 import static com.dartmouth.cs.greenworks.Activity.BackendTest.GET_TIMELINE;
 
 public class ShowTimelineActivity extends AppCompatActivity implements TimeLineAdapter.OnRecyclerViewItemClickListener {
     private RecyclerView mRecyclerView;
     private TimeLineAdapter mTimeLineAdapter;
-    private List<TimelineEntry> mDataList = new ArrayList<>();
+    private static List<TimelineEntry> mDataList = new ArrayList<>();
     public static String TIMELINE = "timeline";
 
     @Override
@@ -31,7 +32,6 @@ public class ShowTimelineActivity extends AppCompatActivity implements TimeLineA
         mRecyclerView.setLayoutManager(getLinearLayoutManager());
         mRecyclerView.setHasFixedSize(true);
 
-
         initView();
     }
 
@@ -40,23 +40,31 @@ public class ShowTimelineActivity extends AppCompatActivity implements TimeLineA
     }
 
     private void initView() {
+        mTimeLineAdapter = new TimeLineAdapter();
         setDataListItems();
-        mTimeLineAdapter = new TimeLineAdapter(mDataList);
         mTimeLineAdapter.setOnItemClickListener(this);
         mRecyclerView.setAdapter(mTimeLineAdapter);
     }
 
     private void setDataListItems(){
-        new BackendTest.DatastoreTask(mDataList).execute(GET_TIMELINE,"");
+        Intent intent = getIntent();
+        long TreeId = intent.getLongExtra(TREEID, 0);
+        new BackendTest.DatastoreTask(mTimeLineAdapter, mDataList).execute(GET_TIMELINE,TreeId);
+//        try {
+//            new BackendTest.DatastoreTask(mTimeLineAdapter, mDataList).execute(GET_TIMELINE,TreeId).get();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
     }
 
-
     @Override
-    public void onItemClick(View view, int position) {
+    public void onItemClick(View view, TimelineEntry entry) {
 
         Intent intent = new Intent(this, UpdateDetailsActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putParcelable(TIMELINE,mDataList.get(position));
+        bundle.putParcelable(TIMELINE,entry);
 
         intent.putExtras(bundle);
 

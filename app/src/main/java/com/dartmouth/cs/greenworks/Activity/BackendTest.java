@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.dartmouth.cs.greenworks.ActivityEntriesAdapter;
 import com.dartmouth.cs.greenworks.Model.TimelineEntry;
 import com.dartmouth.cs.greenworks.Model.TreeEntry;
+import com.dartmouth.cs.greenworks.Timeline.TimeLineAdapter;
 import com.dartmouth.cs.greenworks.backend.registration.Registration;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -63,8 +64,8 @@ public class BackendTest {
 
 
     // Server stuff
-    public static String SERVER_ADDR = "https://lateral-avatar-160118.appspot.com";
-//    public static String SERVER_ADDR = "http://127.0.0.1:8080";
+//    public static String SERVER_ADDR = "https://lateral-avatar-160118.appspot.com";
+      public static String SERVER_ADDR = "http://127.0.0.1:8080";
 
 
     public boolean registerTest(Context context) {
@@ -227,7 +228,7 @@ public class BackendTest {
         private List<TreeEntry> mTreeEntryList;
         private List<TimelineEntry> mTimelineList;
         private ActivityEntriesAdapter mAdapter;
-
+        private TimeLineAdapter mTimeLineAdapter;
 
         DatastoreTask(){
         }
@@ -241,8 +242,9 @@ public class BackendTest {
             mAdapter = adapter;
         }
 
-        public DatastoreTask(List<TimelineEntry> entryList){
+        public DatastoreTask(TimeLineAdapter timeLineAdapter, List<TimelineEntry> entryList){
             mTimelineList = entryList;
+            mTimeLineAdapter = timeLineAdapter;
         }
 
         @Override
@@ -302,7 +304,7 @@ public class BackendTest {
                         String treesAroundMe = ServerUtilities.post(SERVER_ADDR + "/gettreesaroundme.do", data1);
                         JSONArray treesAroundMeJSON = new JSONArray(treesAroundMe);
                         //List<TreeEntry> treeEntryList = new ArrayList<>();
-
+                        mTreeEntryList.clear();
                         for(int i=0;i<treesAroundMeJSON.length();i++)
                         {
                             Gson gson = new Gson();
@@ -325,7 +327,7 @@ public class BackendTest {
                         String myTrees = ServerUtilities.post(SERVER_ADDR + "/getmytrees.do", data21 );
                         JSONArray jsonResult = new JSONArray(myTrees);
 //                        List<TreeEntry> treeEntryList = new ArrayList<>()
-
+                        mTreeEntryList.clear();
                         for(int i=0;i<jsonResult.length();i++)
                         {
 
@@ -353,7 +355,7 @@ public class BackendTest {
                         String myTrees = ServerUtilities.post(SERVER_ADDR + "/gettreesiupdated.do", data3 );
                         JSONArray jsonResult = new JSONArray(myTrees);
                         //List<TreeEntry> treeEntryList = new ArrayList<>();
-
+                        mTreeEntryList.clear();
                         for(int i=0;i<jsonResult.length();i++)
                         {
 
@@ -378,7 +380,7 @@ public class BackendTest {
                         String myTrees = ServerUtilities.post(SERVER_ADDR + "/gettimeline.do", data4 );
                         JSONArray jsonResult = new JSONArray(myTrees);
 //                        List<TimelineEntry> treeEntryList = new ArrayList<>();
-
+                        mTimelineList.clear();
                         for(int i=0;i<jsonResult.length();i++)
                         {
 
@@ -432,6 +434,11 @@ public class BackendTest {
                     mAdapter.clear();
                     mAdapter.addAll(mTreeEntryList);
                     mAdapter.notifyDataSetChanged();
+                    break;
+                case GET_TIMELINE:
+                    mTimeLineAdapter.clear();
+                    mTimeLineAdapter.addAll(mTimelineList);
+                    mTimeLineAdapter.notifyDataSetChanged();
                     break;
             }
         }

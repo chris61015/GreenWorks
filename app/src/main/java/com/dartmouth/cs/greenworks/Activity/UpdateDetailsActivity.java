@@ -32,11 +32,11 @@ public class UpdateDetailsActivity extends AppCompatActivity {
     }
 
     void initView(){
-        ((EditText) findViewById(R.id.etTimelineName)).setText(mEntry.name);
+        ((EditText) findViewById(R.id.etUpdateDetailName)).setText(mEntry.name);
 
-        ((EditText) findViewById(R.id.etTimelineComment)).setText(mEntry.comment);
+        ((EditText) findViewById(R.id.etUpdateDetailComment)).setText(mEntry.comment);
 
-        ImageView imgView = (ImageView) findViewById(R.id.detailImageProfile);
+        ImageView imgView = (ImageView) findViewById(R.id.UpdateDetailImageProfile);
 
         Bitmap decodedByte;
         if (mEntry.photo == null){

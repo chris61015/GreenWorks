@@ -14,6 +14,7 @@ import com.dartmouth.cs.greenworks.R;
 import com.github.vipulasri.timelineview.TimelineView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,11 +31,11 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineViewHolder> im
         private OnRecyclerViewItemClickListener mOnItemClickListener = null;
         //define interface
         public static interface OnRecyclerViewItemClickListener {
-            void onItemClick(View view, int position);
+            void onItemClick(View view, TimelineEntry entry);
         }
 
-        public TimeLineAdapter(List<TimelineEntry> feedList) {
-            mFeedList = feedList;
+        public TimeLineAdapter() {
+            mFeedList = new ArrayList<TimelineEntry>();
         }
 
         @Override
@@ -75,7 +76,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineViewHolder> im
             holder.mComment.setText(entry.comment);
 
             //将数据保存在itemView的Tag中，以便点击时进行获取
-            holder.itemView.setTag(position);
+            holder.itemView.setTag(entry);
         }
 
         @Override
@@ -86,12 +87,20 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineViewHolder> im
     @Override
     public void onClick(View v) {
         if (mOnItemClickListener != null) {
-            if (mOnItemClickListener != null) mOnItemClickListener.onItemClick(v, (int)v.getTag());
+            if (mOnItemClickListener != null) mOnItemClickListener.onItemClick(v, (TimelineEntry)v.getTag());
         }
     }
 
     public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
         this.mOnItemClickListener = listener;
+    }
+
+    public void clear(){
+        mFeedList.clear();
+    }
+
+    public void addAll(List<TimelineEntry> entries){
+        mFeedList.addAll(entries);
     }
 }
 

@@ -20,7 +20,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.dartmouth.cs.greenworks.Fragment.MyDialogFragment;
+import com.dartmouth.cs.greenworks.Fragment.MyTreesFragment;
 import com.dartmouth.cs.greenworks.Model.TimelineEntry;
+import com.dartmouth.cs.greenworks.Model.TreeEntry;
 import com.dartmouth.cs.greenworks.R;
 import com.soundcloud.android.crop.Crop;
 
@@ -39,6 +41,7 @@ public class AddTimelineActivity extends AppCompatActivity {
     private static final String URI_INSTANCE_STATE_KEY = "saved_uri";
     private static final String URI_INSTANCE_STATE_KEY_TEMP = "saved_uri_temp";
     private static final String CAMERA_CLICKED_KEY = "clicked";
+    public static final String TREEID = "TreeId";
 
     private Uri mImageCaptureUri, mTempUri;
     private Boolean stateChanged = false, cameraClicked = false,clickedFromCam=false;
@@ -71,18 +74,24 @@ public class AddTimelineActivity extends AppCompatActivity {
 //                getString(R.string.ui_profile_toast_save_text),
 //                Toast.LENGTH_SHORT).show();
         saveProfileImage();
-        long timelineId = 2;
-        long treeId = 2;
+
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        TreeEntry entry = bundle.getParcelable(MyTreesFragment.ENTRY);
+
         long dateTime = new Date().getTime();
         String name = ((EditText) findViewById(R.id.etAddTimelineName)).getText().toString();
-        String regId = ""; // unique Id to identify use. Hack for login.
-        String photo = new BackendTest().photoToString(this,getString(R.string.ui_plant_tree_photo_file_name));
+        String regId = entry.regId; // unique Id to identify use. Hack for login.
+        String photo = new BackendTest().photoToString(this,getString(R.string.ui_add_timeline_photo_file_name));
         String comment =((EditText) findViewById(R.id.etAddTimelineComment)).getText().toString();;
 
-        TimelineEntry entry = new TimelineEntry(timelineId, treeId, dateTime,name,regId,photo,comment);
-        new BackendTest.DatastoreTask().execute(UPDATE_TREE,entry);
+        TimelineEntry timelineEntry = new TimelineEntry(0, entry.treeId, dateTime,name,regId,photo,comment);
+        new BackendTest.DatastoreTask().execute(UPDATE_TREE,timelineEntry);
 
-        finish();
+        Intent showTimelineIntent = new Intent(this, ShowTimelineActivity.class);
+        showTimelineIntent.putExtra(TREEID, entry.treeId);
+        startActivity(showTimelineIntent);
     }
 
     public void onAddTimelineCancelClicked(View v){
@@ -216,7 +225,7 @@ public class AddTimelineActivity extends AppCompatActivity {
         Bitmap bmap = m_ImgView.getDrawingCache();
 
         String filepath = Environment.getExternalStorageDirectory()
-                .getAbsolutePath() + File.separator + getString(R.string.ui_update_timeline_photo_file_name);
+                .getAbsolutePath() + File.separator + getString(R.string.ui_add_timeline_photo_file_name);
         Log.d("DEBUG", "abs file path: " + filepath);
 
         try {
@@ -242,7 +251,7 @@ public class AddTimelineActivity extends AppCompatActivity {
                 }
             } else {
                 String filepath = Environment.getExternalStorageDirectory()
-                        .getAbsolutePath() + File.separator + getString(R.string.ui_update_timeline_photo_file_name);
+                        .getAbsolutePath() + File.separator + getString(R.string.ui_add_timeline_photo_file_name);
                 fis = new FileInputStream(filepath);
                 Bitmap bmap = BitmapFactory.decodeStream(fis);
                 m_ImgView.setImageBitmap(bmap);

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import com.dartmouth.cs.greenworks.Model.TreeEntry;
 import com.dartmouth.cs.greenworks.R;
 
+import static com.dartmouth.cs.greenworks.Activity.AddTimelineActivity.TREEID;
 import static com.dartmouth.cs.greenworks.Fragment.MyTreesFragment.ENTRY;
 
 /**
@@ -23,6 +24,7 @@ import static com.dartmouth.cs.greenworks.Fragment.MyTreesFragment.ENTRY;
 public class TreeDetailActivity extends AppCompatActivity {
 
     private TreeEntry mEntry;
+    final public static String TREEIFNO = "TreeInfo";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,11 +60,15 @@ public class TreeDetailActivity extends AppCompatActivity {
 
     public void onShowTimelineClicked(View v){
         Intent intent = new Intent(this, ShowTimelineActivity.class);
+        intent.putExtra(TREEID, mEntry.treeId);
         startActivity(intent);
     }
 
     public void onUpdateClicked(View v){
         Intent intent = new Intent(this, AddTimelineActivity.class);
+        Bundle extras = new Bundle();
+        extras.putParcelable(ENTRY,mEntry);
+        intent.putExtras(extras);
         startActivity(intent);
     }
 }

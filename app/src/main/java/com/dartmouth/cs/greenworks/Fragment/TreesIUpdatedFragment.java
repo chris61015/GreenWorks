@@ -34,6 +34,7 @@ public class TreesIUpdatedFragment extends ListFragment {
         mTreeEntryList = new ArrayList<TreeEntry>();
 
         setListAdapter(mAdapter);
+        updateTreeEntries();
     }
     // retrieve records from the database and display them in the list view
     public void updateTreeEntries() {

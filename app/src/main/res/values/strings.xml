@@ -11,7 +11,7 @@
     <string name="Trees_Photo">Photo of the Tree</string>
 
     <string name="ui_plant_tree_photo_file_name">plant_tree_photo.jpg</string>
-    <string name="ui_update_timeline_photo_file_name">update_timeline_photo.jpg</string>
+    <string name="ui_add_timeline_photo_file_name">add_timeline_photo.jpg</string>
     <string name="ui_proile_image_descripton">Your Profile Picture</string>
     <string name="ui_profile_button_change">Change</string>
     <string name="ui_profile_button_save">Save</string>

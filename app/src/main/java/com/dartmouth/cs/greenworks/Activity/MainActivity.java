@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigate(mNavItemId);
 
         checkPermissions();
-        testBackend();
+     //   testBackend();
     }
 
     @Override
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.drawer_item_1:
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.content, mFirstFragment)
+                        .replace(R.id.content, mFirstFragment).addToBackStack(null)
                         .commit();
                 break;
             case R.id.drawer_item_2:
@@ -187,5 +187,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return;
         }
     }
-
+//
+//    @Override
+//    public void onBackPressed() {
+//
+//        if (!popFragment()){
+//            super.onBackPressed();
+//        }
+//    }
+//
+//    public boolean popFragment() {
+//        boolean isPop = false;
+//        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+//            isPop = true;
+//            getSupportFragmentManager().popBackStackImmediate();
+//        }
+//
+//        return isPop;
+//    }
 }
