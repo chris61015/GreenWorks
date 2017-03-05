@@ -149,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         newTest.updateTree(this, "U1_1.jpg", 1);
         newTest.updateTree(this, "U1_2.jpg", 1);
         newTest.updateTree(this, "U2_1.jpg", 2);
+        newTest.getTimelineTest(this, (long) 4);
 
 
     }

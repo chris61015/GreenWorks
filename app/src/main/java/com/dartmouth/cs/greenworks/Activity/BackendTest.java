@@ -84,9 +84,9 @@ public class BackendTest {
         new DatastoreTask().execute(GET_MY_TREES,myRegId);
     }
 
-    public void getTimelineTest(Context context)
+    public void getTimelineTest(Context context, Long treeID)
     {
-        new DatastoreTask().execute(GET_TIMELINE,myRegId);
+        new DatastoreTask().execute(GET_TIMELINE,treeID);
     }
 
     public void getTreesIUpdatedTest(Context context)
@@ -278,19 +278,19 @@ public class BackendTest {
 
                 case GET_TIMELINE:
                     Map<String, String> data4 = new HashMap<>();
-                    data4.put("Registration ID", (String)params[1]);
+                    data4.put("Tree ID", ((String.valueOf(params[1]))));
                     try {
                         String myTrees = ServerUtilities.post(SERVER_ADDR + "/gettimeline.do", data4 );
                         JSONArray jsonResult = new JSONArray(myTrees);
-                        List<TreeEntry> treeEntryList = new ArrayList<>();
+                        List<TimelineEntry> treeEntryList = new ArrayList<>();
 
                         for(int i=0;i<jsonResult.length();i++)
                         {
 
                             Gson gson = new Gson();
-                            TreeEntry treeEntry = gson.fromJson(jsonResult.getString(i),TreeEntry.class);
-                            treeEntryList.add(treeEntry);
-                            Log.e(TAG, treeEntry.comment);
+                            TimelineEntry tempTimelineEntry = gson.fromJson(jsonResult.getString(i),TimelineEntry.class);
+                            treeEntryList.add(tempTimelineEntry);
+                            Log.e("In GetTimeline", Long.toString(tempTimelineEntry.timelineId));
                         }///treeEntryList now contains all my updates treeEntry objects
                     } catch (IOException e) {
                         Log.e(TAG, "Sync failed: " + e.getCause());
