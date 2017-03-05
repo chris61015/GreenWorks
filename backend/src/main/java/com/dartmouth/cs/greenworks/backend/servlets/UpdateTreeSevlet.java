@@ -51,7 +51,7 @@ public class UpdateTreeSevlet extends HttpServlet {
         TreeEntry tree = treeDataStore.getEntryByIdentifier(treeId);
 
         if (tree != null) { // cann't update non-existant tree
-            timelineDataStore.addEntry2Datastore(timelineEntry);
+
             // for pushing notification:
             ArrayList<String> regIds = new ArrayList<>();
             regIds.add(tree.regId);
@@ -60,6 +60,8 @@ public class UpdateTreeSevlet extends HttpServlet {
             for(TimelineEntry timeline:timelines) {
                 regIds.add(timeline.regId);
             }
+
+            timelineDataStore.addEntry2Datastore(timelineEntry);
             new MessagingEndpoint().sendMessage(Long.toString(treeId), regIds);
 
         }

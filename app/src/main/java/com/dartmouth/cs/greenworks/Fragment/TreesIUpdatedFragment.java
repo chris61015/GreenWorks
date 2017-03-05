@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.dartmouth.cs.greenworks.Activity.BackendTest;
+import com.dartmouth.cs.greenworks.Activity.MainActivity;
 import com.dartmouth.cs.greenworks.Activity.TreeDetailActivity;
 import com.dartmouth.cs.greenworks.ActivityEntriesAdapter;
 import com.dartmouth.cs.greenworks.Model.TreeEntry;
@@ -17,8 +18,6 @@ import com.dartmouth.cs.greenworks.R;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.dartmouth.cs.greenworks.Activity.BackendTest.GET_MY_TREES;
 
 
 public class TreesIUpdatedFragment extends ListFragment {
@@ -38,7 +37,7 @@ public class TreesIUpdatedFragment extends ListFragment {
     }
     // retrieve records from the database and display them in the list view
     public void updateTreeEntries() {
-        new BackendTest.DatastoreTask(mAdapter, mTreeEntryList).execute(GET_MY_TREES,"");
+        new BackendTest.DatastoreTask(mAdapter, mTreeEntryList).execute(BackendTest.GET_MY_UPDATED_TREES, MainActivity.myRegId);
     }
 
     @Override

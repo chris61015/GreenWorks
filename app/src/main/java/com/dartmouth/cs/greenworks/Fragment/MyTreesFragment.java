@@ -19,8 +19,6 @@ import com.dartmouth.cs.greenworks.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.dartmouth.cs.greenworks.Activity.BackendTest.GET_MY_UPDATED_TREES;
-
 public class MyTreesFragment extends ListFragment {
     private Context mContext; // context pointed to parent activity
     private ActivityEntriesAdapter mAdapter; // customized adapter for displaying
@@ -37,7 +35,7 @@ public class MyTreesFragment extends ListFragment {
     }
     // retrieve records from the database and display them in the list view
     public void updateTreeEntries() {
-        new BackendTest.DatastoreTask(mAdapter, mTreeEntryList).execute(GET_MY_UPDATED_TREES, MainActivity.myRegId);
+        new BackendTest.DatastoreTask(mAdapter, mTreeEntryList).execute(BackendTest.GET_MY_TREES, MainActivity.myRegId);
     }
 
     @Override

@@ -45,7 +45,7 @@ public class GcmIntentService extends IntentService {
                     try {
                         long treeId = Long.parseLong(message);
                         showToast("Tree " + treeId + " Updated!");
-                        showNotification("Tree " + treeId + " Updated!");
+                        showNotification("Tree " + treeId + " Updated!", (int)treeId);
                     } catch (Exception e) {
 
                     }
@@ -64,7 +64,7 @@ public class GcmIntentService extends IntentService {
         });
     }
 
-    private void showNotification(String text) {
+    private void showNotification(String text, int id) {
         String title = "GreenWorks";
 
         Log.d("IntentService", "Starting notification");
@@ -76,6 +76,7 @@ public class GcmIntentService extends IntentService {
                 0, myIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 
+        long[] v = {500,1000};
 
         // Build notification.
         Notification notification = new Notification.Builder(this)
@@ -84,6 +85,7 @@ public class GcmIntentService extends IntentService {
                 .setContentText(text)
                 .setSmallIcon(R.drawable.dartmouthpine)
                 .setContentIntent(pendingIntent)
+                .setVibrate(v)
                 .build();
 
         // Doesn't allow system to cancel notification when activity is running.
@@ -93,6 +95,6 @@ public class GcmIntentService extends IntentService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0, notification);
+        notificationManager.notify(id, notification);
     }
 }
