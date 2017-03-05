@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.dartmouth.cs.greenworks.Model.TimelineEntry;
 import com.dartmouth.cs.greenworks.Model.TreeEntry;
@@ -17,8 +18,6 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
-import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -54,29 +53,35 @@ public class BackendTest {
     public static int pseudoRegId = 1;
 
 
-    public String myRegId = "";
 
     // Server stuff
-//    public static String SERVER_ADDR = "https://lateral-avatar-160118.appspot.com";
-    public static String SERVER_ADDR = "http://127.0.0.1:8080";
+    public static String SERVER_ADDR = "https://lateral-avatar-160118.appspot.com";
+//    public static String SERVER_ADDR = "http://127.0.0.1:8080";
 
 
-    public String registerTest(Context context) {
+    public void registerTest(Context context) {
 
         checkPlayServices(context);
 
+//        while (true) {
+            try {
+                new GcmRegistrationAsyncTask(context).execute().get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            Log.d(TAG, "RegID: " + MainActivity.myRegId);
+//            if (MainActivity.myRegId.length() != 0) {
+//                break;
+//            }
+//            try {
+//                Thread.sleep(2000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
-        try {
-            myRegId = new GcmRegistrationAsyncTask(context).execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        Log.d(TAG, "RegID: " + myRegId);
-
-
-        return myRegId;
     }
     private boolean checkPlayServices(Context context) {
         int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
@@ -106,7 +111,7 @@ public class BackendTest {
 
     public void getMyTreesTest(Context context)
     {
-        new DatastoreTask().execute(GET_MY_TREES,myRegId);
+        new DatastoreTask().execute(GET_MY_TREES, MainActivity.myRegId);
     }
 
     public void getTimelineTest(Context context, Long treeID)
@@ -116,7 +121,7 @@ public class BackendTest {
 
     public void getTreesIUpdatedTest(Context context)
     {
-        new DatastoreTask().execute(GET_MY_UPDATED_TREES,myRegId);
+        new DatastoreTask().execute(GET_MY_UPDATED_TREES,MainActivity.myRegId);
     }
 
 
@@ -124,7 +129,7 @@ public class BackendTest {
         String encodedImage = photoToString (context, filename);
         TimelineEntry timelineEntry = new TimelineEntry(0, treeId,
                 System.currentTimeMillis(), "Xiaolei_up_" + treeId,
-                myRegId, encodedImage, "update on tree " + treeId) ;
+                MainActivity.myRegId, encodedImage, "update on tree " + treeId) ;
         new DatastoreTask().execute(UPDATE_TREE, timelineEntry);
     }
 
@@ -134,14 +139,8 @@ public class BackendTest {
 
         TreeEntry tree = new TreeEntry(0, System.currentTimeMillis(),
                 new LatLng(43.7069, -72.2869), "Rohan", "Sudikoff",
-                myRegId, encodedImage, "Tree in Sudikoff");
+                MainActivity.myRegId, encodedImage, "Tree in Sudikoff");
         new DatastoreTask().execute(ADD_TREE, tree);
-//
-//        TreeEntry tree2 = new TreeEntry(0, System.currentTimeMillis(),
-//                new LatLng(42.3599, -71.0940), "Chris", "Boston",
-//                myRegId, encodedImage, "Tree in Boston!");
-//        new DatastoreTask().execute(ADD_TREE, tree2);
-
     }
 
     public void addTreeTest(TreeEntry entry) {
@@ -389,30 +388,30 @@ public class BackendTest {
         @Override
         protected String doInBackground(Void... params) {
             if (regService == null) {
-                Registration.Builder builder =
-                        new Registration.Builder(AndroidHttp.newCompatibleTransport(),
-                        new AndroidJsonFactory(), null)
-                        // Need setRootUrl and setGoogleClientRequestInitializer
-                        // only for local testing,
-                        // otherwise they can be skipped
-                        .setRootUrl(SERVER_ADDR+"/_ah/api/")
-                        .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-                            @Override
-                            public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest)
-                                    throws IOException {
-                                abstractGoogleClientRequest.setDisableGZipContent(true);
-                            }
-                        });
+//                Registration.Builder builder =
+//                        new Registration.Builder(AndroidHttp.newCompatibleTransport(),
+//                        new AndroidJsonFactory(), null)
+//                        // Need setRootUrl and setGoogleClientRequestInitializer
+//                        // only for local testing,
+//                        // otherwise they can be skipped
+//                        .setRootUrl(SERVER_ADDR+"/_ah/api/")
+//                        .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
+//                            @Override
+//                            public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest)
+//                                    throws IOException {
+//                                abstractGoogleClientRequest.setDisableGZipContent(true);
+//                            }
+//                        });
                 // end of optional local run code
 
                 //XD: newCompatibleTransport - returns a new thread-safe HTTP transport
                 // instance that is compatible with Android SDKs prior to * Gingerbread.
                 //XD: use this builder instead if you deploy your backend to the cloud
                 // (e.g. https://abstract-arc-123122.appspot.com)
-//                Registration.Builder builder =
-//                        new Registration.Builder(AndroidHttp.newCompatibleTransport(),
-//                                new AndroidJsonFactory(), null)
-//                                .setRootUrl(SERVER_ADDR +"/_ah/api/");
+                Registration.Builder builder =
+                        new Registration.Builder(AndroidHttp.newCompatibleTransport(),
+                                new AndroidJsonFactory(), null)
+                                .setRootUrl(SERVER_ADDR +"/_ah/api/");
                 regService = builder.build();
             }
 
@@ -423,6 +422,7 @@ public class BackendTest {
                     gcm = GoogleCloudMessaging.getInstance(context);
                 }
                 regId = gcm.register(SENDER_ID);
+                MainActivity.myRegId = regId;
                 msg = "Device registered, registration ID=" + regId;
 
                 // You should send the registration ID to your server over HTTP,
@@ -442,7 +442,7 @@ public class BackendTest {
 
         @Override
         protected void onPostExecute(String msg) {
-//            Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+            Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
             Logger.getLogger("REGISTRATION").log(Level.INFO, msg);
         }
     }

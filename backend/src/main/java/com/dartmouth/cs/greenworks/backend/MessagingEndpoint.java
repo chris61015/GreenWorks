@@ -41,6 +41,8 @@ import javax.inject.Named;
 )
 public class MessagingEndpoint {
     private static final Logger log = Logger.getLogger(MessagingEndpoint.class.getName());
+    public static final int TREE_ID = 1;
+    public static final int REG_ID = 2;
 
     /**
      * Api Keys can be obtained from the google cloud console
@@ -64,6 +66,7 @@ public class MessagingEndpoint {
         }
         Sender sender = new Sender(API_KEY);
         Message msg = new Message.Builder().addData("message", message).build();
+
         List<RegistrationRecord> records;
         if (IDs == null || IDs.size() == 0 || IDs.get(0).length() == 0) {
             records = OfyService.ofy().load().type(RegistrationRecord.class).limit(100).list();

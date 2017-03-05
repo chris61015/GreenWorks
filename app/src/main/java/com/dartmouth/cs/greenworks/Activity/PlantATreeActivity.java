@@ -85,17 +85,18 @@ public class PlantATreeActivity extends AppCompatActivity {
         saveProfileImage();
 
         BackendTest test = new BackendTest();
-        test.registerTest(this);
+//        test.registerTest(this);
         long treeId = 2;
         long dateTime = new Date().getTime();
         LatLng location = new LatLng(12.4, 11.2);
         String name = ((EditText) findViewById(R.id.etName)).getText().toString();
         String city = ((EditText) findViewById(R.id.etCity)).getText().toString();
-        String regId = ""; // unique Id to identify use. Hack for login.
+//        String regId = ""; // unique Id to identify use. Hack for login.
         String photo = test.photoToString(this,getString(R.string.ui_profile_photo_file_name));
         String comment =((EditText) findViewById(R.id.etComment)).getText().toString();;
 
-        TreeEntry entry = new TreeEntry(treeId, dateTime,location,name,city,regId,photo,comment);
+        TreeEntry entry = new TreeEntry(treeId, dateTime,location,name,city,
+                MainActivity.myRegId,photo,comment);
         test.addTreeTest(entry);
         finish();
     }

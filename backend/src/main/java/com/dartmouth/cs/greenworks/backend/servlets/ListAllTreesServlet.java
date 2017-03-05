@@ -75,13 +75,13 @@ public class ListAllTreesServlet extends HttpServlet {
                     out.write("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
                     out.write("Timeline ID: " + timelineEntry.timelineId + "<br>");
                     out.write("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-                    out.write("Tree ID: " + treeEntry.treeId + "<br>");
+                    out.write("Tree ID: " + timelineEntry.treeId + "<br>");
                     out.write("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-                    out.write("User: " + treeEntry.name + "<br>");
+                    out.write("User: " + timelineEntry.name + "<br>");
                     out.write("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-                    out.write("Registration ID: " + treeEntry.regId + "<br>");
+                    out.write("Registration ID: " + timelineEntry.regId + "<br>");
                     out.write("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-                    out.write("Comment: " + treeEntry.comment + "<br>");
+                    out.write("Comment: " + timelineEntry.comment + "<br>");
                 }
                 out.write("<hr>");
             }

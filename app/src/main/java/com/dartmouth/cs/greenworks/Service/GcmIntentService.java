@@ -11,6 +11,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.dartmouth.cs.greenworks.Activity.MainActivity;
 import com.dartmouth.cs.greenworks.R;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -40,11 +41,17 @@ public class GcmIntentService extends IntentService {
                 Logger.getLogger("GCM_RECEIVED").log(Level.INFO, extras.toString());
                 //XD: this "my_message" has to be the same as the one used on the server side in MessagingEndpoint.java
 //                showToast(extras.getString("message"));
-                long treeId = Long.parseLong(extras.getString("message"));
-                showToast("Tree " + treeId + " Updated!");
-                showNotification("Tree " + treeId + " Updated!");
-//                MainActivity.dataSource.deleteEntry(entryId, HistoryFragment.entries, HistoryFragment.adapter);
-                //TODO: Receive Data Here
+                String message = extras.getString("message");
+                if (message != null && message.length()!=0) {
+                    try {
+                        long treeId = Long.parseLong(message);
+                        showToast("Tree " + treeId + " Updated!");
+                        showNotification("Tree " + treeId + " Updated!");
+                    } catch (Exception e) {
+                        MainActivity.myRegId = message;
+                        showToast("From intentservice: registerred: " + MainActivity.myRegId);
+                    }
+                }
             }
         }
         GcmBroadcastReceiver.completeWakefulIntent(intent);
