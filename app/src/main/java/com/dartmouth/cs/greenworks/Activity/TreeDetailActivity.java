@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -52,5 +53,8 @@ public class TreeDetailActivity extends AppCompatActivity {
 
     }
 
-
+    public void onShowTimelineClicked(View v){
+        Intent intent = new Intent(this, ShowTimelineActivity.class);
+        startActivity(intent);
+    }
 }
