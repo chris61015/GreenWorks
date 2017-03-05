@@ -1,16 +1,28 @@
-<!-- Indices written at Sat, 4 Mar 2017 20:47:45 EST -->
+<!-- Indices written at Sat, 4 Mar 2017 21:00:08 EST -->
 
 <datastore-indexes>
 
-    <!-- Used 11 times in query history -->
+    <!-- Used 41 times in query history -->
     <datastore-index kind="tree entry" ancestor="true" source="auto">
         <property name="Date Time" direction="desc"/>
     </datastore-index>
 
-    <!-- Used 9 times in query history -->
+    <!-- Used 52 times in query history -->
     <datastore-index kind="timeline entry" ancestor="false" source="auto">
         <property name="Tree ID" direction="asc"/>
         <property name="Date Time" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="tree entry" ancestor="false" source="auto">
+        <property name="Registration ID" direction="asc"/>
+        <property name="Date Time" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="timeline entry" ancestor="false" source="auto">
+        <property name="Registration ID" direction="asc"/>
+        <property name="Tree ID" direction="desc"/>
     </datastore-index>
 
 </datastore-indexes>

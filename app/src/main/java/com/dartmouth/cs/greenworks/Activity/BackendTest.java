@@ -116,7 +116,7 @@ public class BackendTest {
 
     public void getTreesIUpdatedTest(Context context)
     {
-        new DatastoreTask().execute(GET_MY_TREES,myRegId);
+        new DatastoreTask().execute(GET_MY_UPDATED_TREES,myRegId);
     }
 
 
@@ -295,7 +295,7 @@ public class BackendTest {
                             Gson gson = new Gson();
                             TreeEntry treeEntry = gson.fromJson(jsonResult.getString(i),TreeEntry.class);
                             treeEntryList.add(treeEntry);
-                            Log.e("In GEtTreesAroundMe", treeEntry.comment);
+                            Log.e("In GetTreesIUpdated", "Tree:"+treeEntry.treeId+" "+treeEntry.regId);
                         }///treeEntryList now contains all my updates treeEntry objects
                     } catch (IOException e) {
                         Log.e(TAG, "Sync failed: " + e.getCause());
