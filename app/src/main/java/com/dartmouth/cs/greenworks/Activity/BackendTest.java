@@ -189,6 +189,10 @@ public class BackendTest {
         DatastoreTask(){
         }
 
+        public DatastoreTask(ArrayList<TreeEntry> list){
+            mTreeEntryList = list;
+        }
+
         public DatastoreTask(ActivityEntriesAdapter adapter, List<TreeEntry> entryList){
             mTreeEntryList = entryList;
             mAdapter = adapter;
@@ -254,13 +258,13 @@ public class BackendTest {
                     try {
                         String treesAroundMe = ServerUtilities.post(SERVER_ADDR + "/gettreesaroundme.do", data1);
                         JSONArray treesAroundMeJSON = new JSONArray(treesAroundMe);
-                        List<TreeEntry> treeEntryList = new ArrayList<>();
+                        //List<TreeEntry> treeEntryList = new ArrayList<>();
 
                         for(int i=0;i<treesAroundMeJSON.length();i++)
                         {
                             Gson gson = new Gson();
                             TreeEntry treeEntry = gson.fromJson(treesAroundMeJSON.getString(i),TreeEntry.class);
-                            treeEntryList.add(treeEntry);
+                            mTreeEntryList.add(treeEntry);
                             Log.e("In GetTreesAroundMe ", treeEntry.comment);
                         }
                     } catch (IOException e) {
