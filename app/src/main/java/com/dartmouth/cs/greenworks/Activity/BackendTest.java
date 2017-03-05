@@ -47,6 +47,7 @@ public class BackendTest {
     public static final int GET_MY_TREES = 4;
     public static final int GET_MY_UPDATED_TREES = 5;
     public static final int GET_TIMELINE = 6;
+    public static final int GET_TREE_BY_ID = 7;
 
     public static final String TAG = "BackendTest";
 
@@ -145,6 +146,11 @@ public class BackendTest {
 
     public void addTreeTest(TreeEntry entry) {
         new DatastoreTask().execute(ADD_TREE, entry);
+    }
+
+    public void getTreeByIDTest(long treeID)
+    {
+        new DatastoreTask().execute(GET_TREE_BY_ID,treeID);
     }
 
     public String photoToString(Context context, String filename) {
@@ -323,6 +329,24 @@ public class BackendTest {
                         e.printStackTrace();
                     }
 
+                    break;
+
+                case GET_TREE_BY_ID:
+                    Map<String, String> data5 = new HashMap<>();
+                    data5.put("Tree ID", ((String.valueOf(params[1]))));
+                    try {
+                        String myTree = ServerUtilities.post(SERVER_ADDR + "/gettreebyid.do", data5 );
+                        JSONArray jsonResult = new JSONArray(myTree);
+                        //List<TimelineEntry> treeEntryList = new ArrayList<>();
+                        Gson gson = new Gson();
+                        TreeEntry treeByID = gson.fromJson(jsonResult.getString(0),TreeEntry.class);
+                        Log.e("In TreeByID",String.valueOf(treeByID.treeId)+" "+treeByID.comment);
+                    } catch (IOException e) {
+                        Log.e(TAG, "Sync failed: " + e.getCause());
+                        Log.e(TAG, "data posting error " + e);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     break;
 
             }
