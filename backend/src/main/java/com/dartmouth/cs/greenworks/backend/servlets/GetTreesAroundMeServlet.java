@@ -5,6 +5,8 @@ import com.dartmouth.cs.greenworks.backend.datastores.TreeEntry;
 import com.google.appengine.api.datastore.GeoPt;
 import com.google.appengine.repackaged.com.google.gson.Gson;
 
+import org.json.simple.JSONArray;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -33,14 +35,20 @@ public class GetTreesAroundMeServlet  extends HttpServlet  {
         int distanceRadius = Integer.parseInt(request.getParameter("Radius"));
         double longitude = Double.parseDouble(request.getParameter("Longitude"));
         double lattitude = Double.parseDouble(request.getParameter("Lattitude"));
-        GeoPt location = new GeoPt((float)lattitude,(float)longitude);
+        GeoPt location = new GeoPt((float)longitude,(float)lattitude);
         //fetch my trees from data store
         TreeDataStore treeDataStore = new TreeDataStore();
         ArrayList<TreeEntry> treesNearMe = new ArrayList<>();
+        JSONArray treesNearMeJSON = new JSONArray();
 
         treesNearMe = treeDataStore.queryNearbyTrees(distanceRadius, location);
 
-        String result = new Gson().toJson(treesNearMe);
+        for(TreeEntry treeEntry: treesNearMe)
+        {
+            treesNearMeJSON.add(treeEntry);
+        }
+
+        String result = new Gson().toJson(treesNearMeJSON);
         response.getWriter().write(result);
     }
 }

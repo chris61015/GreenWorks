@@ -78,6 +78,8 @@ public class PlantATreeActivity extends AppCompatActivity {
 //        Toast.makeText(getApplicationContext(),
 //                getString(R.string.ui_profile_toast_save_text),
 //                Toast.LENGTH_SHORT).show();
+        saveProfileImage();
+
         BackendTest test = new BackendTest();
         test.registerTest(this);
         long treeId = 2;
@@ -180,6 +182,7 @@ public class PlantATreeActivity extends AppCompatActivity {
             m_ImgView.setImageResource(0);
             m_ImgView.setImageURI(mTempUri);
             cameraClicked=true;
+            saveProfileImage();
 
         } else if (resultCode == Crop.RESULT_ERROR) {
             Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
@@ -229,7 +232,7 @@ public class PlantATreeActivity extends AppCompatActivity {
 
         try {
             File f = new File(filepath);
-            FileOutputStream fos = new FileOutputStream(f);
+            FileOutputStream fos = new FileOutputStream(f,false);
             bmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.flush();
             fos.close();

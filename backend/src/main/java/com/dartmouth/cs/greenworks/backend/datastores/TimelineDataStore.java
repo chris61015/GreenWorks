@@ -129,7 +129,7 @@ public class TimelineDataStore {
 
     // get my timeline updates.
     // note it will return the time line, not the trees.
-    private ArrayList<TimelineEntry> queryMyUpdate (String regId) {
+    public ArrayList<TimelineEntry> queryMyUpdate (String regId) {
         ArrayList<TimelineEntry> ret = new ArrayList<> ();
 
         Query.Filter filter = new Query.FilterPredicate(TimelineEntry.PROPERTY_REG_ID,

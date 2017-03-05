@@ -96,7 +96,7 @@ public class BackendTest {
 
     public void getTreesAroundMeTest(Context context)
     {
-        int radius =5;
+        int radius =2;
         double longitude = 43.7069;
         double lattitude = -72.2869;
 
@@ -110,7 +110,7 @@ public class BackendTest {
 
     public void getTimelineTest(Context context)
     {
-
+        new DatastoreTask().execute(GET_TIMELINE,myRegId);
     }
 
     public void getTreesIUpdatedTest(Context context)
@@ -132,14 +132,15 @@ public class BackendTest {
         String encodedImage = photoToString(context, filename);
 
         TreeEntry tree = new TreeEntry(0, System.currentTimeMillis(),
-                new LatLng(11.4, 12.7), "Rohan2", "Hanover2",
-                myRegId, encodedImage, "Hello World!");
+                new LatLng(43.7069, -72.2869), "Rohan", "Sudikoff",
+                myRegId, encodedImage, "Tree in Sudikoff");
         new DatastoreTask().execute(ADD_TREE, tree);
 
-//        TreeEntry tree1 = new TreeEntry(0, System.currentTimeMillis(),
-//                new LatLng(11.4, 12.7), "Xiao", "West Leb",
-//                myRegId, encodedImage, "ByeBye!");
-//        new DatastoreTask().execute(ADD_TREE, tree1);
+        TreeEntry tree2 = new TreeEntry(0, System.currentTimeMillis(),
+                new LatLng(42.3599, -71.0940), "Chris", "Boston",
+                myRegId, encodedImage, "Tree in Boston!");
+        new DatastoreTask().execute(ADD_TREE, tree2);
+
     }
 
     public void addTreeTest(TreeEntry entry) {
@@ -219,7 +220,7 @@ public class BackendTest {
                     //data1.put("Date Time", Long.toString(tree1.dateTime));
                     data1.put("Radius", Integer.toString((Integer)params[1]));
                     data1.put("Longitude", Double.toString((Double)params[2]));
-                    data1.put("Latitude", Double.toString((Double)params[3]));
+                    data1.put("Lattitude", Double.toString((Double)params[3]));
 
                     //data1.put("Name", tree1.name);
                     //data1.put("City", tree1.city);
@@ -227,10 +228,22 @@ public class BackendTest {
                     //data1.put("Photo", tree1.photo);
                     //data1.put("Comment", tree1.comment);
                     try {
-                        ServerUtilities.post(SERVER_ADDR + "/gettreesaroundme.do", data1);
+                        String treesAroundMe = ServerUtilities.post(SERVER_ADDR + "/gettreesaroundme.do", data1);
+                        JSONArray treesAroundMeJSON = new JSONArray(treesAroundMe);
+                        List<TreeEntry> treeEntryList = new ArrayList<>();
+
+                        for(int i=0;i<treesAroundMeJSON.length();i++)
+                        {
+                            Gson gson = new Gson();
+                            TreeEntry treeEntry = gson.fromJson(treesAroundMeJSON.getString(i),TreeEntry.class);
+                            treeEntryList.add(treeEntry);
+                            Log.e("In GetTreesAroundMe ", treeEntry.comment);
+                        }
                     } catch (IOException e) {
                         Log.e(TAG, "Sync failed: " + e.getCause());
                         Log.e(TAG, "data posting error " + e);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                     break;
 
@@ -276,7 +289,7 @@ public class BackendTest {
                             Gson gson = new Gson();
                             TreeEntry treeEntry = gson.fromJson(jsonResult.getString(i),TreeEntry.class);
                             treeEntryList.add(treeEntry);
-                            Log.e(TAG, treeEntry.comment);
+                            Log.e("In GEtTreesAroundMe", treeEntry.comment);
                         }///treeEntryList now contains all my updates treeEntry objects
                     } catch (IOException e) {
                         Log.e(TAG, "Sync failed: " + e.getCause());
