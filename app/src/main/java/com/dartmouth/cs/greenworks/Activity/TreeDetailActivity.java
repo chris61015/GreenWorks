@@ -60,4 +60,9 @@ public class TreeDetailActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ShowTimelineActivity.class);
         startActivity(intent);
     }
+
+    public void onUpdateClicked(View v){
+        Intent intent = new Intent(this, AddTimelineActivity.class);
+        startActivity(intent);
+    }
 }

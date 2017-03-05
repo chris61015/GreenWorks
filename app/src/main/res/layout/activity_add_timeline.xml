@@ -59,7 +59,7 @@
 
             <ImageView
                 android:contentDescription="@string/ui_proile_image_descripton"
-                android:id="@+id/imageProfile"
+                android:id="@+id/AddTimelineImageProfile"
                 android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:layout_margin="5dp"
@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_weight="1"
-                android:onClick="onSaveClicked"
+                android:onClick="onAddTimelineSaveClicked"
                 android:text="@string/ui_profile_button_save" >
             </Button>
 
@@ -107,6 +107,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="30dp"
                 android:layout_weight="1"
+                android:onClick="onAddTimelineCancelClicked"
                 android:text="@string/ui_profile_button_cancel" >
             </Button>
         </LinearLayout>

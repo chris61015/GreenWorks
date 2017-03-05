@@ -58,14 +58,14 @@ public class AddTimelineActivity extends AppCompatActivity {
             stateChanged=true;
         }
 
-        m_ImgView = (ImageView)findViewById(R.id.imageProfile);
-        ((EditText) findViewById(R.id.etName)).setInputType(InputType.TYPE_CLASS_TEXT);
-        ((EditText) findViewById(R.id.etComment)).setInputType(InputType.TYPE_CLASS_TEXT);
+        m_ImgView = (ImageView)findViewById(R.id.AddTimelineImageProfile);
+        ((EditText) findViewById(R.id.etAddTimelineName)).setInputType(InputType.TYPE_CLASS_TEXT);
+        ((EditText) findViewById(R.id.etAddTimelineComment)).setInputType(InputType.TYPE_CLASS_TEXT);
         loadProfile();
         loadProfileImage();
     }
 
-    public void onSaveClicked(View v){
+    public void onAddTimelineSaveClicked(View v){
         //TODO Get Location
 //        Toast.makeText(getApplicationContext(),
 //                getString(R.string.ui_profile_toast_save_text),
@@ -74,10 +74,10 @@ public class AddTimelineActivity extends AppCompatActivity {
         long timelineId = 2;
         long treeId = 2;
         long dateTime = new Date().getTime();
-        String name = ((EditText) findViewById(R.id.etName)).getText().toString();
+        String name = ((EditText) findViewById(R.id.etAddTimelineName)).getText().toString();
         String regId = ""; // unique Id to identify use. Hack for login.
         String photo = new BackendTest().photoToString(this,getString(R.string.ui_plant_tree_photo_file_name));
-        String comment =((EditText) findViewById(R.id.etComment)).getText().toString();;
+        String comment =((EditText) findViewById(R.id.etAddTimelineComment)).getText().toString();;
 
         TimelineEntry entry = new TimelineEntry(timelineId, treeId, dateTime,name,regId,photo,comment);
         new BackendTest.DatastoreTask().execute(UPDATE_TREE,entry);
@@ -85,7 +85,7 @@ public class AddTimelineActivity extends AppCompatActivity {
         finish();
     }
 
-    public void onCancelClicked(View v){
+    public void onAddTimelineCancelClicked(View v){
         finish();
     }
 

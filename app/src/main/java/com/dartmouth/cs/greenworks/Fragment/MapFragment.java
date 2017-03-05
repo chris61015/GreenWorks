@@ -38,6 +38,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     private GoogleMap mMap;
     private static View view;
     private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
 
     private LocationRequest locationRequest;
 
@@ -103,8 +104,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     }
 
     void getTreesAroundMe(){
-        new BackendTest.DatastoreTask(mTreeList).execute(GET_TREES_AROUND_ME,10000,currentLocation.getLongitude(), currentLocation.getAltitude());
-
+        if (mLastLocation != null) {
+            new BackendTest.DatastoreTask(mTreeList).execute(GET_TREES_AROUND_ME, 10000, mLastLocation.getLongitude(), mLastLocation.getAltitude());
+        }
     }
     /**
      * Manipulates the map once available.
@@ -130,6 +132,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     public void onConnected(@Nullable Bundle bundle) {
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, locationRequest, this);
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
     }
 
     @Override
