@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +25,7 @@ public class MyTreesFragment extends ListFragment {
     private Context mContext; // context pointed to parent activity
     private ActivityEntriesAdapter mAdapter; // customized adapter for displaying
     private List<TreeEntry> mTreeEntryList;
+    public static String ENTRY = "entry";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,7 @@ public class MyTreesFragment extends ListFragment {
     public void updateTreeEntries() {
         try {
             new BackendTest.DatastoreTask(mTreeEntryList).execute(GET_MY_TREES,"").get();
+            //TODO Multithread Version
             mAdapter.clear();
             mAdapter.addAll(mTreeEntryList);
             mAdapter.notifyDataSetChanged();
@@ -47,7 +48,6 @@ public class MyTreesFragment extends ListFragment {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        Log.d("DEBUG!!!!!!!!!!!!!!", mTreeEntryList.toString());
     }
     @Override
     public void onResume() {
@@ -69,15 +69,14 @@ public class MyTreesFragment extends ListFragment {
     // Click event
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Intent intent = new Intent(); // The intent to launch the activity after click.
-        intent.setClass(mContext,TreeDetailActivity.class);
+        Intent intent = new Intent(getActivity(), TreeDetailActivity.class); // The intent to launch the activity after click.
         Bundle extras = new Bundle(); // The extra information needed pass
         // through to next activity.
 
         // get the ExerciseEntry corresponding to user's selection
         TreeEntry entry = mAdapter.getItem(position);
         // Task type is display history, versus create new as in
-
+        extras.putParcelable(ENTRY,entry);
 
         // start the activity
         intent.putExtras(extras);

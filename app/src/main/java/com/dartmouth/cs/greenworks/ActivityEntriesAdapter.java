@@ -59,13 +59,10 @@ public class ActivityEntriesAdapter extends ArrayAdapter<TreeEntry> {
         // get the corresponding ExerciseEntry
         TreeEntry entry = getItem(position);
 
-        Log.d("DEBUG", entry.toString());
-
         Bitmap decodedByte;
         if (entry.photo == null){
             imgView.setImageResource(R.drawable.dartmouthpine);
         } else {
-            Log.d("DEBUG!!", entry.photo);
             byte[] decodedString = Base64.decode(entry.photo.replace(' ','+'), Base64.DEFAULT);
             decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             imgView.setImageBitmap(decodedByte);
