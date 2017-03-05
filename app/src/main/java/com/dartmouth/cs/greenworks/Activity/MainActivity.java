@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.dartmouth.cs.greenworks.Fragment.MapFragment;
 import com.dartmouth.cs.greenworks.Fragment.MyTreesFragment;
@@ -134,7 +135,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void testBackend() {
         BackendTest newTest = new BackendTest();
-        newTest.registerTest(this);
+        if(!newTest.registerTest(this)) {
+            Toast.makeText(this, "Registration failed. Please try later",
+                    Toast.LENGTH_LONG).show();
+            Log.d(TAG, "Registration failed. Please try later");
+        }
 
 //        newTest.addTreeTest(this, "1.jpg");
 //        newTest.getMyTreesTest(this);
@@ -144,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        newTest.addTreeTest(this, "3.jpg");
 //        newTest.addTreeTest(this, "4.jpg");
 //        newTest.addTreeTest(this, "5.jpg");
-//        newTest.updateTree(this, "U1_1.jpg", 1);
+        newTest.updateTree(this, "U1_1.jpg", 4);
 //        newTest.updateTree(this, "U1_2.jpg", 1);
 //        newTest.updateTree(this, "U2_1.jpg", 2);
 //        newTest.getTimelineTest(this, (long) 4);
