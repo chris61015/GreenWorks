@@ -11,8 +11,6 @@ import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -54,13 +52,7 @@ public class RegistrationEndpoint {
         }
         RegistrationRecord record = new RegistrationRecord();
         record.setRegId(regId);
-        ArrayList<String> IDs = new ArrayList<>();
-        IDs.add(regId);
-        try {
-            new MessagingEndpoint().sendMessage(regId, IDs);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         OfyService.ofy().save().entity(record).now();
     }
 

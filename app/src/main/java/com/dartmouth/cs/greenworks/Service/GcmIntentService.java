@@ -11,7 +11,6 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.dartmouth.cs.greenworks.Activity.MainActivity;
 import com.dartmouth.cs.greenworks.R;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -48,8 +47,7 @@ public class GcmIntentService extends IntentService {
                         showToast("Tree " + treeId + " Updated!");
                         showNotification("Tree " + treeId + " Updated!");
                     } catch (Exception e) {
-                        MainActivity.myRegId = message;
-                        showToast("From intentservice: registerred: " + MainActivity.myRegId);
+
                     }
                 }
             }

@@ -24,9 +24,15 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +57,8 @@ public class BackendTest {
 
     public static final String TAG = "BackendTest";
 
-    public static int pseudoRegId = 1;
+    public static final String REG_FILE = Environment.getExternalStorageDirectory()
+            .getAbsolutePath() + File.separator + "regId.csv";
 
 
 
@@ -60,11 +67,54 @@ public class BackendTest {
 //    public static String SERVER_ADDR = "http://127.0.0.1:8080";
 
 
-    public void registerTest(Context context) {
+    public boolean registerTest(Context context) {
 
         checkPlayServices(context);
 
-//        while (true) {
+
+
+        File file = new File(REG_FILE);
+
+        if (!file.exists()) {   // create file and try to register and block.
+            Log.d(TAG, "Register for the first time");
+
+            doRegister(context, true);
+
+        }
+        else {  // load from file first. Also try register.
+            try {
+                Log.d(TAG, "Loading ID from file");
+                FileInputStream fis = new FileInputStream(file);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
+                String line = reader.readLine();
+                if (line == null || line.length() == 0) {
+                    Log.d(TAG, "Error loading ID from file: " + line);
+                    doRegister(context, true);
+                }
+                else {
+                    Log.d(TAG, "Successfully loading ID from file: " + line);
+                    MainActivity.myRegId = line;
+                    doRegister(context, false);
+                }
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Log.d(TAG, "Finally, RegID: " + MainActivity.myRegId);
+        if (MainActivity.myRegId.length() == 0) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    public void doRegister(Context context, boolean block) {
+        if (block) {
             try {
                 new GcmRegistrationAsyncTask(context).execute().get();
             } catch (InterruptedException e) {
@@ -72,18 +122,12 @@ public class BackendTest {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-            Log.d(TAG, "RegID: " + MainActivity.myRegId);
-//            if (MainActivity.myRegId.length() != 0) {
-//                break;
-//            }
-//            try {
-//                Thread.sleep(2000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-
+        }
+        else {
+            new GcmRegistrationAsyncTask(context).execute();
+        }
     }
+
     private boolean checkPlayServices(Context context) {
         int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
         if (status != ConnectionResult.SUCCESS) {
@@ -434,7 +478,6 @@ public class BackendTest {
                 regService = builder.build();
             }
 
-            String msg = "";
             String regId = "";
             try {
                 if (gcm == null) {
@@ -442,7 +485,6 @@ public class BackendTest {
                 }
                 regId = gcm.register(SENDER_ID);
                 MainActivity.myRegId = regId;
-                msg = "Device registered, registration ID=" + regId;
 
                 // You should send the registration ID to your server over HTTP,
                 // so it can use GCM/HTTP or CCS to send messages to your app.
@@ -454,16 +496,35 @@ public class BackendTest {
 
             } catch (IOException ex) {
                 ex.printStackTrace();
-                msg = "Error: " + ex.getMessage();
             }
             return regId; //msg;
         }
 
         @Override
-        protected void onPostExecute(String msg) {
-            Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
-            Logger.getLogger("REGISTRATION").log(Level.INFO, msg);
+        protected void onPostExecute(String id) {
+            if (id.length() == 0) {
+                Logger.getLogger("REGISTRATION").log(Level.INFO, "Error");
+            }
+            else {
+                MainActivity.myRegId = id;
+                Toast.makeText(context, "New Reg ID = " + id, Toast.LENGTH_LONG).show();
+                Log.d(TAG, "New ID = " + id);
+                try {   // write to file. Delete the old one and write to new one.
+                    File file = new File(REG_FILE);
+                    file.delete();
+                    try {
+                        file.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    FileWriter fileWriter = new FileWriter(file, true);
+                    BufferedWriter bfWriter = new BufferedWriter(fileWriter);
+                    bfWriter.write(id);
+                    bfWriter.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
-
 }
