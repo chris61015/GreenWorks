@@ -178,8 +178,18 @@ public class BackendTest {
         }
     }
 
-    public class DatastoreTask extends AsyncTask<Object, Void, Void> {
+    public static class DatastoreTask extends AsyncTask<Object, Void, Void> {
         private int operMode;
+        private List<TreeEntry> mTreeEntryList;
+
+
+        DatastoreTask(){
+        }
+
+        public DatastoreTask(List<TreeEntry> entryList){
+            mTreeEntryList = entryList;
+        }
+
         @Override
         protected Void doInBackground(Object... params) {
             operMode = (int)params[0];
@@ -259,14 +269,14 @@ public class BackendTest {
                     try {
                         String myTrees = ServerUtilities.post(SERVER_ADDR + "/getmytrees.do", data21 );
                         JSONArray jsonResult = new JSONArray(myTrees);
-                        List<TreeEntry> treeEntryList = new ArrayList<>();
+//                        List<TreeEntry> treeEntryList = new ArrayList<>()
 
                         for(int i=0;i<jsonResult.length();i++)
                         {
 
                             Gson gson = new Gson();
                             TreeEntry treeEntry = gson.fromJson(jsonResult.getString(i),TreeEntry.class);
-                            treeEntryList.add(treeEntry);
+                            mTreeEntryList.add(treeEntry);
                             Log.e(TAG, treeEntry.comment);
                         }   ////treeEntryList now contains all the TreeEntry Objects
                     } catch (IOException e) {
@@ -353,6 +363,16 @@ public class BackendTest {
             return null;
 
         }
+//
+//        @Override
+//        protected void onPostExecute(Void aVoid) {
+//            super.onPostExecute(aVoid);
+//            if (mTreeEntryList != null){
+//                mAdapter.clear();
+//                mAdapter.addAll(mTreeEntryList);
+//                mAdapter.notifyDataSetChanged();
+//            }
+//        }
     }
 
     public class GcmRegistrationAsyncTask extends AsyncTask<Void, Void, String> {
