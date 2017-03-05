@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.dartmouth.cs.greenworks.Fragment.MapFragment;
 import com.dartmouth.cs.greenworks.Fragment.MyDialogFragment;
 import com.dartmouth.cs.greenworks.Model.TreeEntry;
 import com.dartmouth.cs.greenworks.R;
@@ -75,7 +76,7 @@ public class PlantATreeActivity extends AppCompatActivity {
         loadProfileImage();
     }
 
-    public void onSaveClicked(View v){
+    public void onSaveClicked(View v) throws Exception {
         //TODO Get Location
 //        Toast.makeText(getApplicationContext(),
 //                getString(R.string.ui_profile_toast_save_text),
@@ -86,7 +87,7 @@ public class PlantATreeActivity extends AppCompatActivity {
 //        test.registerTest(this);
         long treeId = 2;
         long dateTime = new Date().getTime();
-        LatLng location = new LatLng(12.4, 11.2);
+        LatLng location = new LatLng(MapFragment.getLocation().getLatitude(), MapFragment.getLocation().getLongitude());
         String name = ((EditText) findViewById(R.id.etName)).getText().toString();
         String city = ((EditText) findViewById(R.id.etCity)).getText().toString();
         String regId = ""; // unique Id to identify use. Hack for login.
