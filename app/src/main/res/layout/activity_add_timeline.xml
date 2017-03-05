@@ -14,7 +14,7 @@
             android:text="@string/trees_name"
             android:layout_margin="5dp"
             android:layout_marginBottom="5dp"
-            android:id="@+id/tvEmail" />
+            android:id="@+id/tvAddTimelineName" />
 
         <EditText
             android:layout_width="match_parent"
@@ -24,26 +24,7 @@
             android:layout_marginBottom="5dp"
             android:inputType="textEmailAddress"
             android:singleLine="true"
-            android:id="@+id/etEmail" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_marginBottom="5dp"
-            android:text="@string/City"
-
-            android:id="@+id/tvPhone" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_marginBottom="5dp"
-            android:hint="@string/Record_where_you_find_your_tree"
-            android:inputType="phone"
-            android:singleLine="true"
-            android:id="@+id/etPhone" />
+            android:id="@+id/etAddTimelineName" />
 
 
         <TextView
@@ -52,7 +33,7 @@
             android:layout_margin="5dp"
             android:layout_marginBottom="5dp"
             android:text="@string/Write_somthing_to_your_tree"
-            android:id="@+id/tvClass" />
+            android:id="@+id/tvAddTimelineComment" />
 
         <EditText
             android:layout_width="match_parent"
@@ -62,8 +43,7 @@
             android:hint="@string/This_is_my_happy_tree"
             android:inputType="date"
             android:singleLine="true"
-
-            android:id="@+id/etClass" />
+            android:id="@+id/etAddTimelineComment" />
 
         <TextView
             android:layout_width="wrap_content"

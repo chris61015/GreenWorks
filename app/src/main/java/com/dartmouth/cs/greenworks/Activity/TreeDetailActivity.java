@@ -33,7 +33,11 @@ public class TreeDetailActivity extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
         mEntry = bundle.getParcelable(ENTRY);
 
+        initView();
 
+    }
+
+    void initView(){
         ((EditText) findViewById(R.id.etDetailName)).setText(mEntry.name);
 
         ((EditText) findViewById(R.id.etDetailCity)).setText(mEntry.city);
@@ -50,7 +54,6 @@ public class TreeDetailActivity extends AppCompatActivity {
             decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             imgView.setImageBitmap(decodedByte);
         }
-
     }
 
     public void onShowTimelineClicked(View v){

@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
@@ -21,9 +20,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.dartmouth.cs.greenworks.Fragment.MyDialogFragment;
-import com.dartmouth.cs.greenworks.Model.TreeEntry;
+import com.dartmouth.cs.greenworks.Model.TimelineEntry;
 import com.dartmouth.cs.greenworks.R;
-import com.google.android.gms.maps.model.LatLng;
 import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
@@ -32,18 +30,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
-/**
- * Created by chris61015 on 2/25/17.
- */
+import static com.dartmouth.cs.greenworks.Activity.BackendTest.UPDATE_TREE;
 
-//TODO: Figure out the bug when change orientation, pic become smaller
-public class PlantATreeActivity extends AppCompatActivity {
-
+public class AddTimelineActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_TAKE_FROM_CAMERA = 0;
     public static final int REQUEST_CODE_SELECT_FROM_GALLERY = 1;
-    public static final int REQUEST_CODE_CROP_PHOTO = 2;
 
-    private static final String IMAGE_UNSPECIFIED = "image/*";
     private static final String URI_INSTANCE_STATE_KEY = "saved_uri";
     private static final String URI_INSTANCE_STATE_KEY_TEMP = "saved_uri_temp";
     private static final String CAMERA_CLICKED_KEY = "clicked";
@@ -52,11 +44,10 @@ public class PlantATreeActivity extends AppCompatActivity {
     private Boolean stateChanged = false, cameraClicked = false,clickedFromCam=false;
 
     private ImageView m_ImgView;
-
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_plant_a_tree);
+        setContentView(R.layout.activity_add_timeline);
 
         // To avoid pictures dissapearing from rotate the cell phone
         if (savedInstanceState != null) {
@@ -69,7 +60,6 @@ public class PlantATreeActivity extends AppCompatActivity {
 
         m_ImgView = (ImageView)findViewById(R.id.imageProfile);
         ((EditText) findViewById(R.id.etName)).setInputType(InputType.TYPE_CLASS_TEXT);
-        ((EditText) findViewById(R.id.etCity)).setInputType(InputType.TYPE_CLASS_TEXT);
         ((EditText) findViewById(R.id.etComment)).setInputType(InputType.TYPE_CLASS_TEXT);
         loadProfile();
         loadProfileImage();
@@ -81,20 +71,17 @@ public class PlantATreeActivity extends AppCompatActivity {
 //                getString(R.string.ui_profile_toast_save_text),
 //                Toast.LENGTH_SHORT).show();
         saveProfileImage();
-
-        BackendTest test = new BackendTest();
-        test.registerTest(this);
+        long timelineId = 2;
         long treeId = 2;
         long dateTime = new Date().getTime();
-        LatLng location = new LatLng(12.4, 11.2);
         String name = ((EditText) findViewById(R.id.etName)).getText().toString();
-        String city = ((EditText) findViewById(R.id.etCity)).getText().toString();
         String regId = ""; // unique Id to identify use. Hack for login.
-        String photo = test.photoToString(this,getString(R.string.ui_plant_tree_photo_file_name));
+        String photo = new BackendTest().photoToString(this,getString(R.string.ui_plant_tree_photo_file_name));
         String comment =((EditText) findViewById(R.id.etComment)).getText().toString();;
 
-        TreeEntry entry = new TreeEntry(treeId, dateTime,location,name,city,regId,photo,comment);
-        test.addTreeTest(entry);
+        TimelineEntry entry = new TimelineEntry(timelineId, treeId, dateTime,name,regId,photo,comment);
+        new BackendTest.DatastoreTask().execute(UPDATE_TREE,entry);
+
         finish();
     }
 
@@ -131,7 +118,7 @@ public class PlantATreeActivity extends AppCompatActivity {
     }
 
     public void onChangePhotoClicked(View v){
-        DialogFragment fragment = MyDialogFragment.newInstance(MyDialogFragment.DIALOG_ID_PHOTO_PICKER);
+        DialogFragment fragment = MyDialogFragment.newInstance(MyDialogFragment.DIALOG_ID_ADD_TIMELINE);
         fragment.show(getFragmentManager(), "Photo Picker");;
     }
 
@@ -229,7 +216,7 @@ public class PlantATreeActivity extends AppCompatActivity {
         Bitmap bmap = m_ImgView.getDrawingCache();
 
         String filepath = Environment.getExternalStorageDirectory()
-                .getAbsolutePath() + File.separator + getString(R.string.ui_plant_tree_photo_file_name);
+                .getAbsolutePath() + File.separator + getString(R.string.ui_update_timeline_photo_file_name);
         Log.d("DEBUG", "abs file path: " + filepath);
 
         try {
@@ -255,7 +242,7 @@ public class PlantATreeActivity extends AppCompatActivity {
                 }
             } else {
                 String filepath = Environment.getExternalStorageDirectory()
-                        .getAbsolutePath() + File.separator + getString(R.string.ui_plant_tree_photo_file_name);
+                        .getAbsolutePath() + File.separator + getString(R.string.ui_update_timeline_photo_file_name);
                 fis = new FileInputStream(filepath);
                 Bitmap bmap = BitmapFactory.decodeStream(fis);
                 m_ImgView.setImageBitmap(bmap);
@@ -272,22 +259,17 @@ public class PlantATreeActivity extends AppCompatActivity {
     public void saveProfile(){
         String key, val;
 
-        key = getString(R.string.preference_name);
+        key = getString(R.string.timeline_preference_name);
         SharedPreferences prefs = getSharedPreferences(key, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
         // Write screen contents into corresponding editor fields.
         key = getString(R.string.preference_key_tree_name);
-        val = ((EditText) findViewById(R.id.etName)).getText().toString();
-        editor.putString(key, val);
-
-        key = getString(R.string.preference_key_tree_city);
-        val = ((EditText) findViewById(R.id.etCity)).getText()
-                .toString();
+        val = ((EditText) findViewById(R.id.etAddTimelineName)).getText().toString();
         editor.putString(key, val);
 
         key = getString(R.string.preference_key_tree_comment);
-        val = ((EditText) findViewById(R.id.etComment)).getText()
+        val = ((EditText) findViewById(R.id.etAddTimelineComment)).getText()
                 .toString();
         editor.putString(key, val);
 
@@ -298,19 +280,15 @@ public class PlantATreeActivity extends AppCompatActivity {
     public void loadProfile(){
         String key, str_val;
 
-        key = getString(R.string.preference_name);
+        key = getString(R.string.timeline_preference_name);
         SharedPreferences prefs = getSharedPreferences(key, MODE_PRIVATE);
 
         key = getString(R.string.preference_key_tree_name);
         str_val = prefs.getString(key, "");
-        ((EditText) findViewById(R.id.etName)).setText(str_val);
-
-        key = getString(R.string.preference_key_tree_city);
-        str_val = prefs.getString(key, "");
-        ((EditText) findViewById(R.id.etCity)).setText(str_val);
+        ((EditText) findViewById(R.id.etAddTimelineName)).setText(str_val);
 
         key = getString(R.string.preference_key_tree_comment);
         str_val = prefs.getString(key, "");
-        ((EditText) findViewById(R.id.etComment)).setText(str_val);
+        ((EditText) findViewById(R.id.etAddTimelineComment)).setText(str_val);
     }
 }

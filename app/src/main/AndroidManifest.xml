@@ -74,11 +74,12 @@
                 <category android:name="com.dartmouth.cs.greenworks" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.PlantATreeActivity"></activity>
-        <activity android:name=".Activity.TreeDetailActivity"></activity>
+        <activity android:name=".Activity.PlantATreeActivity" />
+        <activity android:name=".Activity.TreeDetailActivity" />
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
         <activity android:name=".Activity.ShowTimelineActivity" />
-        <activity android:name=".Activity.UpdateDetailsActivity"></activity>
+        <activity android:name=".Activity.UpdateDetailsActivity" />
+        <activity android:name=".Activity.AddTimelineActivity"></activity>
     </application>
 
 </manifest>

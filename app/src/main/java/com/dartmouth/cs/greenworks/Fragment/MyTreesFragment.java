@@ -17,9 +17,8 @@ import com.dartmouth.cs.greenworks.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
-import static com.dartmouth.cs.greenworks.Activity.BackendTest.GET_MY_TREES;
+import static com.dartmouth.cs.greenworks.Activity.BackendTest.GET_MY_UPDATED_TREES;
 
 public class MyTreesFragment extends ListFragment {
     private Context mContext; // context pointed to parent activity
@@ -37,18 +36,9 @@ public class MyTreesFragment extends ListFragment {
     }
     // retrieve records from the database and display them in the list view
     public void updateTreeEntries() {
-        try {
-            new BackendTest.DatastoreTask(mTreeEntryList).execute(GET_MY_TREES,"").get();
-            //TODO Multithread Version
-            mAdapter.clear();
-            mAdapter.addAll(mTreeEntryList);
-            mAdapter.notifyDataSetChanged();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+        new BackendTest.DatastoreTask(mAdapter, mTreeEntryList).execute(GET_MY_UPDATED_TREES,"");
     }
+
     @Override
     public void onResume() {
         super.onResume();

@@ -1,16 +1,20 @@
 package com.dartmouth.cs.greenworks.Timeline;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.dartmouth.cs.greenworks.Model.TimeLineModel;
+import com.dartmouth.cs.greenworks.Model.TimelineEntry;
 import com.dartmouth.cs.greenworks.R;
 import com.github.vipulasri.timelineview.TimelineView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,7 +23,7 @@ import java.util.List;
 
 public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineViewHolder> implements View.OnClickListener{
 
-        private List<TimeLineModel> mFeedList;
+        private List<TimelineEntry> mFeedList;
         private Context mContext;
         private LayoutInflater mLayoutInflater;
 
@@ -29,7 +33,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineViewHolder> im
             void onItemClick(View view, int position);
         }
 
-        public TimeLineAdapter(List<TimeLineModel> feedList) {
+        public TimeLineAdapter(List<TimelineEntry> feedList) {
             mFeedList = feedList;
         }
 
@@ -52,8 +56,24 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineViewHolder> im
         @Override
         public void onBindViewHolder(TimeLineViewHolder holder, int position) {
 
-            TimeLineModel timeLineModel = mFeedList.get(position);
-            holder.mMessage.setText(timeLineModel.getMessage());
+            TimelineEntry entry = mFeedList.get(position);
+
+            Bitmap decodedByte;
+            if (entry.photo == null){
+                holder.mImgView.setImageResource(R.drawable.dartmouthpine);
+            } else {
+                byte[] decodedString = Base64.decode(entry.photo.replace(' ','+'), Base64.DEFAULT);
+                decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                holder.mImgView.setImageBitmap(decodedByte);
+            }
+
+            SimpleDateFormat formatTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String time = formatTime.format(new Date(entry.dateTime));
+
+            holder.mName.setText(entry.name);
+            holder.mDate.setText(time);
+            holder.mComment.setText(entry.comment);
+
             //将数据保存在itemView的Tag中，以便点击时进行获取
             holder.itemView.setTag(position);
         }
@@ -65,7 +85,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineViewHolder> im
 
     @Override
     public void onClick(View v) {
-        Log.d("DBUGE","QQQQQQ");
         if (mOnItemClickListener != null) {
             if (mOnItemClickListener != null) mOnItemClickListener.onItemClick(v, (int)v.getTag());
         }
