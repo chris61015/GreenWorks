@@ -25,7 +25,7 @@ import com.google.android.gms.maps.GoogleMap;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-
+    public static String regId = "";
     public static final String TAG = "MAIN ACTIVITY";
     public static final int PERMISSIONS_REQUEST = 1;
 
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigate(mNavItemId);
 
         checkPermissions();
-//        testBackend();
+        testBackend();
 
     }
 
@@ -140,14 +140,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 //        newTest.addTreeTest(this, "1.jpg");
 //        newTest.getMyTreesTest(this);
-
-        newTest.addTreeTest(this, "1.jpg");
-        newTest.addTreeTest(this, "2.jpg");
-        newTest.addTreeTest(this, "3.jpg");
-        newTest.addTreeTest(this, "4.jpg");
-        newTest.addTreeTest(this, "5.jpg");
-        newTest.updateTree(this, "U1_1.jpg", 1);
-        newTest.updateTree(this, "U1_2.jpg", 1);
+//
+//        newTest.addTreeTest(this, "1.jpg");
+//        newTest.addTreeTest(this, "2.jpg");
+//        newTest.addTreeTest(this, "3.jpg");
+//        newTest.addTreeTest(this, "4.jpg");
+//        newTest.addTreeTest(this, "5.jpg");
+//        newTest.updateTree(this, "U1_1.jpg", 1);
+//        newTest.updateTree(this, "U1_2.jpg", 1);
         newTest.updateTree(this, "U2_1.jpg", 2);
 //        newTest.getTimelineTest(this, (long) 4);
 //        newTest.getTreeByIDTest(6);
@@ -184,4 +184,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return;
         }
     }
+
 }

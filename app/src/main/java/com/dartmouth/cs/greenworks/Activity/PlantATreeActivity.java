@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -69,6 +70,9 @@ public class PlantATreeActivity extends AppCompatActivity {
         }
 
         m_ImgView = (ImageView)findViewById(R.id.imageProfile);
+        ((EditText) findViewById(R.id.etName)).setInputType(InputType.TYPE_CLASS_TEXT);
+        ((EditText) findViewById(R.id.etCity)).setInputType(InputType.TYPE_CLASS_TEXT);
+        ((EditText) findViewById(R.id.etComment)).setInputType(InputType.TYPE_CLASS_TEXT);
         loadProfile();
         loadProfileImage();
     }
