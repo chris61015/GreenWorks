@@ -1,10 +1,19 @@
 package com.dartmouth.cs.greenworks.Activity;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
+import android.widget.EditText;
+import android.widget.ImageView;
 
+import com.dartmouth.cs.greenworks.Model.TreeEntry;
 import com.dartmouth.cs.greenworks.R;
+
+import static com.dartmouth.cs.greenworks.Fragment.MyTreesFragment.ENTRY;
 
 /**
  * Created by chris61015 on 3/4/17.
@@ -12,9 +21,36 @@ import com.dartmouth.cs.greenworks.R;
 
 public class TreeDetailActivity extends AppCompatActivity {
 
+    private TreeEntry mEntry;
+
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tree_details);
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        mEntry = bundle.getParcelable(ENTRY);
+
+
+        ((EditText) findViewById(R.id.etDetailName)).setText(mEntry.name);
+
+        ((EditText) findViewById(R.id.etDetailCity)).setText(mEntry.city);
+
+        ((EditText) findViewById(R.id.etDetailComment)).setText(mEntry.comment);
+
+        ImageView imgView = (ImageView) findViewById(R.id.detailImageProfile);
+
+        Bitmap decodedByte;
+        if (mEntry.photo == null){
+            imgView.setImageResource(R.drawable.dartmouthpine);
+        } else {
+            byte[] decodedString = Base64.decode(mEntry.photo.replace(' ','+'), Base64.DEFAULT);
+            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            imgView.setImageBitmap(decodedByte);
+        }
+
     }
+
+
 }

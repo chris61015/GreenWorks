@@ -23,7 +23,7 @@
 
             <ImageView
                 android:contentDescription="@string/ui_proile_image_descripton"
-                android:id="@+id/imageProfile"
+                android:id="@+id/detailImageProfile"
                 android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:layout_margin="5dp"
@@ -35,18 +35,6 @@
                 <requestFocus />
 
             </ImageView>
-
-            <Button
-                android:id="@+id/btnChangePhoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="30dp"
-                android:onClick="onChangePhotoClicked"
-                android:text="@string/ui_profile_button_change" >
-
-            </Button>
-
         </LinearLayout>
 
 
@@ -54,11 +42,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:text="@string/trees_name"
             android:layout_margin="5dp"
             android:layout_marginBottom="5dp"
-            android:id="@+id/tvEmail" />
+            android:id="@+id/tvDetailName" />
 
         <EditText
             android:layout_width="match_parent"
@@ -68,7 +55,7 @@
             android:layout_marginBottom="5dp"
             android:inputType="textEmailAddress"
             android:singleLine="true"
-            android:id="@+id/etEmail" />
+            android:id="@+id/etDetailName" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -76,8 +63,7 @@
             android:layout_margin="5dp"
             android:layout_marginBottom="5dp"
             android:text="@string/City"
-
-            android:id="@+id/tvPhone" />
+            android:id="@+id/tvDetailCity" />
 
         <EditText
             android:layout_width="match_parent"
@@ -87,7 +73,7 @@
             android:hint="@string/Record_where_you_find_your_tree"
             android:inputType="phone"
             android:singleLine="true"
-            android:id="@+id/etPhone" />
+            android:id="@+id/etDetailCity" />
 
 
         <TextView
@@ -96,7 +82,7 @@
             android:layout_margin="5dp"
             android:layout_marginBottom="5dp"
             android:text="@string/Write_somthing_to_your_tree"
-            android:id="@+id/tvClass" />
+            android:id="@+id/tvDetailComment" />
 
         <EditText
             android:layout_width="match_parent"
@@ -106,8 +92,7 @@
             android:hint="@string/This_is_my_happy_tree"
             android:inputType="date"
             android:singleLine="true"
-
-            android:id="@+id/etClass" />
+            android:id="@+id/etDetailComment" />
 
 
         <LinearLayout

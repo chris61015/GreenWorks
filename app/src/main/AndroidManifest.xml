@@ -72,10 +72,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.dartmouth.cs.greenworks.Activity.MyTreesActivity">
+            android:name="com.dartmouth.cs.greenworks.Activity.PlantATreeActivity">
         </activity>
         <activity
-            android:name="com.dartmouth.cs.greenworks.Activity.PlantATreeActivity">
+            android:name="com.dartmouth.cs.greenworks.Activity.TreeDetailActivity">
         </activity>
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
     </application>
