@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -44,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private final MyTreesFragment mSecondFragment = new MyTreesFragment();
     private final TreesIUpdatedFragment mThirdFragment = new TreesIUpdatedFragment();
   //  private final PlantATreeFragment mFourthFragment = new PlantATreeFragment();
+    private NavigationView mNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,15 +53,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(com.dartmouth.cs.greenworks.R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        NavigationView navigationView = (NavigationView) findViewById(com.dartmouth.cs.greenworks.R.id.navigation);
-        navigationView.setNavigationItemSelectedListener(this);
+        mNavigationView = (NavigationView) findViewById(com.dartmouth.cs.greenworks.R.id.navigation);
+        mNavigationView.setNavigationItemSelectedListener(this);
 
         if (null != savedInstanceState) {
             mNavItemId = savedInstanceState.getInt(NAV_ITEM_ID);
         } else {
             mNavItemId = R.id.drawer_item_1;
         }
-        navigationView.getMenu().findItem(mNavItemId).setChecked(true);
+        Log.d("DEBUG",mNavigationView.getMenu().findItem(mNavItemId).toString());
+        mNavigationView.getMenu().findItem(mNavItemId).setChecked(true);
+
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, com.dartmouth.cs.greenworks.R.string.open, com.dartmouth.cs.greenworks.R.string.close);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -70,11 +71,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         navigate(mNavItemId);
 
-        //checkPermissions();
+        checkPermissions();
         testBackend();
 
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(NAV_ITEM_ID, mNavItemId);
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
@@ -128,73 +134,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-
-    /**
-     * Checks if user has CAMERA, READ/WRITE external storage
-     * and access fine location permissions
-     */
-    private void checkPermissions2 () {
-
-        boolean permitted = true;
-
-        if (ContextCompat.checkSelfPermission(this,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            Log.d(TAG, "No write SD permssion!");
-            permitted = false;
-        }
-        else {
-            Log.d(TAG, "Has write SD permssion!");
-        }
-
-        if (ContextCompat.checkSelfPermission(this,
-                android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            Log.d(TAG, "No Read SD permssion!");
-            permitted = false;
-
-        }
-        else {
-            Log.d(TAG, "Has Read SD permssion!");
-        }
-
-        if (!permitted) {
-            acquirePermssions();
-        }
-
-    }
-
-    /**
-     * Ask for permission using dialog.
-     */
-    private void acquirePermssions () {
-
-        Log.d(TAG, "Requesting permssions...");
-        ActivityCompat.requestPermissions(this,
-                new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        android.Manifest.permission.READ_EXTERNAL_STORAGE},
-                PERMISSIONS_REQUEST);
-
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        Log.d(TAG, "Returned from request");
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST:
-                if (grantResults.length == 2
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d(TAG, "Permission Granted!");
-                }
-        }
-        // Check again
-//        checkPermissions();
-    }
-
     public void testBackend() {
         BackendTest newTest = new BackendTest();
         newTest.registerTest(this);
@@ -210,9 +149,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         newTest.updateTree(this, "U1_1.jpg", 1);
         newTest.updateTree(this, "U1_2.jpg", 1);
         newTest.updateTree(this, "U2_1.jpg", 2);
-        newTest.getMyTreesTest(this);
-        newTest.getTreesAroundMeTest(this);
-        newTest.addTreeTest(this, "5.jpg");
+
 
     }
 

@@ -9,22 +9,29 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.dartmouth.cs.greenworks.Fragment.MyDialogFragment;
+import com.dartmouth.cs.greenworks.Model.TreeEntry;
 import com.dartmouth.cs.greenworks.R;
+import com.google.android.gms.maps.model.LatLng;
 import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
+
+import static com.dartmouth.cs.greenworks.R.string.ui_profile_photo_file_name;
 
 /**
  * Created by chris61015 on 2/25/17.
@@ -71,6 +78,21 @@ public class PlantATreeActivity extends AppCompatActivity {
 //        Toast.makeText(getApplicationContext(),
 //                getString(R.string.ui_profile_toast_save_text),
 //                Toast.LENGTH_SHORT).show();
+        saveProfileImage();
+
+        BackendTest test = new BackendTest();
+        test.registerTest(this);
+        long treeId = 2;
+        long dateTime = new Date().getTime();
+        LatLng location = new LatLng(12.4, 11.2);
+        String name = ((EditText) findViewById(R.id.etName)).getText().toString();
+        String city = ((EditText) findViewById(R.id.etCity)).getText().toString();
+        String regId = ""; // unique Id to identify use. Hack for login.
+        String photo = test.photoToString(this,getString(R.string.ui_profile_photo_file_name));
+        String comment =((EditText) findViewById(R.id.etComment)).getText().toString();;
+
+        TreeEntry entry = new TreeEntry(treeId, dateTime,location,name,city,regId,photo,comment);
+        test.addTreeTest(entry);
         finish();
     }
 
@@ -160,6 +182,7 @@ public class PlantATreeActivity extends AppCompatActivity {
             m_ImgView.setImageResource(0);
             m_ImgView.setImageURI(mTempUri);
             cameraClicked=true;
+            saveProfileImage();
 
         } else if (resultCode == Crop.RESULT_ERROR) {
             Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
@@ -202,10 +225,15 @@ public class PlantATreeActivity extends AppCompatActivity {
         // Save profile image into internal storage.
         m_ImgView.buildDrawingCache();
         Bitmap bmap = m_ImgView.getDrawingCache();
+
+        String filepath = Environment.getExternalStorageDirectory()
+                .getAbsolutePath() + File.separator + getString(ui_profile_photo_file_name);
+        Log.d("DEBUG", "abs file path: " + filepath);
+
         try {
-            FileOutputStream fos = openFileOutput(
-                    getString(R.string.ui_profile_photo_file_name), MODE_PRIVATE);
-            bmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            File f = new File(filepath);
+            FileOutputStream fos = new FileOutputStream(f,false);
+            bmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.flush();
             fos.close();
         } catch (IOException ioe) {
@@ -224,7 +252,9 @@ public class PlantATreeActivity extends AppCompatActivity {
                     stateChanged = false;
                 }
             } else {
-                fis = openFileInput(getString(R.string.ui_profile_photo_file_name));
+                String filepath = Environment.getExternalStorageDirectory()
+                        .getAbsolutePath() + File.separator + getString(ui_profile_photo_file_name);
+                fis = new FileInputStream(filepath);
                 Bitmap bmap = BitmapFactory.decodeStream(fis);
                 m_ImgView.setImageBitmap(bmap);
 
