@@ -30,7 +30,6 @@ public class GetTimelineServlet  extends HttpServlet {
             throws IOException, ServletException {
 
         int treeCounter; //used to limit results while sending back in pages
-        String RegisrationID = request.getParameter("Registration ID");
         long treeID = Long.parseLong(request.getParameter("Tree ID"));
         //fetch my trees from data store
         TimelineDataStore timelineDataStore = new TimelineDataStore();
@@ -50,7 +49,7 @@ public class GetTimelineServlet  extends HttpServlet {
             //treeCounter++;
         }
 
-        String jsonResult = new Gson().toJson(timelineEntries);
+        String jsonResult = new Gson().toJson(myTrees);
         response.getWriter().write(jsonResult);
 
     }

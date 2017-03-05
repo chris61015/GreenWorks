@@ -47,6 +47,7 @@ public class BackendTest {
     public static final int GET_MY_TREES = 4;
     public static final int GET_MY_UPDATED_TREES = 5;
     public static final int GET_TIMELINE = 6;
+    public static final int GET_TREE_BY_ID = 7;
 
     public static final String TAG = "BackendTest";
 
@@ -108,14 +109,14 @@ public class BackendTest {
         new DatastoreTask().execute(GET_MY_TREES,myRegId);
     }
 
-    public void getTimelineTest(Context context)
+    public void getTimelineTest(Context context, Long treeID)
     {
-        new DatastoreTask().execute(GET_TIMELINE,myRegId);
+        new DatastoreTask().execute(GET_TIMELINE,treeID);
     }
 
     public void getTreesIUpdatedTest(Context context)
     {
-        new DatastoreTask().execute(GET_MY_TREES,myRegId);
+        new DatastoreTask().execute(GET_MY_UPDATED_TREES,myRegId);
     }
 
 
@@ -145,6 +146,11 @@ public class BackendTest {
 
     public void addTreeTest(TreeEntry entry) {
         new DatastoreTask().execute(ADD_TREE, entry);
+    }
+
+    public void getTreeByIDTest(long treeID)
+    {
+        new DatastoreTask().execute(GET_TREE_BY_ID,treeID);
     }
 
     public String photoToString(Context context, String filename) {
@@ -289,7 +295,7 @@ public class BackendTest {
                             Gson gson = new Gson();
                             TreeEntry treeEntry = gson.fromJson(jsonResult.getString(i),TreeEntry.class);
                             treeEntryList.add(treeEntry);
-                            Log.e("In GEtTreesAroundMe", treeEntry.comment);
+                            Log.e("In GetTreesIUpdated", "Tree:"+treeEntry.treeId+" "+treeEntry.regId);
                         }///treeEntryList now contains all my updates treeEntry objects
                     } catch (IOException e) {
                         Log.e(TAG, "Sync failed: " + e.getCause());
@@ -302,19 +308,19 @@ public class BackendTest {
 
                 case GET_TIMELINE:
                     Map<String, String> data4 = new HashMap<>();
-                    data4.put("Registration ID", (String)params[1]);
+                    data4.put("Tree ID", ((String.valueOf(params[1]))));
                     try {
                         String myTrees = ServerUtilities.post(SERVER_ADDR + "/gettimeline.do", data4 );
                         JSONArray jsonResult = new JSONArray(myTrees);
-                        List<TreeEntry> treeEntryList = new ArrayList<>();
+                        List<TimelineEntry> treeEntryList = new ArrayList<>();
 
                         for(int i=0;i<jsonResult.length();i++)
                         {
 
                             Gson gson = new Gson();
-                            TreeEntry treeEntry = gson.fromJson(jsonResult.getString(i),TreeEntry.class);
-                            treeEntryList.add(treeEntry);
-                            Log.e(TAG, treeEntry.comment);
+                            TimelineEntry tempTimelineEntry = gson.fromJson(jsonResult.getString(i),TimelineEntry.class);
+                            treeEntryList.add(tempTimelineEntry);
+                            Log.e("In GetTimeline", Long.toString(tempTimelineEntry.timelineId));
                         }///treeEntryList now contains all my updates treeEntry objects
                     } catch (IOException e) {
                         Log.e(TAG, "Sync failed: " + e.getCause());
@@ -323,6 +329,24 @@ public class BackendTest {
                         e.printStackTrace();
                     }
 
+                    break;
+
+                case GET_TREE_BY_ID:
+                    Map<String, String> data5 = new HashMap<>();
+                    data5.put("Tree ID", ((String.valueOf(params[1]))));
+                    try {
+                        String myTree = ServerUtilities.post(SERVER_ADDR + "/gettreebyid.do", data5 );
+                        JSONArray jsonResult = new JSONArray(myTree);
+                        //List<TimelineEntry> treeEntryList = new ArrayList<>();
+                        Gson gson = new Gson();
+                        TreeEntry treeByID = gson.fromJson(jsonResult.getString(0),TreeEntry.class);
+                        Log.e("In TreeByID",String.valueOf(treeByID.treeId)+" "+treeByID.comment);
+                    } catch (IOException e) {
+                        Log.e(TAG, "Sync failed: " + e.getCause());
+                        Log.e(TAG, "data posting error " + e);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     break;
 
             }
