@@ -137,8 +137,8 @@ public class TimelineDataStore {
         Query query = new Query(TimelineEntry.ENTRY_ENTITY_KIND);
 
         query.setFilter(filter);
-        // get the newest ones first.
-        query.addSort(TimelineEntry.PROPERTY_DATETIME, Query.SortDirection.DESCENDING);
+        // get the newest ones (date of tree plantation) of first.
+        query.addSort(TimelineEntry.PROPERTY_TREE_ID, Query.SortDirection.DESCENDING);
         PreparedQuery preparedQuery = datastoreService.prepare(query);
         Iterator<Entity> iter = preparedQuery.asIterator();
         while(iter.hasNext()) {
@@ -149,6 +149,7 @@ public class TimelineDataStore {
         }
         return ret;
     }
+
 
     public long idGenerator() {
         ArrayList<TimelineEntry> allEntries = queryAll();

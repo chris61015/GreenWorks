@@ -7,11 +7,12 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.dartmouth.cs.greenworks.Model.TimelineEntry;
 import com.dartmouth.cs.greenworks.Model.TreeEntry;
 import com.dartmouth.cs.greenworks.backend.registration.Registration;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -49,6 +50,8 @@ public class BackendTest {
 
     public static final String TAG = "BackendTest";
 
+    public static int pseudoRegId = 1;
+
 
     public String myRegId = "";
 
@@ -58,6 +61,10 @@ public class BackendTest {
 
 
     public String registerTest(Context context) {
+
+        checkPlayServices(context);
+
+
         try {
             myRegId = new GcmRegistrationAsyncTask(context).execute().get();
         } catch (InterruptedException e) {
@@ -66,9 +73,26 @@ public class BackendTest {
             e.printStackTrace();
         }
         Log.d(TAG, "RegID: " + myRegId);
+
+
         return myRegId;
     }
+    private boolean checkPlayServices(Context context) {
+        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
+        if (status != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(status)) {
+                Log.d(TAG, "Some error.");
+            } else {
+                Log.d(TAG, "This device is not supported.");
 
+            }
+            return false;
+        }
+        else {
+            Log.d(TAG, "Player service good to go");
+        }
+        return true;
+    }
 
     public void getTreesAroundMeTest(Context context)
     {
@@ -112,11 +136,11 @@ public class BackendTest {
                 myRegId, encodedImage, "Tree in Sudikoff");
         new DatastoreTask().execute(ADD_TREE, tree);
 
-
         TreeEntry tree2 = new TreeEntry(0, System.currentTimeMillis(),
                 new LatLng(42.3599, -71.0940), "Chris", "Boston",
                 myRegId, encodedImage, "Tree in Boston!");
         new DatastoreTask().execute(ADD_TREE, tree2);
+
     }
 
     public void addTreeTest(TreeEntry entry) {
@@ -361,7 +385,9 @@ public class BackendTest {
                 // so it can use GCM/HTTP or CCS to send messages to your app.
                 // The request to your server should be authenticated if your app
                 // is using accounts.
+
                 regService.register(regId).execute();
+
 
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -372,7 +398,7 @@ public class BackendTest {
 
         @Override
         protected void onPostExecute(String msg) {
-            Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+//            Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
             Logger.getLogger("REGISTRATION").log(Level.INFO, msg);
         }
     }
