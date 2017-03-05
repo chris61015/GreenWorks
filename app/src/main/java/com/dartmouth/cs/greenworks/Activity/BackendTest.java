@@ -135,11 +135,11 @@ public class BackendTest {
                 new LatLng(43.7069, -72.2869), "Rohan", "Sudikoff",
                 myRegId, encodedImage, "Tree in Sudikoff");
         new DatastoreTask().execute(ADD_TREE, tree);
-
-        TreeEntry tree2 = new TreeEntry(0, System.currentTimeMillis(),
-                new LatLng(42.3599, -71.0940), "Chris", "Boston",
-                myRegId, encodedImage, "Tree in Boston!");
-        new DatastoreTask().execute(ADD_TREE, tree2);
+//
+//        TreeEntry tree2 = new TreeEntry(0, System.currentTimeMillis(),
+//                new LatLng(42.3599, -71.0940), "Chris", "Boston",
+//                myRegId, encodedImage, "Tree in Boston!");
+//        new DatastoreTask().execute(ADD_TREE, tree2);
 
     }
 

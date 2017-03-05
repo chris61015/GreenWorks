@@ -41,6 +41,7 @@ public class GcmIntentService extends IntentService {
                 //XD: this "my_message" has to be the same as the one used on the server side in MessagingEndpoint.java
 //                showToast(extras.getString("message"));
                 long treeId = Long.parseLong(extras.getString("message"));
+                showToast("Tree " + treeId + " Updated!");
                 showNotification("Tree " + treeId + " Updated!");
 //                MainActivity.dataSource.deleteEntry(entryId, HistoryFragment.entries, HistoryFragment.adapter);
                 //TODO: Receive Data Here
@@ -73,6 +74,7 @@ public class GcmIntentService extends IntentService {
 
         // Build notification.
         Notification notification = new Notification.Builder(this)
+                .setAutoCancel(true)
                 .setContentTitle(title)
                 .setContentText(text)
                 .setSmallIcon(R.drawable.dartmouthpine)
@@ -80,7 +82,7 @@ public class GcmIntentService extends IntentService {
                 .build();
 
         // Doesn't allow system to cancel notification when activity is running.
-        notification.flags |= Notification.FLAG_ONGOING_EVENT;
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
 
         NotificationManager notificationManager =

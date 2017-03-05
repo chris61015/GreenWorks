@@ -65,7 +65,7 @@ public class MessagingEndpoint {
         Sender sender = new Sender(API_KEY);
         Message msg = new Message.Builder().addData("message", message).build();
         List<RegistrationRecord> records;
-        if (IDs == null) {
+        if (IDs == null || IDs.size() == 0 || IDs.get(0).length() == 0) {
             records = OfyService.ofy().load().type(RegistrationRecord.class).limit(100).list();
         }
         else {
