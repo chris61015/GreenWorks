@@ -1,13 +1,13 @@
-<!-- Indices written at Sat, 4 Mar 2017 16:39:10 EST -->
+<!-- Indices written at Sat, 4 Mar 2017 18:19:20 EST -->
 
 <datastore-indexes>
 
-    <!-- Used 22 times in query history -->
+    <!-- Used 7 times in query history -->
     <datastore-index kind="tree entry" ancestor="true" source="auto">
         <property name="Date Time" direction="desc"/>
     </datastore-index>
 
-    <!-- Used 46 times in query history -->
+    <!-- Used 60 times in query history -->
     <datastore-index kind="timeline entry" ancestor="false" source="auto">
         <property name="Tree ID" direction="asc"/>
         <property name="Date Time" direction="desc"/>

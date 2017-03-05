@@ -11,6 +11,8 @@ import android.util.Log;
 import com.dartmouth.cs.greenworks.Model.TimelineEntry;
 import com.dartmouth.cs.greenworks.Model.TreeEntry;
 import com.dartmouth.cs.greenworks.backend.registration.Registration;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -60,6 +62,9 @@ public class BackendTest {
 
     public String registerTest(Context context) {
 
+        checkPlayServices(context);
+
+
         try {
             myRegId = new GcmRegistrationAsyncTask(context).execute().get();
         } catch (InterruptedException e) {
@@ -72,7 +77,22 @@ public class BackendTest {
 
         return myRegId;
     }
+    private boolean checkPlayServices(Context context) {
+        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
+        if (status != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(status)) {
+                Log.d(TAG, "Some error.");
+            } else {
+                Log.d(TAG, "This device is not supported.");
 
+            }
+            return false;
+        }
+        else {
+            Log.d(TAG, "Player service good to go");
+        }
+        return true;
+    }
 
     public void getTreesAroundMeTest(Context context)
     {
@@ -352,6 +372,7 @@ public class BackendTest {
                 // so it can use GCM/HTTP or CCS to send messages to your app.
                 // The request to your server should be authenticated if your app
                 // is using accounts.
+
                 regService.register(regId).execute();
 
 
