@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private final MapFragment mFirstFragment = new MapFragment();
     private final MyTreesFragment mSecondFragment = new MyTreesFragment();
     private final TreesIUpdatedFragment mThirdFragment = new TreesIUpdatedFragment();
-  //  private final PlantATreeFragment mFourthFragment = new PlantATreeFragment();
     private NavigationView mNavigationView;
 
     @Override
