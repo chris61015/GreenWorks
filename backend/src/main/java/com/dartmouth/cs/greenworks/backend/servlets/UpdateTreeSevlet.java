@@ -60,9 +60,8 @@ public class UpdateTreeSevlet extends HttpServlet {
             for(TimelineEntry timeline:timelines) {
                 regIds.add(timeline.regId);
             }
-            new MessagingEndpoint().sendMessage("Tree " + treeId + " Updated", regIds);
+            new MessagingEndpoint().sendMessage(Long.toString(treeId), regIds);
 
         }
-
     }
 }

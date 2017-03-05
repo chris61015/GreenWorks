@@ -1,7 +1,7 @@
 package com.dartmouth.cs.greenworks.backend.servlets;
 
-import com.dartmouth.cs.greenworks.backend.datastores.TimelineDataStore;
-import com.dartmouth.cs.greenworks.backend.datastores.TimelineEntry;
+import com.dartmouth.cs.greenworks.backend.datastores.TreeDataStore;
+import com.dartmouth.cs.greenworks.backend.datastores.TreeEntry;
 import com.google.appengine.repackaged.com.google.gson.Gson;
 
 import org.json.simple.JSONArray;
@@ -32,24 +32,23 @@ public class GetTreesIUpdatedSevlet  extends HttpServlet  {
         int treeCounter; //used to limit results while sending back in pages
         String RegisrationID = request.getParameter("Registration ID");
         //fetch my trees from data store
-        TimelineDataStore timelineDataStore = new TimelineDataStore();
-        // TimelineDataStore timelineDataStore = new TimelineDataStore();
-        ArrayList<TimelineEntry> timelineEntries = timelineDataStore.queryMyUpdate(RegisrationID);
+        TreeDataStore treeDataStore = new TreeDataStore();
+        ArrayList<TreeEntry> treeEntries = treeDataStore.queryTreesIUpdated(RegisrationID);
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         JSONArray myTrees = new JSONArray();
 
-        for(TimelineEntry tempTimelineEntry:timelineEntries)
+        for(TreeEntry treeEntry:treeEntries)
         {
 
             //for every TreeEntry add it into returning jsonarray
-            myTrees.add(tempTimelineEntry);
+            myTrees.add(treeEntry);
             //increment tree counter to limit page results
             //treeCounter++;
         }
 
-        String jsonResult = new Gson().toJson(timelineEntries);
+        String jsonResult = new Gson().toJson(myTrees);
         response.getWriter().write(jsonResult);
 
     }

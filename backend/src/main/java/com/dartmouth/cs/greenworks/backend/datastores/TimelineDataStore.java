@@ -137,7 +137,7 @@ public class TimelineDataStore {
         Query query = new Query(TimelineEntry.ENTRY_ENTITY_KIND);
 
         query.setFilter(filter);
-        // get the newest ones of first.
+        // get the newest ones (date of tree plantation) of first.
         query.addSort(TimelineEntry.PROPERTY_TREE_ID, Query.SortDirection.DESCENDING);
         PreparedQuery preparedQuery = datastoreService.prepare(query);
         Iterator<Entity> iter = preparedQuery.asIterator();
@@ -150,24 +150,6 @@ public class TimelineDataStore {
         return ret;
     }
 
-    public ArrayList<TreeEntry> getTreesIUpdated(String regId) {
-        ArrayList<TimelineEntry> timelineEntries = queryMyUpdate(regId);
-        TreeDataStore treeDataStore = new TreeDataStore();
-        ArrayList<Long> treeIds = new ArrayList<>();
-        for (TimelineEntry timelineEntry:timelineEntries) {
-            if (!treeIds.contains(timelineEntry.treeId)) {
-                treeIds.add(timelineEntry.treeId);
-            }
-        }
-        ArrayList<TreeEntry> ret = new ArrayList<>();
-        for (long treeId:treeIds) {
-            TreeEntry treeEntry = treeDataStore.getEntryByIdentifier(treeId);
-            if (treeEntry != null) {
-                ret.add(treeEntry);
-            }
-        }
-        return ret;
-    }
 
     public long idGenerator() {
         ArrayList<TimelineEntry> allEntries = queryAll();
