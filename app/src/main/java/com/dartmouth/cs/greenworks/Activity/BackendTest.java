@@ -1,9 +1,11 @@
 package com.dartmouth.cs.greenworks.Activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
@@ -42,6 +44,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.dartmouth.cs.greenworks.Fragment.MyTreesFragment.ENTRY;
+
 /**
  * Created by Xiaolei on 2/27/17.
  */
@@ -64,8 +68,8 @@ public class BackendTest {
 
 
     // Server stuff
-//    public static String SERVER_ADDR = "https://lateral-avatar-160118.appspot.com";
-      public static String SERVER_ADDR = "http://127.0.0.1:8080";
+    public static String SERVER_ADDR = "https://lateral-avatar-160118.appspot.com";
+//      public static String SERVER_ADDR = "http://127.0.0.1:8080";
 
 
     public boolean registerTest(Context context) {
@@ -193,9 +197,15 @@ public class BackendTest {
         new DatastoreTask().execute(ADD_TREE, entry);
     }
 
-    public void getTreeByIDTest(long treeID)
+    public void getTreeByIDTest(long treeID, Intent intent)
     {
-        new DatastoreTask().execute(GET_TREE_BY_ID,treeID);
+        try {
+            new DatastoreTask().execute(GET_TREE_BY_ID,treeID,intent).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     public String photoToString(Context context, String filename) {
@@ -406,7 +416,13 @@ public class BackendTest {
                         JSONArray jsonResult = new JSONArray(myTree);
                         //List<TimelineEntry> treeEntryList = new ArrayList<>();
                         Gson gson = new Gson();
+                        Intent intent = (Intent)params[2];
                         TreeEntry treeByID = gson.fromJson(jsonResult.getString(0),TreeEntry.class);
+
+                        Bundle extras = new Bundle();
+                        extras.putParcelable(ENTRY,treeByID);
+                        intent.putExtras(extras);
+
                         Log.e("In TreeByID",String.valueOf(treeByID.treeId)+" "+treeByID.comment);
                     } catch (IOException e) {
                         Log.e(TAG, "Sync failed: " + e.getCause());

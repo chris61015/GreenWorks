@@ -11,6 +11,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.dartmouth.cs.greenworks.Activity.BackendTest;
 import com.dartmouth.cs.greenworks.R;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -45,7 +46,7 @@ public class GcmIntentService extends IntentService {
                     try {
                         long treeId = Long.parseLong(message);
                         showToast("Tree " + treeId + " Updated!");
-                        showNotification("Tree " + treeId + " Updated!", (int)treeId);
+                        showNotification("Tree " + treeId + " Updated!", treeId);
                     } catch (Exception e) {
 
                     }
@@ -64,14 +65,20 @@ public class GcmIntentService extends IntentService {
         });
     }
 
-    private void showNotification(String text, int id) {
+    private void showNotification(String text, long id) {
         String title = "GreenWorks";
 
         Log.d("IntentService", "Starting notification");
 
         // resume activity when notification is clicked.
         // remember to set launchMode = singleInstance in manifest.
-        Intent myIntent = new Intent (this, com.dartmouth.cs.greenworks.Activity.MainActivity.class);
+        Intent myIntent = new Intent (this, com.dartmouth.cs.greenworks.Activity.TreeDetailActivity.class);
+
+
+        BackendTest backend = new BackendTest();
+        backend.getTreeByIDTest(id, myIntent);
+
+
         PendingIntent pendingIntent = PendingIntent.getActivity(getBaseContext(),
                 0, myIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
@@ -95,6 +102,6 @@ public class GcmIntentService extends IntentService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        notificationManager.notify(id, notification);
+        notificationManager.notify((int)id, notification);
     }
 }
