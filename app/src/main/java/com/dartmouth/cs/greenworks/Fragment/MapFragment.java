@@ -38,11 +38,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     private GoogleMap mMap;
     private static View view;
     private GoogleApiClient mGoogleApiClient;
-    private Location mLastLocation;
-
+    private static Location mLastLocation;
+    private static Location currentLocation;
     private LocationRequest locationRequest;
 
-    private Location currentLocation;
+
 
     private Marker currentMarker, itemMarker;
     private ArrayList<TreeEntry> mTreeList;
@@ -214,7 +214,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         // 使用動畫的效果移動地圖
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
+
+    public static Location getLocation() throws Exception {
+        if (currentLocation != null) return currentLocation;
+        else if (mLastLocation !=null) return mLastLocation;
+        else throw new Exception("Not Such Location");
+    }
 }
+
 
 
 /* Q1: Whether We should have a activity of fragment in planting a tree?
