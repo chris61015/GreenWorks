@@ -31,6 +31,7 @@ public class UpdateDetailsActivity extends AppCompatActivity {
         initView();
     }
 
+
     void initView(){
         ((EditText) findViewById(R.id.etUpdateDetailName)).setText(mEntry.name);
 
@@ -48,6 +49,7 @@ public class UpdateDetailsActivity extends AppCompatActivity {
         }
     }
 
+    // Click GetFullTimeline and back to ShowTimeline Activity
     public void onGetFullTimelineClicked(View v){
         onBackPressed();
     }

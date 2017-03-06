@@ -75,7 +75,7 @@ public class AddTimelineActivity extends AppCompatActivity {
         loadProfile();
 
     }
-
+    // When you click save button, a new tree info was saved and add a new item to list
     public void onAddTimelineSaveClicked(View v){
         //TODO Get Location
 //        Toast.makeText(getApplicationContext(),
@@ -83,7 +83,7 @@ public class AddTimelineActivity extends AppCompatActivity {
 //                Toast.LENGTH_SHORT).show();
 //        saveProfileImage();
 
-
+    // Get value from Bundle, and put value into buffer, then start Timeline activity
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         TreeEntry entry = bundle.getParcelable(MyTreesFragment.ENTRY);
@@ -102,10 +102,12 @@ public class AddTimelineActivity extends AppCompatActivity {
         startActivity(showTimelineIntent);
     }
 
+    // Cancel Button clicked and then back to original page
     public void onAddTimelineCancelClicked(View v){
         finish();
     }
 
+    // Change the tree's profile photo
     public void changeImage(){
         Intent intent;
         // Take photo from camera，
@@ -134,11 +136,14 @@ public class AddTimelineActivity extends AppCompatActivity {
         }
     }
 
+
+    // When you click the photo button, show the fragment
     public void onChangePhotoClicked(View v){
         DialogFragment fragment = MyDialogFragment.newInstance(MyDialogFragment.DIALOG_ID_ADD_TIMELINE);
         fragment.show(getFragmentManager(), "Photo Picker");;
     }
 
+    // Choose photo from Gallery or take a new photo
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK)
@@ -177,6 +182,8 @@ public class AddTimelineActivity extends AppCompatActivity {
      *	but here the library is handling the creation of an Intent, so you don't
      * have to.
      *  **/
+
+    // Begin Crop a photo and get its Uri
     private void beginCrop(Uri source) {
 //        Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped"));
         String filepath = Environment.getExternalStorageDirectory()
@@ -186,6 +193,7 @@ public class AddTimelineActivity extends AppCompatActivity {
 
     }
 
+    // Crop the photo to a square one
     private void handleCrop(int resultCode, Intent result) {
         if (resultCode == RESULT_OK) {
             mTempUri = Crop.getOutput(result);
@@ -199,6 +207,7 @@ public class AddTimelineActivity extends AppCompatActivity {
         }
     }
 
+    // deal with the rotation
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -210,6 +219,7 @@ public class AddTimelineActivity extends AppCompatActivity {
 //        saveProfileImage();
     }
 
+    // Get Photo from Gallery or get a new photo
     public void onPhotoPickerItemSelected(int item) {
         Intent intent;
         switch (item) {
@@ -251,8 +261,8 @@ public class AddTimelineActivity extends AppCompatActivity {
 //        }
 //    }
 
+    // load profile image from internal storage
     private void loadProfileImage() {
-        // Load profile photo from internal storage
 //        try {
 //            FileInputStream fis;
 
@@ -283,6 +293,7 @@ public class AddTimelineActivity extends AppCompatActivity {
 //        }
     }
 
+    // Use SharedPreference to save tree's info
     public void saveProfile(){
         String key, val;
 
@@ -304,6 +315,7 @@ public class AddTimelineActivity extends AppCompatActivity {
         editor.apply();
     }
 
+    // When you start the activity, load the info saved before
     public void loadProfile(){
         String key, str_val;
 

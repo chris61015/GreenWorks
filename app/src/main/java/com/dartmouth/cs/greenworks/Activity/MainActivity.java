@@ -46,11 +46,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private final AllTreesFragment mFifthFragment = new AllTreesFragment();
     private NavigationView mNavigationView;
 
+    // Main Activity Start
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Navigation view and Drawer Layout
         mDrawerLayout = (DrawerLayout) findViewById(com.dartmouth.cs.greenworks.R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(com.dartmouth.cs.greenworks.R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -71,9 +73,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
-        navigate(mNavItemId);
 
+        navigate(mNavItemId);
         checkPermissions();
+        // Test Backend
         testBackend();
     }
 
@@ -82,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onSaveInstanceState(outState);
         outState.putInt(NAV_ITEM_ID, mNavItemId);
     }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
@@ -97,6 +101,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }, DRAWER_CLOSE_DELAY_MS);
         return true;
     }
+
+    // Navigation view choose
     private void navigate(final int itemId) {
         switch (itemId) {
             case R.id.drawer_item_1:
@@ -140,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
+    // testBackend Method
     public void testBackend() {
         BackendTest newTest = new BackendTest();
         if(!newTest.registerTest(this)) {

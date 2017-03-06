@@ -70,14 +70,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
                 .build();
     }
 
-    // 建立Location請求物件
+    // Build Location Request Object
     private void configLocationRequest() {
         locationRequest = new LocationRequest();
-        // 設定讀取位置資訊的間隔時間為一秒（1000ms）
+        // Set the interval for reading the location information to one second（1000ms）
         locationRequest.setInterval(1000);
-        // 設定讀取位置資訊最快的間隔時間為一秒（1000ms）
+        // Set the fastest interval for reading the location information to one second（1000ms）
         locationRequest.setFastestInterval(1000);
-        // 設定優先讀取高精確度的位置資訊（GPS）
+        // Set priority to read high-precision location information（GPS）
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
@@ -143,11 +143,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        // Google Services連線失敗
-        // ConnectionResult參數是連線失敗的資訊
+        // Google Services Connection Failed
+        // ConnectionResult The parameter is a connection failure message
         int errorCode = connectionResult.getErrorCode();
 
-        // 裝置沒有安裝Google Play服務
+        // Google Play services are not installed on your device
         if (errorCode == ConnectionResult.SERVICE_MISSING) {
             Toast.makeText(getActivity(), R.string.google_play_service_missing,
                     Toast.LENGTH_LONG).show();
@@ -156,13 +156,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
 
     @Override
     public void onLocationChanged(Location location) {
-        // 位置改變
-        // Location參數是目前的位置
+        // Location Changed
+        // Location parameter is the location now
         currentLocation = location;
         LatLng latLng = new LatLng(
                 location.getLatitude(), location.getLongitude());
 
-        // 設定目前位置的標記
+        // Set the mark of the current location
         if (currentMarker == null) {
             currentMarker = mMap.addMarker(new MarkerOptions().position(latLng));
         }
@@ -170,14 +170,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
             currentMarker.setPosition(latLng);
         }
 
-        // 移動地圖到目前的位置
+        // Move the map to current location
         moveMap(latLng);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        // 連線到Google API用戶端
+        // Connect to Google API Client
         if (!mGoogleApiClient.isConnected() && currentMarker != null) {
             mGoogleApiClient.connect();
         }
@@ -186,7 +186,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     @Override
     public void onPause() {
         super.onPause();
-        // 移除位置請求服務
+        // Remove location request
         if (mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(
                     mGoogleApiClient, this);
@@ -196,22 +196,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     @Override
     public void onStop() {
         super.onStop();
-        // 移除Google API用戶端連線
+        // Remove the connection between Client and Google API
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
     }
 
-    // 移動地圖到參數指定的位置
+    // Move map to the location according to parameter
     private void moveMap(LatLng place) {
-        // 建立地圖攝影機的位置物件
+        // Create a location object for the map camera
         CameraPosition cameraPosition =
                 new CameraPosition.Builder()
                         .target(place)
                         .zoom(17)
                         .build();
 
-        // 使用動畫的效果移動地圖
+        // Use the effect of the animation to move the map
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
