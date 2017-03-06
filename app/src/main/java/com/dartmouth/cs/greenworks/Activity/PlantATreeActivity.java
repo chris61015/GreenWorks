@@ -5,8 +5,6 @@ import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -28,9 +26,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Date;
 
 /**
@@ -59,6 +54,13 @@ public class PlantATreeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant_a_tree);
 
+        m_ImgView = (ImageView)findViewById(R.id.imageProfile);
+
+        ((EditText) findViewById(R.id.etName)).setInputType(InputType.TYPE_CLASS_TEXT);
+        ((EditText) findViewById(R.id.etCity)).setInputType(InputType.TYPE_CLASS_TEXT);
+        ((EditText) findViewById(R.id.etComment)).setInputType(InputType.TYPE_CLASS_TEXT);
+        loadProfile();
+
         // To avoid pictures dissapearing from rotate the cell phone
         if (savedInstanceState != null) {
             mImageCaptureUri = savedInstanceState
@@ -66,14 +68,18 @@ public class PlantATreeActivity extends AppCompatActivity {
             mTempUri = savedInstanceState.getParcelable(URI_INSTANCE_STATE_KEY_TEMP);
             cameraClicked = savedInstanceState.getBoolean(CAMERA_CLICKED_KEY);
             stateChanged=true;
+            // If configuration changed after cropping photo,
+            // retain the photo
+            m_ImgView.setImageURI(mTempUri);
+            if(m_ImgView.getDrawable() == null) {
+                Log.d("Plant a tree", "no file to load. call load photo");
+                loadProfileImage();
+            }
         }
 
-        m_ImgView = (ImageView)findViewById(R.id.imageProfile);
-        ((EditText) findViewById(R.id.etName)).setInputType(InputType.TYPE_CLASS_TEXT);
-        ((EditText) findViewById(R.id.etCity)).setInputType(InputType.TYPE_CLASS_TEXT);
-        ((EditText) findViewById(R.id.etComment)).setInputType(InputType.TYPE_CLASS_TEXT);
-        loadProfile();
-        loadProfileImage();
+        else {
+            loadProfileImage();
+        }
     }
 
     public void onSaveClicked(View v) throws Exception {
@@ -81,7 +87,8 @@ public class PlantATreeActivity extends AppCompatActivity {
 //        Toast.makeText(getApplicationContext(),
 //                getString(R.string.ui_profile_toast_save_text),
 //                Toast.LENGTH_SHORT).show();
-        saveProfileImage();
+
+//        saveProfileImage();
 
         BackendTest test = new BackendTest();
 //        test.registerTest(this);
@@ -176,8 +183,11 @@ public class PlantATreeActivity extends AppCompatActivity {
      * have to.
      *  **/
     private void beginCrop(Uri source) {
-        Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped"));
-        Crop.of(source, destination).asSquare().start(this);
+//        Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped"));
+        String filepath = Environment.getExternalStorageDirectory()
+                .getAbsolutePath() + File.separator + getString(R.string.ui_plant_tree_photo_file_name);
+        mTempUri = Uri.fromFile(new File(filepath));
+        Crop.of(source, mTempUri).asSquare().start(this);
     }
 
     private void handleCrop(int resultCode, Intent result) {
@@ -186,7 +196,7 @@ public class PlantATreeActivity extends AppCompatActivity {
             m_ImgView.setImageResource(0);
             m_ImgView.setImageURI(mTempUri);
             cameraClicked=true;
-            saveProfileImage();
+//            saveProfileImage();
 
         } else if (resultCode == Crop.RESULT_ERROR) {
             Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
@@ -201,7 +211,7 @@ public class PlantATreeActivity extends AppCompatActivity {
         outState.putParcelable(URI_INSTANCE_STATE_KEY_TEMP,mTempUri);
         outState.putBoolean(CAMERA_CLICKED_KEY,cameraClicked);
         saveProfile();
-        saveProfileImage();
+//        saveProfileImage();
     }
 
     public void onPhotoPickerItemSelected(int item) {
@@ -223,32 +233,32 @@ public class PlantATreeActivity extends AppCompatActivity {
     }
 
 
-    private void saveProfileImage() {
-
-        // Commit all the changes into preference file
-        // Save profile image into internal storage.
-        m_ImgView.buildDrawingCache();
-        Bitmap bmap = m_ImgView.getDrawingCache();
-
-        String filepath = Environment.getExternalStorageDirectory()
-                .getAbsolutePath() + File.separator + getString(R.string.ui_plant_tree_photo_file_name);
-        Log.d("DEBUG", "abs file path: " + filepath);
-
-        try {
-            File f = new File(filepath);
-            FileOutputStream fos = new FileOutputStream(f,false);
-            bmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-            fos.flush();
-            fos.close();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-    }
+//    private void saveProfileImage() {
+//
+//        // Commit all the changes into preference file
+//        // Save profile image into internal storage.
+//        m_ImgView.buildDrawingCache();
+//        Bitmap bmap = m_ImgView.getDrawingCache();
+//
+//        String filepath = Environment.getExternalStorageDirectory()
+//                .getAbsolutePath() + File.separator + getString(R.string.ui_plant_tree_photo_file_name);
+//        Log.d("DEBUG", "abs file path: " + filepath);
+//
+//        try {
+//            File f = new File(filepath);
+//            FileOutputStream fos = new FileOutputStream(f,false);
+//            bmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+//            fos.flush();
+//            fos.close();
+//        } catch (IOException ioe) {
+//            ioe.printStackTrace();
+//        }
+//    }
 
     private void loadProfileImage() {
         // Load profile photo from internal storage
-        try {
-            FileInputStream fis;
+//        try {
+//            FileInputStream fis;
 
             if(stateChanged && cameraClicked){
                 if(!Uri.EMPTY.equals(mTempUri)) {
@@ -258,17 +268,24 @@ public class PlantATreeActivity extends AppCompatActivity {
             } else {
                 String filepath = Environment.getExternalStorageDirectory()
                         .getAbsolutePath() + File.separator + getString(R.string.ui_plant_tree_photo_file_name);
-                fis = new FileInputStream(filepath);
-                Bitmap bmap = BitmapFactory.decodeStream(fis);
-                m_ImgView.setImageBitmap(bmap);
-
-                fis.close();
+                mTempUri = Uri.fromFile(new File(filepath));
+                m_ImgView.setImageURI(mTempUri);
+                if(m_ImgView.getDrawable() == null) {
+                    m_ImgView.setImageResource(R.drawable.dartmouthpine);
+                }
+//                fis = new FileInputStream(filepath);
+//                Bitmap bmap = BitmapFactory.decodeStream(fis);
+//                m_ImgView.setImageBitmap(bmap);
+//
+//                mTempUri = Uri.fromFile(new File(filepath));
+//
+//                fis.close();
             }
 
-        } catch (IOException e) {
-            // Default profile photo if no photo saved before.
-            m_ImgView.setImageResource(R.drawable.dartmouthpine);
-        }
+//        } catch (IOException e) {
+//            // Default profile photo if no photo saved before.
+//            m_ImgView.setImageResource(R.drawable.dartmouthpine);
+//        }
     }
 
     public void saveProfile(){

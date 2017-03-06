@@ -5,8 +5,6 @@ import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -27,9 +25,6 @@ import com.dartmouth.cs.greenworks.R;
 import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Date;
 
 import static com.dartmouth.cs.greenworks.Activity.BackendTest.UPDATE_TREE;
@@ -52,6 +47,10 @@ public class AddTimelineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_timeline);
 
+        m_ImgView = (ImageView)findViewById(R.id.AddTimelineImageProfile);
+        ((EditText) findViewById(R.id.etAddTimelineName)).setInputType(InputType.TYPE_CLASS_TEXT);
+        ((EditText) findViewById(R.id.etAddTimelineComment)).setInputType(InputType.TYPE_CLASS_TEXT);
+
         // To avoid pictures dissapearing from rotate the cell phone
         if (savedInstanceState != null) {
             mImageCaptureUri = savedInstanceState
@@ -59,13 +58,22 @@ public class AddTimelineActivity extends AppCompatActivity {
             mTempUri = savedInstanceState.getParcelable(URI_INSTANCE_STATE_KEY_TEMP);
             cameraClicked = savedInstanceState.getBoolean(CAMERA_CLICKED_KEY);
             stateChanged=true;
+            // If configuration changed after cropping photo,
+            // retain the photo
+            m_ImgView.setImageURI(mTempUri);
+            if(m_ImgView.getDrawable() == null) {
+                Log.d("Plant a tree", "no file to load. call load photo");
+                loadProfileImage();
+            }
+        }
+        else {
+            loadProfileImage();
         }
 
-        m_ImgView = (ImageView)findViewById(R.id.AddTimelineImageProfile);
-        ((EditText) findViewById(R.id.etAddTimelineName)).setInputType(InputType.TYPE_CLASS_TEXT);
-        ((EditText) findViewById(R.id.etAddTimelineComment)).setInputType(InputType.TYPE_CLASS_TEXT);
+
+
         loadProfile();
-        loadProfileImage();
+
     }
 
     public void onAddTimelineSaveClicked(View v){
@@ -73,7 +81,7 @@ public class AddTimelineActivity extends AppCompatActivity {
 //        Toast.makeText(getApplicationContext(),
 //                getString(R.string.ui_profile_toast_save_text),
 //                Toast.LENGTH_SHORT).show();
-        saveProfileImage();
+//        saveProfileImage();
 
 
         Intent intent = getIntent();
@@ -170,8 +178,12 @@ public class AddTimelineActivity extends AppCompatActivity {
      * have to.
      *  **/
     private void beginCrop(Uri source) {
-        Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped"));
-        Crop.of(source, destination).asSquare().start(this);
+//        Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped"));
+        String filepath = Environment.getExternalStorageDirectory()
+                .getAbsolutePath() + File.separator + getString(R.string.ui_add_timeline_photo_file_name);
+        mTempUri = Uri.fromFile(new File(filepath));
+        Crop.of(source, mTempUri).asSquare().start(this);
+
     }
 
     private void handleCrop(int resultCode, Intent result) {
@@ -180,7 +192,7 @@ public class AddTimelineActivity extends AppCompatActivity {
             m_ImgView.setImageResource(0);
             m_ImgView.setImageURI(mTempUri);
             cameraClicked=true;
-            saveProfileImage();
+//            saveProfileImage();
 
         } else if (resultCode == Crop.RESULT_ERROR) {
             Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
@@ -195,7 +207,7 @@ public class AddTimelineActivity extends AppCompatActivity {
         outState.putParcelable(URI_INSTANCE_STATE_KEY_TEMP,mTempUri);
         outState.putBoolean(CAMERA_CLICKED_KEY,cameraClicked);
         saveProfile();
-        saveProfileImage();
+//        saveProfileImage();
     }
 
     public void onPhotoPickerItemSelected(int item) {
@@ -217,32 +229,32 @@ public class AddTimelineActivity extends AppCompatActivity {
     }
 
 
-    private void saveProfileImage() {
-
-        // Commit all the changes into preference file
-        // Save profile image into internal storage.
-        m_ImgView.buildDrawingCache();
-        Bitmap bmap = m_ImgView.getDrawingCache();
-
-        String filepath = Environment.getExternalStorageDirectory()
-                .getAbsolutePath() + File.separator + getString(R.string.ui_add_timeline_photo_file_name);
-        Log.d("DEBUG", "abs file path: " + filepath);
-
-        try {
-            File f = new File(filepath);
-            FileOutputStream fos = new FileOutputStream(f,false);
-            bmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-            fos.flush();
-            fos.close();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-    }
+//    private void saveProfileImage() {
+//
+//        // Commit all the changes into preference file
+//        // Save profile image into internal storage.
+//        m_ImgView.buildDrawingCache();
+//        Bitmap bmap = m_ImgView.getDrawingCache();
+//
+//        String filepath = Environment.getExternalStorageDirectory()
+//                .getAbsolutePath() + File.separator + getString(R.string.ui_add_timeline_photo_file_name);
+//        Log.d("DEBUG", "abs file path: " + filepath);
+//
+//        try {
+//            File f = new File(filepath);
+//            FileOutputStream fos = new FileOutputStream(f,false);
+//            bmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+//            fos.flush();
+//            fos.close();
+//        } catch (IOException ioe) {
+//            ioe.printStackTrace();
+//        }
+//    }
 
     private void loadProfileImage() {
         // Load profile photo from internal storage
-        try {
-            FileInputStream fis;
+//        try {
+//            FileInputStream fis;
 
             if(stateChanged && cameraClicked){
                 if(!Uri.EMPTY.equals(mTempUri)) {
@@ -252,17 +264,23 @@ public class AddTimelineActivity extends AppCompatActivity {
             } else {
                 String filepath = Environment.getExternalStorageDirectory()
                         .getAbsolutePath() + File.separator + getString(R.string.ui_add_timeline_photo_file_name);
-                fis = new FileInputStream(filepath);
-                Bitmap bmap = BitmapFactory.decodeStream(fis);
-                m_ImgView.setImageBitmap(bmap);
 
-                fis.close();
+                mTempUri = Uri.fromFile(new File(filepath));
+                m_ImgView.setImageURI(mTempUri);
+                if(m_ImgView.getDrawable() == null) {
+                    m_ImgView.setImageResource(R.drawable.dartmouthpine);
+                }
+//                fis = new FileInputStream(filepath);
+//                Bitmap bmap = BitmapFactory.decodeStream(fis);
+//                m_ImgView.setImageBitmap(bmap);
+
+//                fis.close();
             }
 
-        } catch (IOException e) {
-            // Default profile photo if no photo saved before.
-            m_ImgView.setImageResource(R.drawable.dartmouthpine);
-        }
+//        } catch (IOException e) {
+//            // Default profile photo if no photo saved before.
+//            m_ImgView.setImageResource(R.drawable.dartmouthpine);
+//        }
     }
 
     public void saveProfile(){

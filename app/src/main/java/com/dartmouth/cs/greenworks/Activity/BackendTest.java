@@ -60,6 +60,8 @@ public class BackendTest {
     public static final int GET_TIMELINE = 6;
     public static final int GET_TREE_BY_ID = 7;
 
+    public static final int MAX_SIZE = 400;
+
     public static final String TAG = "BackendTest";
 
     public static final String REG_FILE = Environment.getExternalStorageDirectory()
@@ -222,6 +224,7 @@ public class BackendTest {
             }
 
             Bitmap bm = BitmapFactory.decodeFile(filepath);
+            bm = getResizedBitmap(bm, MAX_SIZE);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
             byte[] b = baos.toByteArray();
@@ -231,6 +234,24 @@ public class BackendTest {
             Log.d(TAG, "Load file error: " + filename);
             return null;
         }
+    }
+
+    // code source:
+    // http://stackoverflow.com/questions/16954109/
+    // reduce-the-size-of-a-bitmap-to-a-specified-size-in-android
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
     public static class DatastoreTask extends AsyncTask<Object, Void, Void> {
