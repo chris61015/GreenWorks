@@ -240,7 +240,7 @@ public class BackendTest {
         private ActivityEntriesAdapter mAdapter;
         private TimeLineAdapter mTimeLineAdapter;
 
-        DatastoreTask(){
+        public DatastoreTask(){
         }
 
         public DatastoreTask(ArrayList<TreeEntry> list){
@@ -314,14 +314,19 @@ public class BackendTest {
                         String treesAroundMe = ServerUtilities.post(SERVER_ADDR + "/gettreesaroundme.do", data1);
                         JSONArray treesAroundMeJSON = new JSONArray(treesAroundMe);
                         //List<TreeEntry> treeEntryList = new ArrayList<>();
-                        mTreeEntryList.clear();
-                        for(int i=0;i<treesAroundMeJSON.length();i++)
-                        {
-                            Gson gson = new Gson();
-                            TreeEntry treeEntry = gson.fromJson(treesAroundMeJSON.getString(i),TreeEntry.class);
-                            mTreeEntryList.add(treeEntry);
-                            Log.e("In GetTreesAroundMe ", treeEntry.comment);
+
+                        // A hack for getting all trees.
+                        if (mAdapter != null && mTreeEntryList != null) {
+                            mTreeEntryList.clear();
+                            for(int i=0;i<treesAroundMeJSON.length();i++)
+                            {
+                                Gson gson = new Gson();
+                                TreeEntry treeEntry = gson.fromJson(treesAroundMeJSON.getString(i),TreeEntry.class);
+                                mTreeEntryList.add(treeEntry);
+                                Log.e("In GetTreesAroundMe ", treeEntry.comment);
+                            }
                         }
+
                     } catch (IOException e) {
                         Log.e(TAG, "Sync failed: " + e.getCause());
                         Log.e(TAG, "data posting error " + e);
@@ -450,6 +455,13 @@ public class BackendTest {
                     mAdapter.clear();
                     mAdapter.addAll(mTreeEntryList);
                     mAdapter.notifyDataSetChanged();
+                    break;
+                case GET_TREES_AROUND_ME:
+                    if (mAdapter != null && mTreeEntryList != null) {
+                        mAdapter.clear();
+                        mAdapter.addAll(mTreeEntryList);
+                        mAdapter.notifyDataSetChanged();
+                    }
                     break;
                 case GET_TIMELINE:
                     mTimeLineAdapter.clear();

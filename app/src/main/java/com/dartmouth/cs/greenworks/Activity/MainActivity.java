@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.dartmouth.cs.greenworks.Fragment.AllTreesFragment;
 import com.dartmouth.cs.greenworks.Fragment.MapFragment;
 import com.dartmouth.cs.greenworks.Fragment.MyTreesFragment;
 import com.dartmouth.cs.greenworks.Fragment.TreesIUpdatedFragment;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private final MapFragment mFirstFragment = new MapFragment();
     private final MyTreesFragment mSecondFragment = new MyTreesFragment();
     private final TreesIUpdatedFragment mThirdFragment = new TreesIUpdatedFragment();
+    private final AllTreesFragment mFifthFragment = new AllTreesFragment();
     private NavigationView mNavigationView;
 
     @Override
@@ -125,6 +127,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent intent = new Intent(this, PlantATreeActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.drawer_item_5:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content, mFifthFragment).addToBackStack(null)
+                        .commit();
+                break;
             default:
                 // ignore
                 break;
@@ -151,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        newTest.addTreeTest(this, "5.jpg");
 //        newTest.updateTree(this, "U1_1.jpg", 4);
 //        newTest.updateTree(this, "U1_2.jpg", 1);
-        newTest.updateTree(this, "U2_1.jpg", 2);
+//        newTest.updateTree(this, "U2_1.jpg", 2);
 //        newTest.getTimelineTest(this, (long) 4);
 //        newTest.getTreeByIDTest(6);
 //        newTest.getTreesIUpdatedTest(this);
