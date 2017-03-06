@@ -86,7 +86,7 @@ public class AddTimelineActivity extends AppCompatActivity {
         String photo = new BackendTest().photoToString(this,getString(R.string.ui_add_timeline_photo_file_name));
         String comment =((EditText) findViewById(R.id.etAddTimelineComment)).getText().toString();;
 
-        TimelineEntry timelineEntry = new TimelineEntry(0, entry.treeId, dateTime,name,regId,photo,comment);
+        TimelineEntry timelineEntry = new TimelineEntry(0, entry.treeId, dateTime,name,MainActivity.myRegId,photo,comment);
         new BackendTest.DatastoreTask().execute(UPDATE_TREE,timelineEntry);
 
         Intent showTimelineIntent = new Intent(this, ShowTimelineActivity.class);
