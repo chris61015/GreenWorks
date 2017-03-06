@@ -220,3 +220,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        return isPop;
 //    }
 }
+
+
+
+/*
+* 1. Tree List Titles
+* 2. Activities other main need navigation
+* 3. Tree/Timeline Detail => photo larger
+*
+*
+* */
