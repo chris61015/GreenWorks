@@ -1,8 +1,7 @@
 # GreenWorks
-CS 65 Final Project
+CS 165 Final Project
 ===================
-Original Pitch Slides:https://docs.google.com/presentation/d/1ZR7_Da4xgTU9xarrQxrUwRzfqr4Cki8P6i2LupXZqlg/edit
-Temp Website: https://chris61015.wixsite.com/website
+Temp Website: https://greenworkscs165.wixsite.com/greenworks
 
 Course Websites:
 http://www.cs.dartmouth.edu/~xingdong/Teaching/CS65/projs/projects.html
