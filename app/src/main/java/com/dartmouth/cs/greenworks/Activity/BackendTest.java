@@ -68,11 +68,12 @@ public class BackendTest {
     public static final String REG_FILE = Environment.getExternalStorageDirectory()
             .getAbsolutePath() + File.separator + "regId.csv";
 
+    public static boolean isFinish = true;
 
 
     // Server stuff
-//    public static String SERVER_ADDR = "https://lateral-avatar-160118.appspot.com";
-      public static String SERVER_ADDR = "http://127.0.0.1:8080";
+    public static String SERVER_ADDR = "https://lateral-avatar-160118.appspot.com";
+//      public static String SERVER_ADDR = "http://127.0.0.1:8080";
 
 
     public boolean registerTest(Context context) {
@@ -485,6 +486,7 @@ public class BackendTest {
                         mAdapter.addAll(mTreeEntryList);
                         mAdapter.notifyDataSetChanged();
                     }
+                    isFinish = true;
                     break;
                 case GET_TIMELINE:
                     mTimeLineAdapter.clear();

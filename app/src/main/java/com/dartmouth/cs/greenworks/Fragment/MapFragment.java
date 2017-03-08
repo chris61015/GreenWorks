@@ -35,8 +35,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
-import static com.dartmouth.cs.greenworks.Activity.AddTimelineActivity.TREEID;
 import static com.dartmouth.cs.greenworks.Activity.BackendTest.GET_TREES_AROUND_ME;
+import static com.dartmouth.cs.greenworks.Fragment.AllTreesFragment.ENTRY;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_GREEN;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
@@ -49,11 +49,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     private static Location currentLocation;
     private LocationRequest locationRequest;
 
-
-
     private Marker currentMarker, itemMarker;
     private ArrayList<TreeEntry> mTreeList;
     private ActivityEntriesAdapter mAdapter;
+
+    private boolean isInitial = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,7 +66,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         if (!mGoogleApiClient.isConnected()) {
             mGoogleApiClient.connect();
         }
-
         mTreeList = new ArrayList<TreeEntry>();
         mAdapter = new ActivityEntriesAdapter(getActivity());
     }
@@ -112,7 +111,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
 
     void getTreesAroundMe(){
         if (mLastLocation != null) {
-            new BackendTest.DatastoreTask(mAdapter, mTreeList).execute(GET_TREES_AROUND_ME, 10000, mLastLocation.getLongitude(), mLastLocation.getLatitude());
+            new BackendTest.DatastoreTask(mAdapter, mTreeList).execute(GET_TREES_AROUND_ME, 10000, currentLocation.getLongitude(), currentLocation.getLatitude());
             plotTreesOnMap();
         } else if (currentLocation != null){
             new BackendTest.DatastoreTask(mAdapter, mTreeList).execute(GET_TREES_AROUND_ME, 10000, currentLocation.getLongitude(), currentLocation.getLatitude());
@@ -122,18 +121,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         }
     }
 
-    void plotTreesOnMap(){
+     void plotTreesOnMap(){
         if (mTreeList != null){
-            Marker temp = currentMarker;
+            currentMarker = null;
             mMap.clear();
-            for (TreeEntry entry:mTreeList){
-                Marker marker = mMap.addMarker(new MarkerOptions().
-                        position(entry.location).
-                        icon(BitmapDescriptorFactory.
-                        defaultMarker(HUE_GREEN)));
-                marker.setTag(entry.treeId);
+            synchronized (this){
+                int size = mTreeList.size();
+
+                for (TreeEntry entry:mTreeList){
+                    Marker marker = mMap.addMarker(new MarkerOptions().
+                            position(entry.location).
+                            icon(BitmapDescriptorFactory.
+                            defaultMarker(HUE_GREEN)));
+                    marker.setTag(entry);
+                    Log.d("DEBUG", entry.toString());
+                }
             }
-            currentMarker = temp;
         }
     }
     /**
@@ -157,10 +160,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
 
             @Override
             public boolean onMarkerClick(Marker arg0) {
-                long treeId = (long) arg0.getTag();
+                TreeEntry entry = (TreeEntry) arg0.getTag();
                 Intent intent = new Intent(getActivity(), TreeDetailActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putLong(TREEID,treeId);
+                bundle.putParcelable(ENTRY,entry);
                 intent.putExtras(bundle);
                 startActivity(intent);
                 return true;
@@ -169,6 +172,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         });
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
+
 
     @Override
     @SuppressWarnings({"MissingPermission"})
@@ -205,10 +209,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         LatLng latLng = new LatLng(
                 location.getLatitude(), location.getLongitude());
 
-        getTreesAroundMe();
+        if (BackendTest.isFinish && (mLastLocation != null || currentLocation != null)){
+            BackendTest.isFinish = false;
+            getTreesAroundMe();
+        }
+
         // Set the mark of the current location
         if (currentMarker == null) {
             currentMarker = mMap.addMarker(new MarkerOptions().position(latLng));
+            currentMarker.setZIndex(1.0f);
         }
         else {
             currentMarker.setPosition(latLng);
@@ -225,6 +234,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         if (!mGoogleApiClient.isConnected() && currentMarker != null) {
             mGoogleApiClient.connect();
         }
+//        isInitial = true;
     }
 
     @Override
