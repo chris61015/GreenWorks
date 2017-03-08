@@ -35,7 +35,7 @@ public class GetTreesAroundMeServlet  extends HttpServlet  {
         int distanceRadius = Integer.parseInt(request.getParameter("Radius"));
         double longitude = Double.parseDouble(request.getParameter("Longitude"));
         double lattitude = Double.parseDouble(request.getParameter("Lattitude"));
-        GeoPt location = new GeoPt((float)longitude,(float)lattitude);
+        GeoPt location = new GeoPt((float)lattitude,(float)longitude);
         //fetch my trees from data store
         TreeDataStore treeDataStore = new TreeDataStore();
         ArrayList<TreeEntry> treesNearMe = new ArrayList<>();
