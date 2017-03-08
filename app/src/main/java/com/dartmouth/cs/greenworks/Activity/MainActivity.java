@@ -53,8 +53,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        checkPermissions();
-
         // Navigation view and Drawer Layout
         mDrawerLayout = (DrawerLayout) findViewById(com.dartmouth.cs.greenworks.R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(com.dartmouth.cs.greenworks.R.id.toolbar);
@@ -68,6 +66,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             mNavItemId = R.id.drawer_item_1;
         }
+
+        checkPermissions();
+
         Log.d("DEBUG",mNavigationView.getMenu().findItem(mNavItemId).toString());
         mNavigationView.getMenu().findItem(mNavItemId).setChecked(true);
 
@@ -76,8 +77,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
-
-        navigate(mNavItemId);
         // Test Backend
         testBackend();
     }
@@ -208,6 +207,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
             return;
+        } else {
+            navigate(mNavItemId);
         }
     }
 
@@ -221,11 +222,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
 
-        if (allPermitted) return;
+        if (allPermitted) {
+            navigate(mNavItemId);
+            return;
+        }
         else {
-            Toast.makeText(MainActivity.this, "WRITE_CONTACTS Denied", Toast.LENGTH_SHORT)
+            Toast.makeText(MainActivity.this, "PERMISSION Denied", Toast.LENGTH_SHORT)
                     .show();
-            //while(1)
         }
     }
 }
