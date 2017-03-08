@@ -45,12 +45,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private final TreesIUpdatedFragment mThirdFragment = new TreesIUpdatedFragment();
     private final AllTreesFragment mFifthFragment = new AllTreesFragment();
     private NavigationView mNavigationView;
+    public  static boolean mIsPermitted = true;
 
     // Main Activity Start
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        checkPermissions();
 
         // Navigation view and Drawer Layout
         mDrawerLayout = (DrawerLayout) findViewById(com.dartmouth.cs.greenworks.R.id.drawer_layout);
@@ -75,7 +78,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         navigate(mNavItemId);
-        checkPermissions();
         // Test Backend
         testBackend();
     }
@@ -197,6 +199,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION
             };
+
             requestPermissions(permissions, 0);
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -207,24 +210,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return;
         }
     }
-//
-//    @Override
-//    public void onBackPressed() {
-//
-//        if (!popFragment()){
-//            super.onBackPressed();
-//        }
-//    }
-//
-//    public boolean popFragment() {
-//        boolean isPop = false;
-//        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-//            isPop = true;
-//            getSupportFragmentManager().popBackStackImmediate();
-//        }
-//
-//        return isPop;
-//    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantRes) {
+        boolean allPermitted = true;
+        for (int grant : grantRes){
+            if (grant != PackageManager.PERMISSION_GRANTED){
+                allPermitted = false;
+                break;
+            }
+        }
+
+        if (allPermitted) return;
+        else {
+            Toast.makeText(MainActivity.this, "WRITE_CONTACTS Denied", Toast.LENGTH_SHORT)
+                    .show();
+            //while(1)
+        }
+    }
 }
 
 

@@ -70,7 +70,7 @@ public class ActivityEntriesAdapter extends ArrayAdapter<TreeEntry> {
         String time = formatTime.format(new Date(entry.dateTime));
 
         StringBuilder sb = new StringBuilder();
-        sb.append(entry.name).append(" ").append(time).append(" ").append(entry.city);
+        sb.append(entry.name).append(time).append(" ").append(entry.city);
 
         // Set text on the view.
         txtView.setText(sb);

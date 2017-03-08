@@ -384,9 +384,6 @@ public class BackendTest {
                         e.printStackTrace();
                         Log.e(TAG, "JSON error " + e);
                     }
-
-
-
                     break;
 
                 case GET_MY_UPDATED_TREES:

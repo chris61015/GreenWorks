@@ -53,21 +53,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     private ArrayList<TreeEntry> mTreeList;
     private ActivityEntriesAdapter mAdapter;
 
-    private boolean isInitial = true;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setRetainInstance(true);
 
-        configGoogleApiClient();
-        configLocationRequest();
-        if (!mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.connect();
-        }
-        mTreeList = new ArrayList<TreeEntry>();
-        mAdapter = new ActivityEntriesAdapter(getActivity());
+                configGoogleApiClient();
+                configLocationRequest();
+                if (!mGoogleApiClient.isConnected()) {
+                    mGoogleApiClient.connect();
+                }
+                mTreeList = new ArrayList<TreeEntry>();
+                mAdapter = new ActivityEntriesAdapter(getActivity());
+
     }
 
     private synchronized void configGoogleApiClient() {
