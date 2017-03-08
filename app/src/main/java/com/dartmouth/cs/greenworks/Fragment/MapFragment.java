@@ -112,13 +112,36 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     void getTreesAroundMe(){
         if (mLastLocation != null) {
             new BackendTest.DatastoreTask(mAdapter, mTreeList).execute(GET_TREES_AROUND_ME, 10000, currentLocation.getLongitude(), currentLocation.getLatitude());
-            plotTreesOnMap();
+//            plotTreesOnMap();
+            runThread();
         } else if (currentLocation != null){
             new BackendTest.DatastoreTask(mAdapter, mTreeList).execute(GET_TREES_AROUND_ME, 10000, currentLocation.getLongitude(), currentLocation.getLatitude());
-            plotTreesOnMap();
+//            plotTreesOnMap();
+            runThread();
         } else {
             Log.d("ERROR!!!!!!!!", "It is impossible to come here!!!!!!!!!!!!");
         }
+    }
+
+    private void runThread() {
+        new Thread() {
+            public void run() {
+
+                while (!BackendTest.isFinish) { }
+
+                if (getActivity()!=null) {
+
+                    getActivity().runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            plotTreesOnMap();
+                        }
+                    });
+                }
+            }
+
+        }.start();
     }
 
      void plotTreesOnMap(){
