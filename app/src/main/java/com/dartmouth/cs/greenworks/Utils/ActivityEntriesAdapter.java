@@ -1,4 +1,4 @@
-package com.dartmouth.cs.greenworks;
+package com.dartmouth.cs.greenworks.Utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dartmouth.cs.greenworks.Model.TreeEntry;
+import com.dartmouth.cs.greenworks.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

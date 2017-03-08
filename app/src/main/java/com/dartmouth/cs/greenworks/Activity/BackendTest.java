@@ -11,10 +11,11 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.dartmouth.cs.greenworks.ActivityEntriesAdapter;
+import com.dartmouth.cs.greenworks.Utils.ActivityEntriesAdapter;
 import com.dartmouth.cs.greenworks.Model.TimelineEntry;
 import com.dartmouth.cs.greenworks.Model.TreeEntry;
 import com.dartmouth.cs.greenworks.Timeline.TimeLineAdapter;
+import com.dartmouth.cs.greenworks.Utils.ServerUtilities;
 import com.dartmouth.cs.greenworks.backend.registration.Registration;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -70,8 +71,8 @@ public class BackendTest {
 
 
     // Server stuff
-    public static String SERVER_ADDR = "https://lateral-avatar-160118.appspot.com";
-//      public static String SERVER_ADDR = "http://127.0.0.1:8080";
+//    public static String SERVER_ADDR = "https://lateral-avatar-160118.appspot.com";
+      public static String SERVER_ADDR = "http://127.0.0.1:8080";
 
 
     public boolean registerTest(Context context) {
@@ -332,6 +333,7 @@ public class BackendTest {
                     //data1.put("Photo", tree1.photo);
                     //data1.put("Comment", tree1.comment);
                     try {
+
                         String treesAroundMe = ServerUtilities.post(SERVER_ADDR + "/gettreesaroundme.do", data1);
                         JSONArray treesAroundMeJSON = new JSONArray(treesAroundMe);
                         //List<TreeEntry> treeEntryList = new ArrayList<>();
