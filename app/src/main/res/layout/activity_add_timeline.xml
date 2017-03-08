@@ -6,6 +6,12 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_update"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/abc_action_bar_default_height_material"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -60,8 +66,9 @@
             <ImageView
                 android:contentDescription="@string/ui_proile_image_descripton"
                 android:id="@+id/AddTimelineImageProfile"
-                android:layout_width="200dp"
+                android:layout_width="0dp"
                 android:layout_height="200dp"
+                android:layout_weight="1"
                 android:layout_margin="5dp"
                 android:layout_marginBottom="5dp"
                 android:focusable="true"

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.dartmouth.cs.greenworks.Model.TimelineEntry;
@@ -69,5 +70,13 @@ public class ShowTimelineActivity extends AppCompatActivity implements TimeLineA
         intent.putExtras(bundle);
 
         startActivity(intent);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar_timeline);
+        setSupportActionBar(mActionBarToolbar);
+        getSupportActionBar().setTitle("Timeline");
     }
 }

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -329,5 +330,13 @@ public class AddTimelineActivity extends AppCompatActivity {
         key = getString(R.string.preference_key_tree_comment);
         str_val = prefs.getString(key, "");
         ((EditText) findViewById(R.id.etAddTimelineComment)).setText(str_val);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar_update);
+        setSupportActionBar(mActionBarToolbar);
+        getSupportActionBar().setTitle("Post Update");
     }
 }

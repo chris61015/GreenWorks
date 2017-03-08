@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -53,6 +54,7 @@ public class PlantATreeActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant_a_tree);
+
 
         m_ImgView = (ImageView)findViewById(R.id.imageProfile);
 
@@ -331,5 +333,13 @@ public class PlantATreeActivity extends AppCompatActivity {
         key = getString(R.string.preference_key_tree_comment);
         str_val = prefs.getString(key, "");
         ((EditText) findViewById(R.id.etComment)).setText(str_val);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar_plant);
+        setSupportActionBar(mActionBarToolbar);
+        getSupportActionBar().setTitle("Plant A Tree");
     }
 }

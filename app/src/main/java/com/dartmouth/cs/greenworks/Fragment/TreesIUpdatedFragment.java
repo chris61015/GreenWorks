@@ -30,6 +30,7 @@ public class TreesIUpdatedFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mAdapter = new ActivityEntriesAdapter(getActivity());
         mTreeEntryList = new ArrayList<TreeEntry>();
 
@@ -44,6 +45,7 @@ public class TreesIUpdatedFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
+        getActivity().setTitle("Trees I Updated");
         // Requery in case the data base has changed.
         updateTreeEntries();
     }

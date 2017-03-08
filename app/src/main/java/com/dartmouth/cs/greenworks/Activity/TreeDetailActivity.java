@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
@@ -40,11 +41,19 @@ public class TreeDetailActivity extends AppCompatActivity {
     }
 
     void initView(){
-        ((EditText) findViewById(R.id.etDetailName)).setText(mEntry.name);
+        EditText text1 = ((EditText) findViewById(R.id.etDetailName));
 
-        ((EditText) findViewById(R.id.etDetailCity)).setText(mEntry.city);
+        EditText text2 = ((EditText) findViewById(R.id.etDetailCity));
 
-        ((EditText) findViewById(R.id.etDetailComment)).setText(mEntry.comment);
+        EditText text3 = ((EditText) findViewById(R.id.etDetailComment));
+
+        text1.setText(mEntry.name);
+        text2.setText(mEntry.city);
+        text3.setText(mEntry.comment);
+
+        text1.setKeyListener(null);
+        text2.setKeyListener(null);
+        text3.setKeyListener(null);
 
         ImageView imgView = (ImageView) findViewById(R.id.detailImageProfile);
 
@@ -70,5 +79,13 @@ public class TreeDetailActivity extends AppCompatActivity {
         extras.putParcelable(ENTRY,mEntry);
         intent.putExtras(extras);
         startActivity(intent);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar_tree);
+        setSupportActionBar(mActionBarToolbar);
+        getSupportActionBar().setTitle("Tree");
     }
 }
