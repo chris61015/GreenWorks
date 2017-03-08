@@ -49,9 +49,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     private static Location currentLocation;
     private LocationRequest locationRequest;
 
-    private Marker currentMarker, itemMarker;
+    private Marker currentMarker;
     private ArrayList<TreeEntry> mTreeList;
     private ActivityEntriesAdapter mAdapter;
+    private boolean mIsInitial = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -245,7 +246,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
             currentMarker.setPosition(latLng);
         }
         // Move the map to current location
-        //moveMap(latLng);
+        if (mIsInitial) {
+            mIsInitial = false;
+            moveMap(latLng);
+        }
     }
 
     @Override
@@ -266,6 +270,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
             LocationServices.FusedLocationApi.removeLocationUpdates(
                     mGoogleApiClient, this);
         }
+        mIsInitial = true;
     }
 
     @Override
