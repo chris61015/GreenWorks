@@ -70,11 +70,7 @@ public class AddTimelineActivity extends AppCompatActivity {
         else {
             loadProfileImage();
         }
-
-
-
         loadProfile();
-
     }
     // When you click save button, a new tree info was saved and add a new item to list
     public void onAddTimelineSaveClicked(View v){

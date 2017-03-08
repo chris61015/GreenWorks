@@ -233,6 +233,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         if (BackendTest.isFinish && (mLastLocation != null || currentLocation != null)) {
             BackendTest.isFinish = false;
             getTreesAroundMe();
+        } else {
+            currentMarker = null;
         }
 
         // Set the mark of the current location

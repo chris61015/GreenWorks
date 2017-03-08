@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private final TreesIUpdatedFragment mThirdFragment = new TreesIUpdatedFragment();
     private final AllTreesFragment mFifthFragment = new AllTreesFragment();
     private NavigationView mNavigationView;
+    private boolean isInital = true;
 
     // Main Activity Start
     @Override
@@ -75,7 +76,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerToggle.syncState();
 
         // Test Backend
-        testBackend();
+        if (isInital) {
+            isInital = false;
+            testBackend();
+        }
     }
 
 
@@ -236,7 +240,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //if user is currently in the map page, exit the app
             finish();
         } else {
-            navigate(R.id.drawer_item_1);
+            mNavItemId = R.id.drawer_item_1;
+            navigate(mNavItemId);
         }
 
     }

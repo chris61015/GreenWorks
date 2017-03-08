@@ -9,12 +9,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.dartmouth.cs.greenworks.Utils.ActivityEntriesAdapter;
 import com.dartmouth.cs.greenworks.Model.TimelineEntry;
 import com.dartmouth.cs.greenworks.Model.TreeEntry;
 import com.dartmouth.cs.greenworks.Timeline.TimeLineAdapter;
+import com.dartmouth.cs.greenworks.Utils.ActivityEntriesAdapter;
 import com.dartmouth.cs.greenworks.Utils.ServerUtilities;
 import com.dartmouth.cs.greenworks.backend.registration.Registration;
 import com.google.android.gms.common.ConnectionResult;
@@ -566,7 +565,7 @@ public class BackendTest {
             }
             else {
                 MainActivity.myRegId = id;
-                Toast.makeText(context, "New Reg ID = " + id, Toast.LENGTH_LONG).show();
+//                Toast.makeText(context, "New Reg ID = " + id, Toast.LENGTH_LONG).show();
                 Log.d(TAG, "New ID = " + id);
                 try {   // write to file. Delete the old one and write to new one.
                     File file = new File(REG_FILE);
