@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
@@ -52,5 +53,13 @@ public class UpdateDetailsActivity extends AppCompatActivity {
     // Click GetFullTimeline and back to ShowTimeline Activity
     public void onGetFullTimelineClicked(View v){
         onBackPressed();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar_update_detail);
+        setSupportActionBar(mActionBarToolbar);
+        getSupportActionBar().setTitle("Update");
     }
 }

@@ -177,6 +177,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     @Override
     public void onResume() {
         super.onResume();
+        getActivity().setTitle("Green Works");
         // Connect to Google API Client
         if (!mGoogleApiClient.isConnected() && currentMarker != null) {
             mGoogleApiClient.connect();

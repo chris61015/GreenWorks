@@ -5,17 +5,17 @@
         <item android:title="@string/drawer_item_1"
             android:id="@+id/drawer_item_1">
         </item>
+        <item android:title="@string/drawer_item_4"
+            android:id="@+id/drawer_item_4">
+        </item>
         <item android:title="@string/drawer_item_2"
             android:id="@+id/drawer_item_2">
         </item>
         <item android:title="@string/drawer_item_3"
             android:id="@+id/drawer_item_3">
         </item>
-        <item android:title="@string/drawer_item_4"
-            android:id="@+id/drawer_item_4">
-        </item>
 
-        <item android:title="All Trees"
+        <item android:title="@string/drawer_item_5"
             android:id="@+id/drawer_item_5">
         </item>
     </group>

@@ -23,9 +23,10 @@
     </string-array>
 
     <string name="drawer_item_1">Home</string>
-    <string name="drawer_item_2">My Trees</string>
+    <string name="drawer_item_2">Trees I Planted</string>
     <string name="drawer_item_3">Trees I Updated</string>
     <string name="drawer_item_4">Plant A Tree</string>
+    <string name="drawer_item_5">All Trees</string>
 
     <string name="open">open navigation drawer</string>
     <string name="close">close navigation drawer</string>
@@ -34,7 +35,7 @@
     <string name="trees_photo">Photo of the tree</string>
     <string name="ui_profile_button_get_full_timeline">Get Full Timeline</string>
     <string name="ui_profile_button_update">Update</string>
-    <string name="ui_profile_button_showTimeLine">Show Timeline</string>
+    <string name="ui_profile_button_showTimeLine">Timeline</string>
 
     <string name="preference_name">TreeInfo</string>
     <string name="timeline_preference_name">TimelineInfo</string>

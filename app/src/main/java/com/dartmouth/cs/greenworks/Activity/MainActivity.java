@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private GoogleMap mMap;
 
     private final Handler mDrawerActionHandler = new Handler();
-    private DrawerLayout mDrawerLayout;
+    protected DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private int mNavItemId;
     private static final String NAV_ITEM_ID = "navItemId";
@@ -106,18 +106,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void navigate(final int itemId) {
         switch (itemId) {
             case R.id.drawer_item_1:
+                this.setTitle("Green Works");
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content, mFirstFragment).addToBackStack(null)
                         .commit();
                 break;
             case R.id.drawer_item_2:
+                this.setTitle("Trees I Planted");
+
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content, mSecondFragment).addToBackStack(null)
                         .commit();
                 break;
             case R.id.drawer_item_3:
+                this.setTitle("Trees I Updated");
+
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content, mThirdFragment).addToBackStack(null)
@@ -134,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent);
                 break;
             case R.id.drawer_item_5:
+                this.setTitle("All Trees");
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.content, mFifthFragment).addToBackStack(null)
