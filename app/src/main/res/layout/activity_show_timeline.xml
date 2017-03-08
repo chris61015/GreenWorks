@@ -7,9 +7,10 @@
     android:fitsSystemWindows="true"
     tools:context="com.dartmouth.cs.greenworks.Activity.ShowTimelineActivity">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar_timeline"
@@ -26,6 +27,6 @@
             android:padding="10dp"
             android:clipToPadding="false"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

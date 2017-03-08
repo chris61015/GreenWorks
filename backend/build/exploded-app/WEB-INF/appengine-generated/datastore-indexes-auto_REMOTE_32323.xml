@@ -2,7 +2,7 @@
 
 <datastore-indexes>
 
-    <!-- Used 13 time in query history -->
+    <!-- Used 1 time in query history -->
     <datastore-index kind="tree entry" ancestor="true" source="auto">
         <property name="Date Time" direction="desc"/>
     </datastore-index>

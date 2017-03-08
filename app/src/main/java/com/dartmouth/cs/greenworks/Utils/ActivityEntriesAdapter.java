@@ -48,8 +48,8 @@ public class ActivityEntriesAdapter extends ArrayAdapter<TreeEntry> {
         // Setting up view's text1 is main title, text2 is sub-title.
         ImageView imgView = (ImageView) listItemView
                 .findViewById(android.R.id.icon);
-        imgView.getLayoutParams().height = 200;
-        imgView.getLayoutParams().width = 200;
+        imgView.getLayoutParams().height = 150;
+        imgView.getLayoutParams().width = 150;
 
         TextView txtView = (TextView) listItemView
                 .findViewById(android.R.id.text1);
