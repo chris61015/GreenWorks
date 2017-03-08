@@ -47,8 +47,8 @@ public class ActivityEntriesAdapter extends ArrayAdapter<TreeEntry> {
         // Setting up view's text1 is main title, text2 is sub-title.
         ImageView imgView = (ImageView) listItemView
                 .findViewById(android.R.id.icon);
-        imgView.getLayoutParams().height = 100;
-        imgView.getLayoutParams().width = 100;
+        imgView.getLayoutParams().height = 150;
+        imgView.getLayoutParams().width = 150;
 
         TextView txtView = (TextView) listItemView
                 .findViewById(android.R.id.text1);
@@ -69,7 +69,7 @@ public class ActivityEntriesAdapter extends ArrayAdapter<TreeEntry> {
         String time = formatTime.format(new Date(entry.dateTime));
 
         StringBuilder sb = new StringBuilder();
-        sb.append(entry.name).append(time).append(" ").append(entry.city);
+        sb.append(entry.name).append(" ").append(time).append(" ").append(entry.city);
 
         // Set text on the view.
         txtView.setText(sb);

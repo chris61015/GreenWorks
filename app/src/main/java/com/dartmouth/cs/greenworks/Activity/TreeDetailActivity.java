@@ -15,6 +15,9 @@ import android.widget.ImageView;
 import com.dartmouth.cs.greenworks.Model.TreeEntry;
 import com.dartmouth.cs.greenworks.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static com.dartmouth.cs.greenworks.Activity.AddTimelineActivity.TREEID;
 import static com.dartmouth.cs.greenworks.Fragment.MyTreesFragment.ENTRY;
 
@@ -47,6 +50,8 @@ public class TreeDetailActivity extends AppCompatActivity {
 
         EditText text3 = ((EditText) findViewById(R.id.etDetailComment));
 
+        EditText text4 = ((EditText) findViewById(R.id.etTreeDetailDateTime));
+
         text1.setText(mEntry.name);
         text2.setText(mEntry.city);
         text3.setText(mEntry.comment);
@@ -54,6 +59,12 @@ public class TreeDetailActivity extends AppCompatActivity {
         text1.setKeyListener(null);
         text2.setKeyListener(null);
         text3.setKeyListener(null);
+
+        SimpleDateFormat formatTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = formatTime.format(new Date(mEntry.dateTime));
+
+        text4.setText(time);
+        text4.setKeyListener(null);
 
         ImageView imgView = (ImageView) findViewById(R.id.detailImageProfile);
 

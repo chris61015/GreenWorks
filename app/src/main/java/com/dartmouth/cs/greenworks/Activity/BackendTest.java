@@ -22,6 +22,8 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
+import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -70,8 +72,8 @@ public class BackendTest {
 
 
     // Server stuff
-    public static String SERVER_ADDR = "https://lateral-avatar-160118.appspot.com";
-//      public static String SERVER_ADDR = "http://127.0.0.1:8080";
+//    public static String SERVER_ADDR = "https://lateral-avatar-160118.appspot.com";
+      public static String SERVER_ADDR = "http://127.0.0.1:8080";
 
 
     public boolean registerTest(Context context) {
@@ -507,30 +509,30 @@ public class BackendTest {
         @Override
         protected String doInBackground(Void... params) {
             if (regService == null) {
-//                Registration.Builder builder =
-//                        new Registration.Builder(AndroidHttp.newCompatibleTransport(),
-//                        new AndroidJsonFactory(), null)
-//                        // Need setRootUrl and setGoogleClientRequestInitializer
-//                        // only for local testing,
-//                        // otherwise they can be skipped
-//                        .setRootUrl(SERVER_ADDR+"/_ah/api/")
-//                        .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-//                            @Override
-//                            public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest)
-//                                    throws IOException {
-//                                abstractGoogleClientRequest.setDisableGZipContent(true);
-//                            }
-//                        });
+                Registration.Builder builder =
+                        new Registration.Builder(AndroidHttp.newCompatibleTransport(),
+                        new AndroidJsonFactory(), null)
+                        // Need setRootUrl and setGoogleClientRequestInitializer
+                        // only for local testing,
+                        // otherwise they can be skipped
+                        .setRootUrl(SERVER_ADDR+"/_ah/api/")
+                        .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
+                            @Override
+                            public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest)
+                                    throws IOException {
+                                abstractGoogleClientRequest.setDisableGZipContent(true);
+                            }
+                        });
                 // end of optional local run code
 
                 //XD: newCompatibleTransport - returns a new thread-safe HTTP transport
                 // instance that is compatible with Android SDKs prior to * Gingerbread.
                 //XD: use this builder instead if you deploy your backend to the cloud
                 // (e.g. https://abstract-arc-123122.appspot.com)
-                Registration.Builder builder =
-                        new Registration.Builder(AndroidHttp.newCompatibleTransport(),
-                                new AndroidJsonFactory(), null)
-                                .setRootUrl(SERVER_ADDR +"/_ah/api/");
+//                Registration.Builder builder =
+//                        new Registration.Builder(AndroidHttp.newCompatibleTransport(),
+//                                new AndroidJsonFactory(), null)
+//                                .setRootUrl(SERVER_ADDR +"/_ah/api/");
                 regService = builder.build();
             }
 

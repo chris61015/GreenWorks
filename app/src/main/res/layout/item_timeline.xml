@@ -34,13 +34,14 @@
             android:orientation="horizontal">
 
             <android.support.v7.widget.AppCompatImageView
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:id="@+id/image_timeline_photo" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
                 android:gravity="center"
                 android:orientation="vertical">
                 <android.support.v7.widget.AppCompatTextView

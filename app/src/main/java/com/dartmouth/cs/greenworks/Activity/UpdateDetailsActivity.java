@@ -14,6 +14,9 @@ import android.widget.ImageView;
 import com.dartmouth.cs.greenworks.Model.TimelineEntry;
 import com.dartmouth.cs.greenworks.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static com.dartmouth.cs.greenworks.Activity.ShowTimelineActivity.TIMELINE;
 
 public class UpdateDetailsActivity extends AppCompatActivity {
@@ -34,9 +37,24 @@ public class UpdateDetailsActivity extends AppCompatActivity {
 
 
     void initView(){
-        ((EditText) findViewById(R.id.etUpdateDetailName)).setText(mEntry.name);
+        EditText text1 = ((EditText) findViewById(R.id.etUpdateDetailName));
 
-        ((EditText) findViewById(R.id.etUpdateDetailComment)).setText(mEntry.comment);
+        EditText text3 = ((EditText) findViewById(R.id.etUpdateDetailComment));
+        EditText text4 = ((EditText) findViewById(R.id.etUpdateDetailDateTime));
+
+        text1.setText(mEntry.name);
+
+        text3.setText(mEntry.comment);
+
+        text1.setKeyListener(null);
+
+        text3.setKeyListener(null);
+
+        SimpleDateFormat formatTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = formatTime.format(new Date(mEntry.dateTime));
+
+        text4.setText(time);
+        text4.setKeyListener(null);
 
         ImageView imgView = (ImageView) findViewById(R.id.UpdateDetailImageProfile);
 
