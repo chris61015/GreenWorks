@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 this.setTitle("Green Works");
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.content, mFirstFragment).addToBackStack(null)
+                        .replace(R.id.content, mFirstFragment, "Default_Fragement")
                         .commit();
                 break;
             case R.id.drawer_item_2:
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.content, mSecondFragment).addToBackStack(null)
+                        .replace(R.id.content, mSecondFragment)
                         .commit();
                 break;
             case R.id.drawer_item_3:
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.content, mThirdFragment).addToBackStack(null)
+                        .replace(R.id.content, mThirdFragment)
                         .commit();
                 break;
 //            case R.id.drawer_item_4:
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 this.setTitle("All Trees");
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.content, mFifthFragment).addToBackStack(null)
+                        .replace(R.id.content, mFifthFragment)
                         .commit();
                 break;
             default:
@@ -231,9 +231,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .show();
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        MapFragment myFragment = (MapFragment) getSupportFragmentManager().findFragmentByTag("Default_Fragement");
+        if (myFragment != null && myFragment.isVisible()) {
+            finish();
+        } else {
+            navigate(R.id.drawer_item_1);
+        }
+
+    }
 }
-
-
 
 /*
 * 1. Tree List Titles

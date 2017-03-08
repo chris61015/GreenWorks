@@ -245,7 +245,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
             currentMarker.setPosition(latLng);
         }
         // Move the map to current location
-        moveMap(latLng);
+        //moveMap(latLng);
     }
 
     @Override
@@ -256,7 +256,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         if (!mGoogleApiClient.isConnected() && currentMarker != null) {
             mGoogleApiClient.connect();
         }
-//        isInitial = true;
     }
 
     @Override
