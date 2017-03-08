@@ -72,8 +72,8 @@ public class BackendTest {
 
 
     // Server stuff
-    public static String SERVER_ADDR = "https://lateral-avatar-160118.appspot.com";
-//      public static String SERVER_ADDR = "http://127.0.0.1:8080";
+//    public static String SERVER_ADDR = "https://lateral-avatar-160118.appspot.com";
+      public static String SERVER_ADDR = "http://127.0.0.1:8080";
 
 
     public boolean registerTest(Context context) {
@@ -382,9 +382,6 @@ public class BackendTest {
                         e.printStackTrace();
                         Log.e(TAG, "JSON error " + e);
                     }
-
-
-
                     break;
 
                 case GET_MY_UPDATED_TREES:

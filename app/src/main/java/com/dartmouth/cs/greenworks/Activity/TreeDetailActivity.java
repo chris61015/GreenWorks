@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
@@ -83,8 +84,8 @@ public class TreeDetailActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-//        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar_tree);
-//        setSupportActionBar(mActionBarToolbar);
-//        getSupportActionBar().setTitle("Tree");
+        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar_tree);
+        setSupportActionBar(mActionBarToolbar);
+        getSupportActionBar().setTitle("Tree");
     }
 }
