@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<datastore-indexes  autoGenerate="true">
+
+    <datastore-index kind="timeline entry" ancestor="false" source="manual">
+        <property name="Tree ID" direction="asc"/>
+        <property name="Date Time" direction="desc"/>
+    </datastore-index>
+
+    <datastore-index kind="timeline entry" ancestor="false" source="manual">
+        <property name="Registration ID" direction="asc"/>
+        <property name="Tree ID" direction="desc"/>
+    </datastore-index>
+
+    <datastore-index kind="timeline entry" ancestor="false" source="manual">
+        <property name="Registration ID" direction="asc"/>
+        <property name="Tree ID" direction="desc"/>
+    </datastore-index>
+
+    <datastore-index kind="tree entry" ancestor="false" source="manual">
+        <property name="Registration ID" direction="asc"/>
+        <property name="Date Time" direction="desc"/>
+    </datastore-index>
+
+    <datastore-index kind="tree entry" ancestor="false" source="manual">
+        <property name="Registration ID" direction="asc"/>
+        <property name="Date Time" direction="desc"/>
+    </datastore-index>
+
+</datastore-indexes>
