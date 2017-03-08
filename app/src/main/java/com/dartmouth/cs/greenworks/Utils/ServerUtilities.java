@@ -1,4 +1,4 @@
-package com.dartmouth.cs.greenworks.Activity;
+package com.dartmouth.cs.greenworks.Utils;
 
 import android.util.Log;
 

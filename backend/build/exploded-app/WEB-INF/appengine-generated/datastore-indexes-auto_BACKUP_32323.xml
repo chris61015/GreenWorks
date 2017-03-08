@@ -1,8 +1,16 @@
+<<<<<<< HEAD
+<!-- Indices written at Wed, 8 Mar 2017 00:50:14 EST -->
+
+<datastore-indexes>
+
+    <!-- Used 13 times in query history -->
+=======
 <!-- Indices written at Tue, 7 Mar 2017 20:43:49 EST -->
 
 <datastore-indexes>
 
-    <!-- Used 13 time in query history -->
+    <!-- Used 1 time in query history -->
+>>>>>>> 5e704e27d84275b83d2a70f31b47f29f08a7875c
     <datastore-index kind="tree entry" ancestor="true" source="auto">
         <property name="Date Time" direction="desc"/>
     </datastore-index>

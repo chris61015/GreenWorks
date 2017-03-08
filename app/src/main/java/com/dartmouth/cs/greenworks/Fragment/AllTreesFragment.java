@@ -11,7 +11,7 @@ import android.widget.ListView;
 
 import com.dartmouth.cs.greenworks.Activity.BackendTest;
 import com.dartmouth.cs.greenworks.Activity.TreeDetailActivity;
-import com.dartmouth.cs.greenworks.ActivityEntriesAdapter;
+import com.dartmouth.cs.greenworks.Utils.ActivityEntriesAdapter;
 import com.dartmouth.cs.greenworks.Model.TreeEntry;
 import com.dartmouth.cs.greenworks.R;
 

@@ -1,10 +1,12 @@
 package com.dartmouth.cs.greenworks.Fragment;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +14,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.dartmouth.cs.greenworks.Activity.BackendTest;
+import com.dartmouth.cs.greenworks.Activity.TreeDetailActivity;
 import com.dartmouth.cs.greenworks.Model.TreeEntry;
 import com.dartmouth.cs.greenworks.R;
+import com.dartmouth.cs.greenworks.Utils.ActivityEntriesAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -23,6 +27,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -31,6 +36,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 
 import static com.dartmouth.cs.greenworks.Activity.BackendTest.GET_TREES_AROUND_ME;
+import static com.dartmouth.cs.greenworks.Fragment.AllTreesFragment.ENTRY;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_GREEN;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -42,10 +49,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     private static Location currentLocation;
     private LocationRequest locationRequest;
 
-
-
     private Marker currentMarker, itemMarker;
     private ArrayList<TreeEntry> mTreeList;
+    private ActivityEntriesAdapter mAdapter;
+
+    private boolean isInitial = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,8 +66,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         if (!mGoogleApiClient.isConnected()) {
             mGoogleApiClient.connect();
         }
-
         mTreeList = new ArrayList<TreeEntry>();
+        mAdapter = new ActivityEntriesAdapter(getActivity());
     }
 
     private synchronized void configGoogleApiClient() {
@@ -95,8 +103,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
             SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().
                     findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
-
-            getTreesAroundMe();
         } catch (InflateException e) {
         /* map is already there, just return view as it is */
         }
@@ -105,7 +111,32 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
 
     void getTreesAroundMe(){
         if (mLastLocation != null) {
-            new BackendTest.DatastoreTask(mTreeList).execute(GET_TREES_AROUND_ME, 10000, mLastLocation.getLongitude(), mLastLocation.getAltitude());
+            new BackendTest.DatastoreTask(mAdapter, mTreeList).execute(GET_TREES_AROUND_ME, 10000, currentLocation.getLongitude(), currentLocation.getLatitude());
+            plotTreesOnMap();
+        } else if (currentLocation != null){
+            new BackendTest.DatastoreTask(mAdapter, mTreeList).execute(GET_TREES_AROUND_ME, 10000, currentLocation.getLongitude(), currentLocation.getLatitude());
+            plotTreesOnMap();
+        } else {
+            Log.d("ERROR!!!!!!!!", "It is impossible to come here!!!!!!!!!!!!");
+        }
+    }
+
+     void plotTreesOnMap(){
+        if (mTreeList != null){
+            currentMarker = null;
+            mMap.clear();
+            synchronized (this){
+                int size = mTreeList.size();
+
+                for (TreeEntry entry:mTreeList){
+                    Marker marker = mMap.addMarker(new MarkerOptions().
+                            position(entry.location).
+                            icon(BitmapDescriptorFactory.
+                            defaultMarker(HUE_GREEN)));
+                    marker.setTag(entry);
+                    Log.d("DEBUG", entry.toString());
+                }
+            }
         }
     }
     /**
@@ -124,8 +155,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener()
+        {
+
+            @Override
+            public boolean onMarkerClick(Marker arg0) {
+                TreeEntry entry = (TreeEntry) arg0.getTag();
+                Intent intent = new Intent(getActivity(), TreeDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(ENTRY,entry);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                return true;
+            }
+
+        });
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
+
 
     @Override
     @SuppressWarnings({"MissingPermission"})
@@ -162,14 +209,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         LatLng latLng = new LatLng(
                 location.getLatitude(), location.getLongitude());
 
+        if (BackendTest.isFinish && (mLastLocation != null || currentLocation != null)){
+            BackendTest.isFinish = false;
+            getTreesAroundMe();
+        }
+
         // Set the mark of the current location
         if (currentMarker == null) {
             currentMarker = mMap.addMarker(new MarkerOptions().position(latLng));
+            currentMarker.setZIndex(1.0f);
         }
         else {
             currentMarker.setPosition(latLng);
         }
-
         // Move the map to current location
         moveMap(latLng);
     }
@@ -182,6 +234,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         if (!mGoogleApiClient.isConnected() && currentMarker != null) {
             mGoogleApiClient.connect();
         }
+//        isInitial = true;
     }
 
     @Override
