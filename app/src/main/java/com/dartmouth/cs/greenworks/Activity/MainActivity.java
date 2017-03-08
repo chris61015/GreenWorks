@@ -22,17 +22,14 @@ import com.dartmouth.cs.greenworks.Fragment.MapFragment;
 import com.dartmouth.cs.greenworks.Fragment.MyTreesFragment;
 import com.dartmouth.cs.greenworks.Fragment.TreesIUpdatedFragment;
 import com.dartmouth.cs.greenworks.R;
-import com.google.android.gms.maps.GoogleMap;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static String myRegId = "";
+    public static String myRegId = "";                          //Registation Id for identifying device
     public static final String TAG = "MAIN ACTIVITY";
-    public static final int PERMISSIONS_REQUEST = 1;
 
-    private GoogleMap mMap;
-
+    //For Sliding view and drawer
     private final Handler mDrawerActionHandler = new Handler();
     protected DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -40,12 +37,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String NAV_ITEM_ID = "navItemId";
     private static final long DRAWER_CLOSE_DELAY_MS = 250;
 
+    //For drawer item use
     private final MapFragment mFirstFragment = new MapFragment();
     private final MyTreesFragment mSecondFragment = new MyTreesFragment();
     private final TreesIUpdatedFragment mThirdFragment = new TreesIUpdatedFragment();
     private final AllTreesFragment mFifthFragment = new AllTreesFragment();
     private NavigationView mNavigationView;
-    public  static boolean mIsPermitted = true;
 
     // Main Activity Start
     @Override
@@ -61,18 +58,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNavigationView = (NavigationView) findViewById(com.dartmouth.cs.greenworks.R.id.navigation);
         mNavigationView.setNavigationItemSelectedListener(this);
 
+        //handle orientatino change
         if (null != savedInstanceState) {
             mNavItemId = savedInstanceState.getInt(NAV_ITEM_ID);
         } else {
             mNavItemId = R.id.drawer_item_1;
         }
 
+        //Politely aks users for permissions : )
         checkPermissions();
 
-        Log.d("DEBUG",mNavigationView.getMenu().findItem(mNavItemId).toString());
+        //Set Navigation view
         mNavigationView.getMenu().findItem(mNavItemId).setChecked(true);
-
-
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, com.dartmouth.cs.greenworks.R.string.open, com.dartmouth.cs.greenworks.R.string.close);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
@@ -81,6 +78,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         testBackend();
     }
 
+
+    //Handle the orientation change case
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -129,12 +128,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .replace(R.id.content, mThirdFragment)
                         .commit();
                 break;
-//            case R.id.drawer_item_4:
-//                getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .replace(R.id.content, mFourthFragment)
-//                        .commit();
-//                break;
             case R.id.drawer_item_4:
                 Intent intent = new Intent(this, PlantATreeActivity.class);
                 startActivity(intent);
@@ -156,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // testBackend Method
     public void testBackend() {
         BackendTest newTest = new BackendTest();
-        if(!newTest.registerTest(this)) {
+        if (!newTest.registerTest(this)) {
             Toast.makeText(this, "Registration failed. Please try later",
                     Toast.LENGTH_LONG).show();
             Log.d(TAG, "Registration failed. Please try later");
@@ -208,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // for ActivityCompat#requestPermissions for more details.
             return;
         } else {
+            // If user already gives permission, take the user to the place he/she belongs to
             navigate(mNavItemId);
         }
     }
@@ -215,27 +209,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantRes) {
         boolean allPermitted = true;
-        for (int grant : grantRes){
-            if (grant != PackageManager.PERMISSION_GRANTED){
+        for (int grant : grantRes) {
+            if (grant != PackageManager.PERMISSION_GRANTED) {
                 allPermitted = false;
                 break;
             }
         }
 
         if (allPermitted) {
+            // Take user to the map only when user gives permissions, or the app will crash
             navigate(mNavItemId);
             return;
-        }
-        else {
+        } else {
             Toast.makeText(MainActivity.this, "PERMISSION Denied", Toast.LENGTH_SHORT)
                     .show();
         }
     }
 
+    //Overried this method so when user press back in navigation view, it will go back to map
     @Override
     public void onBackPressed() {
-        MapFragment myFragment = (MapFragment) getSupportFragmentManager().findFragmentByTag("Default_Fragement");
+        MapFragment myFragment = (MapFragment) getSupportFragmentManager().
+                findFragmentByTag("Default_Fragement");
+
         if (myFragment != null && myFragment.isVisible()) {
+            //if user is currently in the map page, exit the app
             finish();
         } else {
             navigate(R.id.drawer_item_1);

@@ -149,18 +149,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         if (mTreeList != null) {
             currentMarker = null;
             mMap.clear();
-            synchronized (this) {
-                int size = mTreeList.size();
-
-                for (TreeEntry entry : mTreeList) {
-                    Marker marker = mMap.addMarker(new MarkerOptions().
-                            position(entry.location).
-                            icon(BitmapDescriptorFactory.
-                                    defaultMarker(HUE_GREEN)));
-                    marker.setTag(entry);
-                    Log.d("DEBUG", entry.toString());
-                }
+            for (TreeEntry entry : mTreeList) {
+                Marker marker = mMap.addMarker(new MarkerOptions().
+                        position(entry.location).
+                        icon(BitmapDescriptorFactory.
+                                defaultMarker(HUE_GREEN)));
+                marker.setTag(entry);
+                Log.d("DEBUG", entry.toString());
             }
+
         }
     }
 
