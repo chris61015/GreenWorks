@@ -8,4 +8,4 @@ Course Websites: http://www.cs.dartmouth.edu/~xingdong/Teaching/CS65/projs/proje
 
 ### IMPORTANT: YOU HAVE TO KNOW BEFORE STARTING USING OUR APP
 1. Due to excessive testing on the cloud, registration of the app might fail the first time app is executed after install. Running the app second time will fix the issue and proceed with normal execution
-2. loading might also take some time only the first time due to registration
+2. Loading might also take some time only the first time due to registration
