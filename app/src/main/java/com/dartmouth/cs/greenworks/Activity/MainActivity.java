@@ -22,6 +22,7 @@ import com.dartmouth.cs.greenworks.Fragment.MapFragment;
 import com.dartmouth.cs.greenworks.Fragment.MyTreesFragment;
 import com.dartmouth.cs.greenworks.Fragment.TreesIUpdatedFragment;
 import com.dartmouth.cs.greenworks.R;
+import com.dartmouth.cs.greenworks.Utils.BackendTest;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -188,7 +189,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                 || checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
                 ) {
-            // TODO: Consider calling
             String[] permissions = new String[]{
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.CAMERA,

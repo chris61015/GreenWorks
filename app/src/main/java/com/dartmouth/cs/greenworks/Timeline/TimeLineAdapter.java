@@ -29,7 +29,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineViewHolder> im
         private LayoutInflater mLayoutInflater;
 
         private OnRecyclerViewItemClickListener mOnItemClickListener = null;
-        //define interface
+
+    //define interface
         public static interface OnRecyclerViewItemClickListener {
             void onItemClick(View view, TimelineEntry entry);
         }
@@ -59,6 +60,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineViewHolder> im
 
             TimelineEntry entry = mFeedList.get(position);
 
+            //decode photo and put it onto timeline
             Bitmap decodedByte;
             if (entry.photo == null){
                 holder.mImgView.setImageResource(R.drawable.dartmouthpine);
@@ -75,7 +77,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineViewHolder> im
             holder.mDate.setText(time);
             holder.mComment.setText(entry.comment);
 
-            //将数据保存在itemView的Tag中，以便点击时进行获取
+            //store the data into the tag of itemview, so we could retrieve it on click
             holder.itemView.setTag(entry);
         }
 
@@ -87,7 +89,10 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineViewHolder> im
     @Override
     public void onClick(View v) {
         if (mOnItemClickListener != null) {
-            if (mOnItemClickListener != null) mOnItemClickListener.onItemClick(v, (TimelineEntry)v.getTag());
+            //listen to view.onclick and trigger another self-defined OnItemClickListener listener,
+            // tricky part on implementing timeline!
+            if (mOnItemClickListener != null)
+                mOnItemClickListener.onItemClick(v, (TimelineEntry)v.getTag());
         }
     }
 

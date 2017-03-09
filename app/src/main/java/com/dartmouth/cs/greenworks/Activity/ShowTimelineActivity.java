@@ -11,12 +11,13 @@ import android.view.View;
 import com.dartmouth.cs.greenworks.Model.TimelineEntry;
 import com.dartmouth.cs.greenworks.R;
 import com.dartmouth.cs.greenworks.Timeline.TimeLineAdapter;
+import com.dartmouth.cs.greenworks.Utils.BackendTest;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.dartmouth.cs.greenworks.Activity.AddTimelineActivity.TREEID;
-import static com.dartmouth.cs.greenworks.Activity.BackendTest.GET_TIMELINE;
+import static com.dartmouth.cs.greenworks.Utils.BackendTest.GET_TIMELINE;
 
 public class ShowTimelineActivity extends AppCompatActivity implements TimeLineAdapter.OnRecyclerViewItemClickListener {
     private RecyclerView mRecyclerView;
@@ -47,17 +48,10 @@ public class ShowTimelineActivity extends AppCompatActivity implements TimeLineA
         mRecyclerView.setAdapter(mTimeLineAdapter);
     }
 
-    private void setDataListItems(){
+    private void setDataListItems() {
         Intent intent = getIntent();
         long TreeId = intent.getLongExtra(TREEID, 0);
-        new BackendTest.DatastoreTask(mTimeLineAdapter, mDataList).execute(GET_TIMELINE,TreeId);
-//        try {
-//            new BackendTest.DatastoreTask(mTimeLineAdapter, mDataList).execute(GET_TIMELINE,TreeId).get();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }
+        new BackendTest.DatastoreTask(mTimeLineAdapter, mDataList).execute(GET_TIMELINE, TreeId);
     }
 
     @Override
@@ -65,7 +59,7 @@ public class ShowTimelineActivity extends AppCompatActivity implements TimeLineA
 
         Intent intent = new Intent(this, UpdateDetailsActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putParcelable(TIMELINE,entry);
+        bundle.putParcelable(TIMELINE, entry);
 
         intent.putExtras(bundle);
 

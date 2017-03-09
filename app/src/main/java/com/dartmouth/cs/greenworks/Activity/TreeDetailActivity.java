@@ -28,30 +28,29 @@ import static com.dartmouth.cs.greenworks.Fragment.MyTreesFragment.ENTRY;
 public class TreeDetailActivity extends AppCompatActivity {
 
     private TreeEntry mEntry;
-    final public static String TREEIFNO = "TreeInfo";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tree_details);
 
+        //Retrieve entry from other activities
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         mEntry = bundle.getParcelable(ENTRY);
 
+        //Prepare to show information
         initView();
-
     }
 
     void initView(){
+
         EditText text1 = ((EditText) findViewById(R.id.etDetailName));
-
         EditText text2 = ((EditText) findViewById(R.id.etDetailCity));
-
         EditText text3 = ((EditText) findViewById(R.id.etDetailComment));
-
         EditText text4 = ((EditText) findViewById(R.id.etTreeDetailDateTime));
 
+        //Show information of the key
         text1.setText(mEntry.name);
         text2.setText(mEntry.city);
         text3.setText(mEntry.comment);
@@ -68,6 +67,7 @@ public class TreeDetailActivity extends AppCompatActivity {
 
         ImageView imgView = (ImageView) findViewById(R.id.detailImageProfile);
 
+        //decode the Base64 string and turn it back into photo
         Bitmap decodedByte;
         if (mEntry.photo == null){
             imgView.setImageResource(R.drawable.dartmouthpine);
@@ -78,12 +78,14 @@ public class TreeDetailActivity extends AppCompatActivity {
         }
     }
 
+    //Take the user to SHOW TIMELINE
     public void onShowTimelineClicked(View v){
         Intent intent = new Intent(this, ShowTimelineActivity.class);
         intent.putExtra(TREEID, mEntry.treeId);
         startActivity(intent);
     }
 
+    //Update timeline for this tree
     public void onUpdateClicked(View v){
         Intent intent = new Intent(this, AddTimelineActivity.class);
         Bundle extras = new Bundle();

@@ -1,4 +1,4 @@
-package com.dartmouth.cs.greenworks.Activity;
+package com.dartmouth.cs.greenworks.Utils;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,16 +10,14 @@ import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 
+import com.dartmouth.cs.greenworks.Activity.MainActivity;
 import com.dartmouth.cs.greenworks.Model.TimelineEntry;
 import com.dartmouth.cs.greenworks.Model.TreeEntry;
 import com.dartmouth.cs.greenworks.Timeline.TimeLineAdapter;
-import com.dartmouth.cs.greenworks.Utils.ActivityEntriesAdapter;
-import com.dartmouth.cs.greenworks.Utils.ServerUtilities;
 import com.dartmouth.cs.greenworks.backend.registration.Registration;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
@@ -38,7 +36,6 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +51,7 @@ import static com.dartmouth.cs.greenworks.Fragment.MyTreesFragment.ENTRY;
 
 public class BackendTest {
 
+    //Activity ID
     public static final int ADD_TREE = 1;
     public static final int UPDATE_TREE = 2;
     public static final int GET_TREES_AROUND_ME = 3;
@@ -65,31 +63,25 @@ public class BackendTest {
     public static final int MAX_SIZE = 400;
 
     public static final String TAG = "BackendTest";
-
     public static final String REG_FILE = Environment.getExternalStorageDirectory()
             .getAbsolutePath() + File.separator + "regId.csv";
-
     public static boolean isFinish = true;
 
-
     // Server stuff
-//    public static String SERVER_ADDR = "https://lateral-avatar-160118.appspot.com";
-      public static String SERVER_ADDR = "http://127.0.0.1:8080";
+    public static String SERVER_ADDR = "https://lateral-avatar-160118.appspot.com";
+//    public static String SERVER_ADDR = "http://127.0.0.1:8080";
 
-
+    //Register with GCM
     public boolean registerTest(Context context) {
 
         checkPlayServices(context);
-
-
-
         File file = new File(REG_FILE);
 
+        //Read the file in the phone which we store registration id inside,
+        //For TIMESAVING!
         if (!file.exists()) {   // create file and try to register and block.
             Log.d(TAG, "Register for the first time");
-
             doRegister(context, true);
-
         }
         else {  // load from file first. Also try register.
             try {
@@ -106,14 +98,12 @@ public class BackendTest {
                     MainActivity.myRegId = line;
                     doRegister(context, false);
                 }
-
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
         Log.d(TAG, "Finally, RegID: " + MainActivity.myRegId);
         if (MainActivity.myRegId.length() == 0) {
             return false;
@@ -123,6 +113,7 @@ public class BackendTest {
         }
     }
 
+    //Using threads to register with server, avoid UI blocking
     public void doRegister(Context context, boolean block) {
         if (block) {
             try {
@@ -138,6 +129,7 @@ public class BackendTest {
         }
     }
 
+    //Check whether Google playservice works
     private boolean checkPlayServices(Context context) {
         int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
         if (status != ConnectionResult.SUCCESS) {
@@ -145,7 +137,6 @@ public class BackendTest {
                 Log.d(TAG, "Some error.");
             } else {
                 Log.d(TAG, "This device is not supported.");
-
             }
             return false;
         }
@@ -153,49 +144,6 @@ public class BackendTest {
             Log.d(TAG, "Player service good to go");
         }
         return true;
-    }
-
-    public void getTreesAroundMeTest(Context context)
-    {
-        int radius =2;
-        double longitude = 43.7069;
-        double lattitude = -72.2869;
-
-        new DatastoreTask().execute(GET_TREES_AROUND_ME,radius, longitude, lattitude);
-    }
-
-    public void getMyTreesTest(Context context)
-    {
-        new DatastoreTask().execute(GET_MY_TREES, MainActivity.myRegId);
-    }
-
-    public void getTimelineTest(Context context, Long treeID)
-    {
-        new DatastoreTask().execute(GET_TIMELINE,treeID);
-    }
-
-    public void getTreesIUpdatedTest(Context context)
-    {
-        new DatastoreTask().execute(GET_MY_UPDATED_TREES,MainActivity.myRegId);
-    }
-
-
-    public void updateTree(Context context, String filename, long treeId) {
-        String encodedImage = photoToString (context, filename);
-        TimelineEntry timelineEntry = new TimelineEntry(0, treeId,
-                System.currentTimeMillis(), "Xiaolei_up_" + treeId,
-                MainActivity.myRegId, encodedImage, "update on tree " + treeId) ;
-        new DatastoreTask().execute(UPDATE_TREE, timelineEntry);
-    }
-
-    public void addTreeTest(Context context, String filename) {
-
-        String encodedImage = photoToString(context, filename);
-
-        TreeEntry tree = new TreeEntry(0, System.currentTimeMillis(),
-                new LatLng(43.7069, -72.2869), "Rohan", "Sudikoff",
-                MainActivity.myRegId, encodedImage, "Tree in Sudikoff");
-        new DatastoreTask().execute(ADD_TREE, tree);
     }
 
     public void addTreeTest(TreeEntry entry) {
@@ -213,6 +161,7 @@ public class BackendTest {
         }
     }
 
+    //Turn Photo to string and compress it
     public String photoToString(Context context, String filename) {
 
         String filepath = Environment.getExternalStorageDirectory()
@@ -226,6 +175,7 @@ public class BackendTest {
                 return null;
             }
 
+            //Use Base64 to encode photo
             Bitmap bm = BitmapFactory.decodeFile(filepath);
             bm = getResizedBitmap(bm, MAX_SIZE);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -257,6 +207,7 @@ public class BackendTest {
         return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
+    //Where we do all the interactions with Server
     public static class DatastoreTask extends AsyncTask<Object, Void, Void> {
         private int operMode;
         private List<TreeEntry> mTreeEntryList;
@@ -265,10 +216,6 @@ public class BackendTest {
         private TimeLineAdapter mTimeLineAdapter;
 
         public DatastoreTask(){
-        }
-
-        public DatastoreTask(ArrayList<TreeEntry> list){
-            mTreeEntryList = list;
         }
 
         public DatastoreTask(ActivityEntriesAdapter adapter, List<TreeEntry> entryList){
@@ -322,23 +269,13 @@ public class BackendTest {
                     break;
 
                 case GET_TREES_AROUND_ME:
-
                     Map<String, String> data1 = new HashMap<>();
-                    //data1.put("Date Time", Long.toString(tree1.dateTime));
                     data1.put("Radius", Integer.toString((Integer)params[1]));
                     data1.put("Longitude", Double.toString((Double)params[2]));
                     data1.put("Lattitude", Double.toString((Double)params[3]));
-
-                    //data1.put("Name", tree1.name);
-                    //data1.put("City", tree1.city);
-                    //data1.put("Registration ID", tree1.regId);
-                    //data1.put("Photo", tree1.photo);
-                    //data1.put("Comment", tree1.comment);
                     try {
-
                         String treesAroundMe = ServerUtilities.post(SERVER_ADDR + "/gettreesaroundme.do", data1);
                         JSONArray treesAroundMeJSON = new JSONArray(treesAroundMe);
-                        //List<TreeEntry> treeEntryList = new ArrayList<>();
 
                         // A hack for getting all trees.
                         if (mAdapter != null && mTreeEntryList != null) {
@@ -366,8 +303,7 @@ public class BackendTest {
                     try {
                         String myTrees = ServerUtilities.post(SERVER_ADDR + "/getmytrees.do", data21 );
                         JSONArray jsonResult = new JSONArray(myTrees);
-//                        List<TreeEntry> treeEntryList = new ArrayList<>()
-                        mTreeEntryList.clear();
+                        mTreeEntryList.clear(); //clear the list in case of duplication object in list
                         for(int i=0;i<jsonResult.length();i++)
                         {
 
@@ -391,8 +327,7 @@ public class BackendTest {
                     try {
                         String myTrees = ServerUtilities.post(SERVER_ADDR + "/gettreesiupdated.do", data3 );
                         JSONArray jsonResult = new JSONArray(myTrees);
-                        //List<TreeEntry> treeEntryList = new ArrayList<>();
-                        mTreeEntryList.clear();
+                        mTreeEntryList.clear(); //clear the list in case of duplication object in list
                         for(int i=0;i<jsonResult.length();i++)
                         {
 
@@ -409,18 +344,15 @@ public class BackendTest {
                     }
 
                     break;
-
                 case GET_TIMELINE:
                     Map<String, String> data4 = new HashMap<>();
                     data4.put("Tree ID", ((String.valueOf(params[1]))));
                     try {
                         String myTrees = ServerUtilities.post(SERVER_ADDR + "/gettimeline.do", data4 );
                         JSONArray jsonResult = new JSONArray(myTrees);
-//                        List<TimelineEntry> treeEntryList = new ArrayList<>();
-                        mTimelineList.clear();
+                        mTimelineList.clear();  //clear the list in case of duplication object in list
                         for(int i=0;i<jsonResult.length();i++)
                         {
-
                             Gson gson = new Gson();
                             TimelineEntry tempTimelineEntry = gson.fromJson(jsonResult.getString(i),TimelineEntry.class);
                             mTimelineList.add(tempTimelineEntry);
@@ -441,7 +373,6 @@ public class BackendTest {
                     try {
                         String myTree = ServerUtilities.post(SERVER_ADDR + "/gettreebyid.do", data5 );
                         JSONArray jsonResult = new JSONArray(myTree);
-                        //List<TimelineEntry> treeEntryList = new ArrayList<>();
                         Gson gson = new Gson();
                         Intent intent = (Intent)params[2];
                         TreeEntry treeByID = gson.fromJson(jsonResult.getString(0),TreeEntry.class);
@@ -525,14 +456,6 @@ public class BackendTest {
                         });
                 // end of optional local run code
 
-                //XD: newCompatibleTransport - returns a new thread-safe HTTP transport
-                // instance that is compatible with Android SDKs prior to * Gingerbread.
-                //XD: use this builder instead if you deploy your backend to the cloud
-                // (e.g. https://abstract-arc-123122.appspot.com)
-//                Registration.Builder builder =
-//                        new Registration.Builder(AndroidHttp.newCompatibleTransport(),
-//                                new AndroidJsonFactory(), null)
-//                                .setRootUrl(SERVER_ADDR +"/_ah/api/");
                 regService = builder.build();
             }
 
@@ -548,10 +471,7 @@ public class BackendTest {
                 // so it can use GCM/HTTP or CCS to send messages to your app.
                 // The request to your server should be authenticated if your app
                 // is using accounts.
-
                 regService.register(regId).execute();
-
-
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -565,7 +485,6 @@ public class BackendTest {
             }
             else {
                 MainActivity.myRegId = id;
-//                Toast.makeText(context, "New Reg ID = " + id, Toast.LENGTH_LONG).show();
                 Log.d(TAG, "New ID = " + id);
                 try {   // write to file. Delete the old one and write to new one.
                     File file = new File(REG_FILE);

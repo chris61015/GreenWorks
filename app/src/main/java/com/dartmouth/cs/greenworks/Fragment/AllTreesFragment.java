@@ -1,6 +1,5 @@
 package com.dartmouth.cs.greenworks.Fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -9,17 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.dartmouth.cs.greenworks.Activity.BackendTest;
 import com.dartmouth.cs.greenworks.Activity.TreeDetailActivity;
-import com.dartmouth.cs.greenworks.Utils.ActivityEntriesAdapter;
 import com.dartmouth.cs.greenworks.Model.TreeEntry;
 import com.dartmouth.cs.greenworks.R;
+import com.dartmouth.cs.greenworks.Utils.ActivityEntriesAdapter;
+import com.dartmouth.cs.greenworks.Utils.BackendTest;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AllTreesFragment extends ListFragment {
-    private Context mContext; // context pointed to parent activity
     private ActivityEntriesAdapter mAdapter; // customized adapter for displaying
     private List<TreeEntry> mTreeEntryList;
     public static String ENTRY = "entry";
@@ -34,6 +32,7 @@ public class AllTreesFragment extends ListFragment {
         setListAdapter(mAdapter);
         updateTreeEntries();
     }
+
     // retrieve records from the database and display them in the list view
     public void updateTreeEntries() {
         new BackendTest.DatastoreTask(mAdapter, mTreeEntryList)
@@ -68,7 +67,7 @@ public class AllTreesFragment extends ListFragment {
         // get the ExerciseEntry corresponding to user's selection
         TreeEntry entry = mAdapter.getItem(position);
         // Task type is display history, versus create new as in
-        extras.putParcelable(ENTRY,entry);
+        extras.putParcelable(ENTRY, entry);
 
         // start the activity
         intent.putExtras(extras);

@@ -1,6 +1,5 @@
 package com.dartmouth.cs.greenworks.Fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -9,18 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.dartmouth.cs.greenworks.Activity.BackendTest;
 import com.dartmouth.cs.greenworks.Activity.MainActivity;
 import com.dartmouth.cs.greenworks.Activity.TreeDetailActivity;
-import com.dartmouth.cs.greenworks.Utils.ActivityEntriesAdapter;
 import com.dartmouth.cs.greenworks.Model.TreeEntry;
 import com.dartmouth.cs.greenworks.R;
+import com.dartmouth.cs.greenworks.Utils.ActivityEntriesAdapter;
+import com.dartmouth.cs.greenworks.Utils.BackendTest;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MyTreesFragment extends ListFragment {
-    private Context mContext; // context pointed to parent activity
     private ActivityEntriesAdapter mAdapter; // customized adapter for displaying
     private List<TreeEntry> mTreeEntryList;
     public static String ENTRY = "entry";

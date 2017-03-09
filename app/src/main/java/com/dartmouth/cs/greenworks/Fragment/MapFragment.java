@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.dartmouth.cs.greenworks.Activity.BackendTest;
+import com.dartmouth.cs.greenworks.Utils.BackendTest;
 import com.dartmouth.cs.greenworks.Activity.TreeDetailActivity;
 import com.dartmouth.cs.greenworks.Model.TreeEntry;
 import com.dartmouth.cs.greenworks.R;
@@ -35,7 +35,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
-import static com.dartmouth.cs.greenworks.Activity.BackendTest.GET_TREES_AROUND_ME;
+import static com.dartmouth.cs.greenworks.Utils.BackendTest.GET_TREES_AROUND_ME;
 import static com.dartmouth.cs.greenworks.Fragment.AllTreesFragment.ENTRY;
 import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_GREEN;
 
@@ -57,17 +57,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //Save instance
         setRetainInstance(true);
 
+        //Connect and config with Google API
         configGoogleApiClient();
         configLocationRequest();
         if (!mGoogleApiClient.isConnected()) {
             mGoogleApiClient.connect();
         }
+        //member varaibles initializer
         mTreeList = new ArrayList<TreeEntry>();
         mAdapter = new ActivityEntriesAdapter(getActivity());
-
     }
 
     private synchronized void configGoogleApiClient() {
@@ -92,7 +93,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        //Fix the bug of redraw map everytime
         if (view != null) {
             ViewGroup parent = (ViewGroup) view.getParent();
             if (parent != null)
@@ -109,14 +110,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         return view;
     }
 
+    //Use async thread to get trees to avoid blocking / race condition on shared list
     void getTreesAroundMe() {
         if (mLastLocation != null) {
             new BackendTest.DatastoreTask(mAdapter, mTreeList).execute(GET_TREES_AROUND_ME, 10000, currentLocation.getLongitude(), currentLocation.getLatitude());
-//            plotTreesOnMap();
             runThread();
         } else if (currentLocation != null) {
             new BackendTest.DatastoreTask(mAdapter, mTreeList).execute(GET_TREES_AROUND_ME, 10000, currentLocation.getLongitude(), currentLocation.getLatitude());
-//            plotTreesOnMap();
             runThread();
         } else {
             Log.d("ERROR!!!!!!!!", "It is impossible to come here!!!!!!!!!!!!");
@@ -149,15 +149,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         if (mTreeList != null) {
             currentMarker = null;
             mMap.clear();
+            //Plant markers on map and store its info within this marker
             for (TreeEntry entry : mTreeList) {
                 Marker marker = mMap.addMarker(new MarkerOptions().
                         position(entry.location).
                         icon(BitmapDescriptorFactory.
                                 defaultMarker(HUE_GREEN)));
                 marker.setTag(entry);
-                Log.d("DEBUG", entry.toString());
             }
-
         }
     }
 
@@ -234,6 +233,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
             BackendTest.isFinish = false;
             getTreesAroundMe();
         } else {
+            //Workaround for avoiding marker disappear occassionly
             currentMarker = null;
         }
 
@@ -300,11 +300,3 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         else throw new Exception("Not Such Location");
     }
 }
-
-
-
-/* Q1: Whether We should have a activity of fragment in planting a tree?
-*
-*
-*
-* */

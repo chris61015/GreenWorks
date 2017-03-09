@@ -18,6 +18,7 @@ public class TimeLineViewHolder extends RecyclerView.ViewHolder{
     public TimelineView mTimelineView;
 
     public TimeLineViewHolder(View itemView, int viewType) {
+        //view initializer!
         super(itemView);
         mImgView = (ImageView) itemView.findViewById(R.id.image_timeline_photo);
         mDate = (TextView) itemView.findViewById(R.id.text_timeline_date);

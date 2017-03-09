@@ -32,22 +32,22 @@ public class UpdateDetailsActivity extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
         mEntry = bundle.getParcelable(TIMELINE);
 
+        //Prepare to show information
         initView();
     }
 
 
     void initView(){
-        EditText text1 = ((EditText) findViewById(R.id.etUpdateDetailName));
 
+        EditText text1 = ((EditText) findViewById(R.id.etUpdateDetailName));
         EditText text3 = ((EditText) findViewById(R.id.etUpdateDetailComment));
         EditText text4 = ((EditText) findViewById(R.id.etUpdateDetailDateTime));
 
+        //Show the information
         text1.setText(mEntry.name);
-
         text3.setText(mEntry.comment);
 
         text1.setKeyListener(null);
-
         text3.setKeyListener(null);
 
         SimpleDateFormat formatTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -58,6 +58,7 @@ public class UpdateDetailsActivity extends AppCompatActivity {
 
         ImageView imgView = (ImageView) findViewById(R.id.UpdateDetailImageProfile);
 
+        //decode the Base64 string and turn it back into photo
         Bitmap decodedByte;
         if (mEntry.photo == null){
             imgView.setImageResource(R.drawable.dartmouthpine);

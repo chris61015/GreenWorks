@@ -11,7 +11,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.dartmouth.cs.greenworks.Activity.BackendTest;
+import com.dartmouth.cs.greenworks.Utils.BackendTest;
 import com.dartmouth.cs.greenworks.R;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -39,10 +39,8 @@ public class GcmIntentService extends IntentService {
             // Since we're not using two way messaging, this is all we really to check for
             if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 Logger.getLogger("GCM_RECEIVED").log(Level.INFO, extras.toString());
-                //XD: this "my_message" has to be the same as the one used on the server side in MessagingEndpoint.java
-//                showToast(extras.getString("message"));
                 String message = extras.getString("message");
-                if (message != null && message.length()!=0) {
+                if (message != null && message.length() != 0) {
                     try {
                         long treeId = Long.parseLong(message);
                         showToast("Tree " + treeId + " Updated!");
@@ -72,18 +70,16 @@ public class GcmIntentService extends IntentService {
 
         // resume activity when notification is clicked.
         // remember to set launchMode = singleInstance in manifest.
-        Intent myIntent = new Intent (this, com.dartmouth.cs.greenworks.Activity.TreeDetailActivity.class);
-
+        Intent myIntent = new Intent(this, com.dartmouth.cs.greenworks.Activity.TreeDetailActivity.class);
 
         BackendTest backend = new BackendTest();
         backend.getTreeByIDTest(id, myIntent);
-
 
         PendingIntent pendingIntent = PendingIntent.getActivity(getBaseContext(),
                 0, myIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 
-        long[] v = {500,1000};
+        long[] v = {500, 1000};
 
         // Build notification.
         Notification notification = new Notification.Builder(this)
@@ -98,10 +94,9 @@ public class GcmIntentService extends IntentService {
         // Doesn't allow system to cancel notification when activity is running.
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
-
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        notificationManager.notify((int)id, notification);
+        notificationManager.notify((int) id, notification);
     }
 }

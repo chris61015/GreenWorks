@@ -13,17 +13,11 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
 
 /**
  * Helper class used to communicate with the AppEngine server.
  */
 public final class ServerUtilities {
-	
-	private static final int MAX_ATTEMPTS = 5;
-	private static final int BACKOFF_MILLI_SECONDS = 2000;
-	private static final Random random = new Random();
-
 
 	/**
 	 * Issue a POST request to the server.
